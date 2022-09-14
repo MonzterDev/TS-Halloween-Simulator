@@ -1,9 +1,10 @@
 import { OnInit, Service } from "@flamework/core";
+import Make from "@rbxts/make";
 import ProfileService from "@rbxts/profileservice";
 import { Profile } from "@rbxts/profileservice/globals";
 import { Functions } from "server/network";
 import { DEFAULT_PLAYER_DATA } from "shared/constants";
-import { PlayerData, Settings } from "shared/types/PlayerData";
+import { PlayerData } from "shared/types/PlayerData";
 import { forEveryPlayer } from "shared/util/functions/forEveryPlayer";
 
 const DATASTORE_NAME = "PlayerData";
@@ -27,14 +28,29 @@ export class PlayerDataService implements OnInit {
 		} );
 	}
 
+	private createLeaderstats (player: Player, data: PlayerData) {
+		Make( "Folder", {
+			Name: "leaderstats",
+			Parent: player,
+			Children: [
+				Make( "NumberValue", {
+					Name: "Candy",
+					Value: data.candy
+				} ),
+				Make( "NumberValue", {
+					Name: "Money",
+					Value: data.money
+				})
+			]
+		})
+	}
+
 	private createProfile ( player: Player ) {
 		const userId = player.UserId;
 		const profileKey = KEY_TEMPLATE.format( userId );
 		const profile = this.profileStore.LoadProfileAsync( profileKey );
 
-		if ( !profile ) {
-			return player.Kick();
-		}
+		if ( !profile ) return player.Kick();
 
 		profile.ListenToRelease( () => {
 			this.profiles.delete( player );
@@ -44,6 +60,7 @@ export class PlayerDataService implements OnInit {
 		profile.AddUserId( userId );
 		profile.Reconcile();
 
+		this.createLeaderstats(player, profile.Data)
 		this.profiles.set( player, profile );
 	}
 
@@ -52,34 +69,42 @@ export class PlayerDataService implements OnInit {
 		profile?.Release();
 	}
 
-	private changeSetting ( player: Player, setting: keyof Settings, value: Settings[keyof Settings] ) {
-		const profile = this.getProfile( player )
-		if ( !profile ) return
-
-		profile.data.settings[setting] = value
-	}
-
 	public getProfile ( player: Player ) {
 		const profile = this.profiles.get( player );
 
 		if ( profile ) {
 
 			/** Set the value directly (Adjust should be used for increase / decreasing) */
-			const setTaps = ( value: number ) => {
-				profile.Data.taps = value
+			const setCandy = ( value: number ) => {
+				profile.Data.candy = value
+				player.leaderstats.Candy.Value = value
 				// Events.modifiedTaps( player, value )
 			}
 
 			/** Increases / Decreases current number */
-			const adjustTaps = ( value: number ) => {
-				const amount = profile.Data.taps + value
-				setTaps( amount )
+			const adjustCandy = ( value: number ) => {
+				const amount = profile.Data.candy + value
+				setCandy( amount )
+			}
+
+			/** Set the value directly (Adjust should be used for increase / decreasing) */
+			const setMoney = ( value: number ) => {
+				profile.Data.money = value
+				// Events.modifiedTaps( player, value )
+			}
+
+			/** Increases / Decreases current number */
+			const adjustMoney = ( value: number ) => {
+				const amount = profile.Data.money + value
+				setMoney( amount )
 			}
 
 			return {
 				data: profile.Data,
-				setTaps: setTaps,
-				adjustTaps: adjustTaps,
+				setCandy: setCandy,
+				adjustCandy: adjustCandy,
+				setMoney: setMoney,
+				adjustMoney: adjustMoney,
 			};
 		}
 
