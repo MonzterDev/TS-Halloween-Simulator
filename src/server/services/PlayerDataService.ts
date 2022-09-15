@@ -2,8 +2,9 @@ import { OnInit, Service } from "@flamework/core";
 import Make from "@rbxts/make";
 import ProfileService from "@rbxts/profileservice";
 import { Profile } from "@rbxts/profileservice/globals";
-import { Functions } from "server/network";
-import { DEFAULT_PLAYER_DATA } from "shared/constants";
+import { Events, Functions } from "server/network";
+import { Currency } from "shared/constants/Currencies";
+import { DEFAULT_PLAYER_DATA } from "shared/constants/PlayerData";
 import { PlayerData } from "shared/types/PlayerData";
 import { forEveryPlayer } from "shared/util/functions/forEveryPlayer";
 
@@ -74,28 +75,34 @@ export class PlayerDataService implements OnInit {
 
 		if ( profile ) {
 
-			/** Set the value directly (Adjust should be used for increase / decreasing) */
 			const setCandy = ( value: number ) => {
 				profile.Data.candy = value
 				player.leaderstats.Candy.Value = value
-				// Events.modifiedTaps( player, value )
+				Events.updateCurrency.fire(player, "candy", value)
 			}
 
-			/** Increases / Decreases current number */
 			const adjustCandy = ( value: number ) => {
 				const amount = profile.Data.candy + value
 				setCandy( amount )
 			}
 
-			/** Set the value directly (Adjust should be used for increase / decreasing) */
 			const setMoney = ( value: number ) => {
 				profile.Data.money = value
-				// Events.modifiedTaps( player, value )
+				Events.updateCurrency.fire(player, "money", value)
 			}
 
-			/** Increases / Decreases current number */
 			const adjustMoney = ( value: number ) => {
 				const amount = profile.Data.money + value
+				setMoney( amount )
+			}
+
+			const setCandyCorn = ( value: number ) => {
+				profile.Data.candy_corn = value
+				Events.updateCurrency.fire(player, "candy_corn", value)
+			}
+
+			const adjustCandyCorn = ( value: number ) => {
+				const amount = profile.Data.candy_corn + value
 				setMoney( amount )
 			}
 
@@ -105,6 +112,8 @@ export class PlayerDataService implements OnInit {
 				adjustCandy: adjustCandy,
 				setMoney: setMoney,
 				adjustMoney: adjustMoney,
+				setCandyCorn: setCandyCorn,
+				adjustCandyCorn: adjustCandyCorn,
 			};
 		}
 
