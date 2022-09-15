@@ -4,4 +4,8 @@ export const DEFAULT_PLAYER_DATA: PlayerData = {
     candy: 0,
     candy_corn: 0,
     money: 0,
+    basket_upgrades: {
+        size: 1,
+        range: 1
+    }
 }

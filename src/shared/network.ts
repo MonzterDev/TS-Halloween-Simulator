@@ -1,16 +1,20 @@
 import { Networking } from "@flamework/networking";
 import { Currency } from "./constants/Currencies";
+import { AreaTypes } from "./constants/Piles";
 import { PlayerData } from "./types/PlayerData";
 
 interface ServerEvents {}
 
 interface ServerFunctions {
     getData: <k extends keyof PlayerData>( data: k ) => PlayerData[k] | false
+    getBasketUpgrade: <k extends keyof PlayerData["basket_upgrades"]>( data: k ) => number | false
 }
 
 interface ClientEvents {
     updatePileHealth: (uuid: string) => void
-    updateCurrency: (currency: Currency, amount: number) => void
+    updateCurrency: ( currency: Currency, amount: number ) => void
+
+    displayBasketUpgradeShop: (area: AreaTypes) => void
 }
 
 

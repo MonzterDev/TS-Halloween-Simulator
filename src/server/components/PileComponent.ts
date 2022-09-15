@@ -1,7 +1,7 @@
 import { OnStart } from "@flamework/core";
 import { Component, BaseComponent } from "@flamework/components";
-import Signal from "@rbxts/signal";
 import { Events } from "server/network";
+import { makeDescendantsInvisible } from "shared/util/functions/makeDescendantsInvisible";
 
 interface Attributes {
     uuid: string
@@ -18,8 +18,11 @@ interface Pile extends Model {
     }
 }
 
+const RESPAWN_DELAY = 5
+
 @Component({tag: "Pile"})
 export class PileComponent extends BaseComponent<Attributes, Pile> implements OnStart {
+    public isAlive = true
     private activePlayers: Player[] = []
 
     onStart () {
@@ -28,14 +31,22 @@ export class PileComponent extends BaseComponent<Attributes, Pile> implements On
     }
 
     private death () {
-        if ( this.attributes.health <= 0 ) {
-            this.destroy()
+        if ( this.attributes.health <= 0 && this.isAlive) {
+            this.isAlive = false
+            makeDescendantsInvisible( this.instance, true )
+            this.activePlayers.clear()
+
+            task.delay( RESPAWN_DELAY, () => {
+                this.attributes.health = this.attributes.max_health
+                this.isAlive = true
+                makeDescendantsInvisible( this.instance, false )
+            })
         }
     }
 
     public reduceHealth ( player: Player, amount: number ) {
         this.attributes.health -= amount
-        if (!this.activePlayers.includes(player)) this.activePlayers.push(player)
+        if ( !this.activePlayers.includes( player ) ) this.activePlayers.push( player )
     }
 
     public notifyHealthUpdate () {

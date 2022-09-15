@@ -33,7 +33,9 @@ export class PilesController implements OnInit {
         const health = <number>pile.GetAttribute("health")
 
         healthGui.Health.Text = tostring( health )
-        healthGui.Bar.Progress.Size = UDim2.fromScale(health / maxHealth, 1)
+        healthGui.Bar.Progress.Size = UDim2.fromScale( health / maxHealth, 1 )
+
+        healthGui.Enabled = health > 0
     }
 
     private createHealthDisplay (pile: Model) {

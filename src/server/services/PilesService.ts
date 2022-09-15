@@ -87,6 +87,7 @@ export class PilesService implements OnInit {
 
         const activePiles = this.components.getAllComponents<PileComponent>()
         activePiles.forEach( ( pile ) => {
+            if (!pile.isAlive) return
             const hitbox = pile.instance.PrimaryPart!
             const distanceBetween = hitbox.Position.sub( humanoidRootPart.Position ).Magnitude
             if ( distanceBetween < PLAYER_RANGE ) nearbyPiles.push( pile )

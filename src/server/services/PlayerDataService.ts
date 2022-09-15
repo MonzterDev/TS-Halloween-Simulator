@@ -24,9 +24,14 @@ export class PlayerDataService implements OnInit {
 
 		Functions.getData.setCallback( ( player, data ) => {
 			const profile = this.profiles.get( player );
-
 			return profile?.Data?.[data] ?? false;
 		} );
+
+		Functions.getBasketUpgrade.setCallback( ( player, upgrade ) => {
+			const profile = this.profiles.get( player );
+			return profile?.Data?.basket_upgrades[upgrade] ?? 0;
+
+		})
 	}
 
 	private createLeaderstats (player: Player, data: PlayerData) {

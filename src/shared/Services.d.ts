@@ -23,6 +23,29 @@ interface Workspace extends Model {
 }
 
 interface PlayerGui extends BasePlayerGui {
+	BasketUpgrade: ScreenGui & {
+		Frame: Frame & {
+			Title: TextLabel;
+			Upgrades: Frame & {
+				Template: ImageButton & {
+					Level: TextLabel;
+					Upgrade: TextLabel;
+					Bar: ImageLabel & {
+						Progress: ImageLabel;
+					};
+				};
+				UIGridLayout: UIGridLayout;
+			};
+			Background: ImageLabel;
+			UIAspectRatioConstraint: UIAspectRatioConstraint;
+			Info: Frame & {
+				Price: TextLabel;
+				Buy: TextButton;
+				Description: TextLabel;
+				Upgrade: TextLabel;
+			};
+		};
+	};
 	Currency: ScreenGui & {
 		Frame: Frame & {
 			CandyHolder: ImageLabel & {
