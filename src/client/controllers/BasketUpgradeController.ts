@@ -22,6 +22,8 @@ export class BasketUpgradeController implements OnInit {
     private frame = this.gui.Frame
     private upgrades = this.frame.Upgrades
     private info = this.frame.Info
+    private purchase = this.info.Buy
+    private exit = this.frame.Exit
 
     private template = this.upgrades.Template
 
@@ -29,6 +31,7 @@ export class BasketUpgradeController implements OnInit {
     private rangeLevel = 1
 
     private area: AreaTypes = "Spawn"
+    private selectedUpgrade: BasketUpgrades = "Range"
 
     onInit () {
         Functions.getBasketUpgrade.invoke( "range" ).andThen( ( amount ) => {
@@ -38,6 +41,8 @@ export class BasketUpgradeController implements OnInit {
             if (isA<number>(amount)) this.sizeLevel = amount
         } )
         this.generateShopParts()
+        this.purchase.MouseButton1Click.Connect( () => this.requestUpgrade() )
+        this.exit.MouseButton1Click.Connect(() => this.gui.Enabled = false)
     }
 
     private generateShopParts () {
@@ -57,8 +62,18 @@ export class BasketUpgradeController implements OnInit {
     private display ( area: AreaTypes ) {
         this.area = area
         this.gui.Enabled = true
-        this.generateUpgrade("Range")
-        this.generateUpgrade( "Size" )
+        this.cleanup()
+        this.generateUpgrades()
+    }
+
+    private cleanup () {
+        this.upgrades.GetChildren().forEach( ( child ) => {
+            if (child.IsA("ImageButton") && child.Visible) child.Destroy()
+        })
+    }
+
+    private generateUpgrades () {
+        BasketUpgrades.forEach((upgrade) => this.generateUpgrade(upgrade))
     }
 
     private generateUpgrade (upgrade: BasketUpgrades) {
@@ -75,11 +90,31 @@ export class BasketUpgradeController implements OnInit {
     }
 
     private displayInfo ( upgrade: BasketUpgrades ) {
+        this.selectedUpgrade = upgrade
         this.info.Visible = true
         this.info.Upgrade.Text = upgrade
         this.info.Description.Text = UPGRADE_DESCRIPTION[upgrade]
 
         const level = upgrade === "Range" ? this.rangeLevel : this.sizeLevel
-        this.info.Price.Text = `Price: ${getBasketUpgradePrice(upgrade, level)}`
+        const price = getBasketUpgradePrice( upgrade, level + 1 ) || "MAXED OUT!"
+        const priceString = price === "MAXED OUT!" ? price : `Price: ${price}`
+        this.info.Price.Text = priceString
+
+        this.purchase.Visible = price !== "MAXED OUT!"
+    }
+
+    private requestUpgrade () {
+        Functions.purchaseBasketUpgrade.invoke( this.selectedUpgrade ).andThen( ( result ) => {
+            if ( !result ) return
+            if (result === "Max") print("Max")
+            if (result === "No Money") print("No Money")
+            if ( result === "Success" ) {
+                if (this.selectedUpgrade === "Range") this.rangeLevel += 1
+                if ( this.selectedUpgrade === "Size" ) this.sizeLevel += 1
+                this.displayInfo( this.selectedUpgrade )
+                this.cleanup()
+                this.generateUpgrades()
+            }
+        })
     }
 }

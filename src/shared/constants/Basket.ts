@@ -1,3 +1,5 @@
+export type BasketUpgradeResponse = "Max" | "No Money" | "Success" | false
+
 export const BasketUpgrades = ["Size", "Range"] as const
 export type BasketUpgrades = typeof BasketUpgrades[number]
 export const UPGRADE_DESCRIPTION: Record<BasketUpgrades, string> = {
@@ -20,6 +22,11 @@ export const BasketShopConfig: BasketUpgradesConfig = {
         3: 100,
         4: 125,
         5: 150,
+        6: 200,
+        7: 250,
+        8: 300,
+        9: 350,
+        10: 400,
     },
     range: {
         1: 50,
@@ -27,6 +34,11 @@ export const BasketShopConfig: BasketUpgradesConfig = {
         3: 100,
         4: 125,
         5: 150,
+        6: 200,
+        7: 250,
+        8: 300,
+        9: 350,
+        10: 400,
     },
 }
 

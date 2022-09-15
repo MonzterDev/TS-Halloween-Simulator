@@ -1,4 +1,5 @@
 interface Workspace extends Model {
+	Sell: Folder
 	Piles: Folder & {
 		["1"]: Part & {
 			Weld: Weld;
@@ -25,6 +26,7 @@ interface Workspace extends Model {
 interface PlayerGui extends BasePlayerGui {
 	BasketUpgrade: ScreenGui & {
 		Frame: Frame & {
+			Exit: TextButton;
 			Title: TextLabel;
 			Upgrades: Frame & {
 				Template: ImageButton & {
@@ -62,6 +64,13 @@ interface PlayerGui extends BasePlayerGui {
 				Amount: TextLabel;
 			};
 			UIAspectRatioConstraint: UIAspectRatioConstraint;
+		};
+	};
+	Buttons: ScreenGui & {
+		Frame: Frame & {
+			UIGridLayout: UIGridLayout;
+			UIAspectRatioConstraint: UIAspectRatioConstraint;
+			Sell: TextButton;
 		};
 	};
 }

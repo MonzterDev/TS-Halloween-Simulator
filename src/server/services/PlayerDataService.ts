@@ -93,6 +93,7 @@ export class PlayerDataService implements OnInit {
 
 			const setMoney = ( value: number ) => {
 				profile.Data.money = value
+				player.leaderstats.Money.Value = value
 				Events.updateCurrency.fire(player, "money", value)
 			}
 
