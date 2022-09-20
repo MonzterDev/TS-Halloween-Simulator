@@ -4,6 +4,7 @@ import { Events, Functions } from "client/network";
 import { BasketShopConfig, BasketUpgrades, getBasketUpgradePrice, UPGRADE_DESCRIPTION } from "shared/constants/Basket";
 import { AreaTypes } from "shared/constants/Piles";
 import { abbreviator } from "shared/util/functions/abbreviate";
+import { getClosestUpgradePart } from "shared/util/functions/getClosestPart";
 import { isA } from "shared/util/functions/isA";
 
 const areasMaxLevel: Record<AreaTypes, number> = {
@@ -53,6 +54,13 @@ export class BasketUpgradeController implements OnInit {
         this.purchase.MouseButton1Click.Connect( () => this.requestUpgrade() )
         this.exit.MouseButton1Click.Connect( () => this.gui.Enabled = false )
         Events.displayBasketUpgradeShop.connect( ( area ) => this.display( area ) )
+    }
+
+    public teleportToShop () {
+        const closestPart = getClosestUpgradePart(this.player, this.shops)
+        const character = this.player.Character
+        if ( !character || !closestPart ) return
+        character.PivotTo(closestPart.CFrame)
     }
 
     private generateShopParts () {

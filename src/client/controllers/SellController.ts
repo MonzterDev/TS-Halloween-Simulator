@@ -38,7 +38,7 @@ export class SellController implements OnInit {
         return closestPart || false
     }
 
-    private clickSellButton () {
+    public clickSellButton () {
         if ( this.ownsSellGamepass ) Events.sell()
         else {
             const closestPart = this.getClosestSellPart()

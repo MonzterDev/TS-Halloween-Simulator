@@ -49,13 +49,6 @@ interface PlayerGui extends BasePlayerGui {
 		};
 	};
 	Currency: ScreenGui & {
-		Popup: Frame & {
-			Template: Frame & {
-				UICorner: UICorner;
-				Icon: ImageLabel;
-				UIAspectRatioConstraint: UIAspectRatioConstraint;
-			};
-		};
 		Frame: Frame & {
 			CandyHolder: ImageLabel & {
 				Icon: ImageLabel;
@@ -71,6 +64,20 @@ interface PlayerGui extends BasePlayerGui {
 				Amount: TextLabel;
 			};
 			UIAspectRatioConstraint: UIAspectRatioConstraint;
+		};
+		Full: Frame & {
+			Tip: TextLabel;
+			Title: TextLabel;
+			Upgrade: TextButton;
+			UICorner: UICorner;
+			Sell: TextButton;
+			UIAspectRatioConstraint: UIAspectRatioConstraint;
+		};
+		Popup: Frame & {
+			Template: Frame & {
+				Icon: ImageLabel;
+				UICorner: UICorner;
+			};
 		};
 	};
 	Buttons: ScreenGui & {
