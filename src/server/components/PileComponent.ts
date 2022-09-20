@@ -24,6 +24,7 @@ const RESPAWN_DELAY = 5
 export class PileComponent extends BaseComponent<Attributes, Pile> implements OnStart {
     public isAlive = true
     private activePlayers: Player[] = []
+    private previousHealth = this.attributes.health
 
     onStart () {
         this.maid.GiveTask(this.instance)
@@ -40,6 +41,7 @@ export class PileComponent extends BaseComponent<Attributes, Pile> implements On
                 this.attributes.health = this.attributes.max_health
                 this.isAlive = true
                 makeDescendantsInvisible( this.instance, false )
+                this.activePlayers.clear()
             })
         }
     }
@@ -50,6 +52,8 @@ export class PileComponent extends BaseComponent<Attributes, Pile> implements On
     }
 
     public notifyHealthUpdate () {
+        if ( this.attributes.health === this.previousHealth ) return
+        this.previousHealth = this.attributes.health
         Events.updatePileHealth.fire(this.activePlayers, this.attributes.uuid)
     }
 

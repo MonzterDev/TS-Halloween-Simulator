@@ -35,6 +35,7 @@ export class PilesController implements OnInit {
         healthGui.Health.Text = tostring( health )
         healthGui.Bar.Progress.Size = UDim2.fromScale( health / maxHealth, 1 )
 
+        print(health)
         healthGui.Enabled = health > 0
     }
 

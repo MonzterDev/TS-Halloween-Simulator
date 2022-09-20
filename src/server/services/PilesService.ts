@@ -74,7 +74,7 @@ export class PilesService implements OnInit {
 
     private collectPile ( player: Player, pile: PileComponent ) {
         const profile = this.playerDataService.getProfile( player )
-        if ( !profile ) return
+        if ( !profile || !pile.isAlive ) return
 
         const damage = getPowerStat( player )
         const luck = getLuckStat( player )
