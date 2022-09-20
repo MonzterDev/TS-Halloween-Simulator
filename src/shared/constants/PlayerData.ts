@@ -9,5 +9,6 @@ export const DEFAULT_PLAYER_DATA: PlayerData = {
         range: 0,
         power: 0,
         luck: 0
-    }
+    },
+    pet_inventory: []
 }

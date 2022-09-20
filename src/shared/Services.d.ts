@@ -80,8 +80,46 @@ interface PlayerGui extends BasePlayerGui {
 			};
 		};
 	};
+	PetInventory: ScreenGui & {
+		Frame: Frame & {
+			Exit: TextButton;
+			Info: Frame & {
+				Locked: ImageLabel;
+				Buttons: Frame & {
+					Equip: TextButton;
+					UIGridLayout: UIGridLayout;
+					Delete: TextButton;
+					Lock: TextButton;
+				};
+				Upgrade: TextLabel;
+				ViewportFrame: ViewportFrame;
+				Temp: TextLabel;
+				Equipped: ImageLabel;
+				Power: TextLabel;
+			};
+			Buttons: Frame & {
+				EquipBest: TextButton;
+				UIGridLayout: UIGridLayout;
+				Trash: TextButton;
+				Lock: TextButton;
+			};
+			Title: TextLabel;
+			Background: ImageLabel;
+			UIAspectRatioConstraint: UIAspectRatioConstraint;
+			Container: ScrollingFrame & {
+				Template: ImageButton & {
+					ViewportFrame: ViewportFrame;
+					Locked: ImageLabel;
+					Equipped: ImageLabel;
+					Power: TextLabel;
+				};
+				UIGridLayout: UIGridLayout;
+			};
+		};
+	};
 	Buttons: ScreenGui & {
 		Frame: Frame & {
+			Pet: TextButton;
 			UIGridLayout: UIGridLayout;
 			UIAspectRatioConstraint: UIAspectRatioConstraint;
 			Sell: TextButton;

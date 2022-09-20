@@ -1,9 +1,11 @@
+import { PetInstance } from "shared/constants/Pets";
 
 export interface PlayerData {
 	candy: number;
 	candy_corn: number;
 	money: number;
 	basket_upgrades: BasketUpgrades
+	pet_inventory: PetInstance[]
 }
 
 export interface BasketUpgrades {

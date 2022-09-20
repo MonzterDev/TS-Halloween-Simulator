@@ -33,6 +33,7 @@
     "@rbxts/cmdr": "^1.8.4-ts.2",
     "@rbxts/make": "^1.0.6",
     "@rbxts/profileservice": "^1.4.1",
+    "@rbxts/rodux": "^3.0.0-ts.3",
     "@rbxts/services": "^1.5.1",
     "@rbxts/signal": "^1.1.1"
   }

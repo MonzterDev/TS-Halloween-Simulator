@@ -7,6 +7,8 @@ import { isA } from "shared/util/functions/isA";
 import { abbreviator, noDecimalPlaceAbbreviator } from "shared/util/functions/abbreviate";
 import { SellController } from "./SellController";
 import { BasketUpgradeController } from "./BasketUpgradeController";
+import { clientStore } from "client/rodux/rodux";
+import { BasketUpgradeConfig } from "shared/constants/Basket";
 
 @Controller({})
 export class CurrencyController implements OnInit {
@@ -31,18 +33,15 @@ export class CurrencyController implements OnInit {
     private upgradeButton = this.full.Upgrade
     private sellButton = this.full.Sell
 
-    private storage = 10
-
     onInit () {
-        Functions.getData.invoke( "candy" ).andThen( ( amount ) => {
-            if (isA<number>(amount)) this.updateAmount( "candy",  amount )
-        } )
-        Functions.getData.invoke( "candy_corn" ).andThen( ( amount ) => {
-            if (isA<number>(amount)) this.updateAmount( "candy_corn",  amount )
-        } )
-        Functions.getData.invoke( "money" ).andThen( ( amount ) => {
-            if (isA<number>(amount)) this.updateAmount( "money",  amount )
-        } )
+        this.updateAmount("candy", clientStore.getState().data.candy)
+        this.updateAmount("money", clientStore.getState().data.money)
+        this.updateAmount( "candy_corn", clientStore.getState().data.candy_corn )
+        clientStore.changed.connect( (newState) => {
+            this.updateAmount("candy", newState.data.candy)
+            this.updateAmount("money", newState.data.money)
+            this.updateAmount( "candy_corn", newState.data.candy_corn )
+        })
         Events.updateCurrency.connect( ( currency, amount ) => this.updateAmount( currency, amount ) )
         Events.luckyReward.connect( ( amount ) => this.animateAmount( true ) )
         this.sellButton.MouseButton1Click.Connect(() => this.clickFullButtons("Sell"))
@@ -52,9 +51,10 @@ export class CurrencyController implements OnInit {
     private updateAmount ( currency: Currency, amount: number ) {
         const displayAmount = <string>abbreviator.abbreviate(amount)
         if ( currency === "candy" ) {
-            this.candyAmount.Text = `${noDecimalPlaceAbbreviator.abbreviate(amount)}/${this.storage}`
+            const storage = BasketUpgradeConfig.size[clientStore.getState().data.basket_upgrades.size]
+            this.candyAmount.Text = `${noDecimalPlaceAbbreviator.abbreviate(amount)}/${storage}`
             if ( amount > 0 ) this.animateAmount()
-            if (amount >= this.storage) this.fullNotification()
+            if (amount >= storage) this.fullNotification()
         }
         if (currency === "candy_corn") this.candyCornAmount.Text = displayAmount
         if (currency === "money") this.moneyAmount.Text = displayAmount

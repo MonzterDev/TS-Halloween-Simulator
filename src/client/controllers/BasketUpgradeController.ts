@@ -1,11 +1,11 @@
 import { Controller, OnStart, OnInit } from "@flamework/core";
 import { Players, Workspace } from "@rbxts/services";
 import { Events, Functions } from "client/network";
-import { BasketShopConfig, BasketUpgrades, getBasketUpgradePrice, UPGRADE_DESCRIPTION } from "shared/constants/Basket";
+import { clientStore } from "client/rodux/rodux";
+import { BasketShopConfig, BasketUpgrades, getBasketUpgradeAsProp, getBasketUpgradePrice, UPGRADE_DESCRIPTION } from "shared/constants/Basket";
 import { AreaTypes } from "shared/constants/Piles";
 import { abbreviator } from "shared/util/functions/abbreviate";
 import { getClosestUpgradePart } from "shared/util/functions/getClosestPart";
-import { isA } from "shared/util/functions/isA";
 
 const areasMaxLevel: Record<AreaTypes, number> = {
     "Spawn": 10,
@@ -29,30 +29,16 @@ export class BasketUpgradeController implements OnInit {
 
     private template = this.upgrades.Template
 
-    private sizeLevel = 1
-    private rangeLevel = 1
-    private powerLevel = 1
-    private luckLevel = 1
-
     private area: AreaTypes = "Spawn"
     private selectedUpgrade: BasketUpgrades = "Range"
 
     onInit () {
-        Functions.getBasketUpgrade.invoke( "range" ).andThen( ( amount ) => {
-            if (isA<number>(amount)) this.rangeLevel = amount
-        } )
-        Functions.getBasketUpgrade.invoke( "size" ).andThen( ( amount ) => {
-            if (isA<number>(amount)) this.sizeLevel = amount
-        } )
-        Functions.getBasketUpgrade.invoke( "power" ).andThen( ( amount ) => {
-            if (isA<number>(amount)) this.powerLevel = amount
-        } )
-        Functions.getBasketUpgrade.invoke( "luck" ).andThen( ( amount ) => {
-            if (isA<number>(amount)) this.luckLevel = amount
-        } )
         this.generateShopParts()
         this.purchase.MouseButton1Click.Connect( () => this.requestUpgrade() )
-        this.exit.MouseButton1Click.Connect( () => this.gui.Enabled = false )
+        this.exit.MouseButton1Click.Connect( () => {
+            this.gui.Enabled = false
+            this.info.Visible = false
+        } )
         Events.displayBasketUpgradeShop.connect( ( area ) => this.display( area ) )
     }
 
@@ -113,8 +99,8 @@ export class BasketUpgradeController implements OnInit {
         this.info.Upgrade.Text = upgrade
         this.info.Description.Text = UPGRADE_DESCRIPTION[upgrade]
 
-        const level = this.getLevel(upgrade)
-        const price = <string>abbreviator.abbreviate(getBasketUpgradePrice( upgrade, level + 1 )) || "MAXED OUT!"
+        const level = this.getLevel( upgrade )
+        const price = (level >= areasMaxLevel[this.area]) ? "MAXED OUT!" : <string>abbreviator.abbreviate(getBasketUpgradePrice( upgrade, level + 1 ))
         const priceString = price === "MAXED OUT!" ? price : `Price: ${price}`
         this.info.Price.Text = priceString
 
@@ -127,10 +113,7 @@ export class BasketUpgradeController implements OnInit {
             if (result === "Max") print("Max")
             if (result === "No Money") print("No Money")
             if ( result === "Success" ) {
-                if (this.selectedUpgrade === "Range") this.rangeLevel += 1
-                if ( this.selectedUpgrade === "Size" ) this.sizeLevel += 1
-                if ( this.selectedUpgrade === "Power" ) this.powerLevel += 1
-                if ( this.selectedUpgrade === "Luck" ) this.luckLevel += 1
+                clientStore.dispatch({type: "updateUpgrade", upgrade: getBasketUpgradeAsProp(this.selectedUpgrade), amount: this.getLevel(this.selectedUpgrade) + 1})
                 this.displayInfo( this.selectedUpgrade )
                 this.cleanup()
                 this.generateUpgrades()
@@ -139,15 +122,6 @@ export class BasketUpgradeController implements OnInit {
     }
 
     private getLevel ( upgrade: BasketUpgrades ): number {
-        switch (upgrade) {
-            case "Size":
-                return this.sizeLevel
-            case "Range":
-                return this.rangeLevel
-            case "Power":
-                return this.powerLevel
-            case "Luck":
-                return this.luckLevel
-        }
+        return clientStore.getState().data.basket_upgrades[getBasketUpgradeAsProp(upgrade)]
     }
 }
