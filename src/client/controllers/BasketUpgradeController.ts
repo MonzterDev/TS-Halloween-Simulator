@@ -42,7 +42,8 @@ export class BasketUpgradeController implements OnInit {
         } )
         this.generateShopParts()
         this.purchase.MouseButton1Click.Connect( () => this.requestUpgrade() )
-        this.exit.MouseButton1Click.Connect(() => this.gui.Enabled = false)
+        this.exit.MouseButton1Click.Connect( () => this.gui.Enabled = false )
+        Events.displayBasketUpgradeShop.connect( ( area ) => this.display( area ) )
     }
 
     private generateShopParts () {
