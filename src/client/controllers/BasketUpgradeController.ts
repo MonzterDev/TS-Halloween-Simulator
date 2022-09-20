@@ -3,6 +3,7 @@ import { Players, Workspace } from "@rbxts/services";
 import { Events, Functions } from "client/network";
 import { BasketShopConfig, BasketUpgrades, getBasketUpgradePrice, UPGRADE_DESCRIPTION } from "shared/constants/Basket";
 import { AreaTypes } from "shared/constants/Piles";
+import { abbreviator } from "shared/util/functions/abbreviate";
 import { isA } from "shared/util/functions/isA";
 
 const areasMaxLevel: Record<AreaTypes, number> = {
@@ -105,7 +106,7 @@ export class BasketUpgradeController implements OnInit {
         this.info.Description.Text = UPGRADE_DESCRIPTION[upgrade]
 
         const level = this.getLevel(upgrade)
-        const price = getBasketUpgradePrice( upgrade, level + 1 ) || "MAXED OUT!"
+        const price = <string>abbreviator.abbreviate(getBasketUpgradePrice( upgrade, level + 1 )) || "MAXED OUT!"
         const priceString = price === "MAXED OUT!" ? price : `Price: ${price}`
         this.info.Price.Text = priceString
 

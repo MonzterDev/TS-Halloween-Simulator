@@ -19,6 +19,7 @@ interface ClientEvents {
     updateCurrency: ( currency: Currency, amount: number ) => void
 
     displayBasketUpgradeShop: (area: AreaTypes) => void
+    luckyReward: (amount: number) => void
 }
 
 

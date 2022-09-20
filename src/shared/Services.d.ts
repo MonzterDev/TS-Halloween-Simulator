@@ -49,6 +49,13 @@ interface PlayerGui extends BasePlayerGui {
 		};
 	};
 	Currency: ScreenGui & {
+		Popup: Frame & {
+			Template: Frame & {
+				UICorner: UICorner;
+				Icon: ImageLabel;
+				UIAspectRatioConstraint: UIAspectRatioConstraint;
+			};
+		};
 		Frame: Frame & {
 			CandyHolder: ImageLabel & {
 				Icon: ImageLabel;

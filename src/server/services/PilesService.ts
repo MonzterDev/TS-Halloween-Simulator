@@ -3,7 +3,7 @@ import { Service, OnStart, OnInit, OnRender, OnTick, Dependency } from "@flamewo
 import { CollectionService, HttpService, Players, ServerStorage, Workspace } from "@rbxts/services";
 import { PileComponent } from "server/components/PileComponent";
 import { Events } from "server/network";
-import { getPowerStat, getRangeStat, getSizeStat } from "server/utils/Stats";
+import { getLuckStat, getPowerStat, getRangeStat, getSizeStat } from "server/utils/Stats";
 import { AreasConfig, PilesConfig } from "shared/constants/Piles";
 import { PlayerDataService } from "./PlayerDataService";
 
@@ -76,7 +76,11 @@ export class PilesService implements OnInit {
         const profile = this.playerDataService.getProfile( player )
         if ( !profile ) return
 
-        const damage = getPowerStat(player)
+        const damage = getPowerStat( player )
+        const luck = getLuckStat( player )
+
+        const wasLucky = math.random( 0, 100 ) < luck
+        let bonusReward = 0
 
         pile.reduceHealth( player, damage )
 
@@ -84,8 +88,11 @@ export class PilesService implements OnInit {
         const currentCandy = profile.data.candy
         let reward = damage
         if ( currentCandy + damage > storage ) reward = storage - currentCandy
+        if ( wasLucky ) bonusReward = math.round( damage / ( math.random( 20, 100 ) / 100 ) )
+        reward += bonusReward
 
-        profile.adjustCandy(reward)
+        profile.adjustCandy( reward )
+        if (wasLucky) Events.luckyReward.fire(player, bonusReward)
     }
 
     private getPilesInRange ( player: Player ) {

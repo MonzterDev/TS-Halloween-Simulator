@@ -1,5 +1,4 @@
 import { Service, OnStart, OnInit, Dependency } from "@flamework/core";
-import { Workspace } from "@rbxts/services";
 import { Functions } from "server/network";
 import { BasketShopConfig, BasketUpgradeResponse, BasketUpgrades, getBasketUpgradeAsProp } from "shared/constants/Basket";
 import { PlayerDataService } from "./PlayerDataService";

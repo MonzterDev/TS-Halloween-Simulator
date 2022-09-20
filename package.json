@@ -28,6 +28,8 @@
     "@flamework/components": "^1.0.0-beta.6",
     "@flamework/core": "^1.0.0-beta.4",
     "@flamework/networking": "^1.0.0-beta.6",
+    "@rbxts/abbreviate": "^3.0.4",
+    "@rbxts/boat-tween": "^1.0.1",
     "@rbxts/cmdr": "^1.8.4-ts.2",
     "@rbxts/make": "^1.0.6",
     "@rbxts/profileservice": "^1.4.1",
