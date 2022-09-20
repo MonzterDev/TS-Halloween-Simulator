@@ -3,10 +3,9 @@ import { Service, OnStart, OnInit, OnRender, OnTick, Dependency } from "@flamewo
 import { CollectionService, HttpService, Players, ServerStorage, Workspace } from "@rbxts/services";
 import { PileComponent } from "server/components/PileComponent";
 import { Events } from "server/network";
+import { getPowerStat, getRangeStat, getSizeStat } from "server/utils/Stats";
 import { AreasConfig, PilesConfig } from "shared/constants/Piles";
 import { PlayerDataService } from "./PlayerDataService";
-
-const PLAYER_RANGE = 10
 
 @Service({})
 export class PilesService implements OnInit {
@@ -48,8 +47,12 @@ export class PilesService implements OnInit {
     private startLoop () {
         while ( true ) {
             Players.GetPlayers().forEach( ( player ) => {
-                const character = player.Character
-                if ( !character ) return
+                const profile = this.playerDataService.getProfile( player )
+                if ( !profile ) return
+
+                const storage = getSizeStat( player )
+                if (profile.data.candy >= storage) return
+
                 const piles = this.getPilesInRange( player )
                 piles?.forEach((pile) => this.collectPile(player, pile))
             } )
@@ -73,15 +76,22 @@ export class PilesService implements OnInit {
         const profile = this.playerDataService.getProfile( player )
         if ( !profile ) return
 
-        const damage = 1
+        const damage = getPowerStat(player)
 
-        pile.reduceHealth(player, damage)
-        profile.adjustCandy(1)
+        pile.reduceHealth( player, damage )
+
+        const storage = getSizeStat( player )
+        const currentCandy = profile.data.candy
+        let reward = damage
+        if ( currentCandy + damage > storage ) reward = storage - currentCandy
+
+        profile.adjustCandy(reward)
     }
 
     private getPilesInRange ( player: Player ) {
         const character = player.Character
         if ( !character ) return
+        const playerCollectionRange = getRangeStat(player)
         const humanoidRootPart = <BasePart>character.FindFirstChild("HumanoidRootPart")
         const nearbyPiles: PileComponent[] = []
 
@@ -90,7 +100,7 @@ export class PilesService implements OnInit {
             if (!pile.isAlive) return
             const hitbox = pile.instance.PrimaryPart!
             const distanceBetween = hitbox.Position.sub( humanoidRootPart.Position ).Magnitude
-            if ( distanceBetween < PLAYER_RANGE ) nearbyPiles.push( pile )
+            if ( distanceBetween < playerCollectionRange ) nearbyPiles.push( pile )
         } )
 
         return nearbyPiles

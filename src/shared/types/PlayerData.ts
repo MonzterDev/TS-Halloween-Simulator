@@ -9,4 +9,6 @@ export interface PlayerData {
 export interface BasketUpgrades {
 	size: number
 	range: number
+	power: number
+	luck: number
 }

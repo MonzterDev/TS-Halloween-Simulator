@@ -29,6 +29,8 @@ export class BasketUpgradeController implements OnInit {
 
     private sizeLevel = 1
     private rangeLevel = 1
+    private powerLevel = 1
+    private luckLevel = 1
 
     private area: AreaTypes = "Spawn"
     private selectedUpgrade: BasketUpgrades = "Range"
@@ -39,6 +41,12 @@ export class BasketUpgradeController implements OnInit {
         } )
         Functions.getBasketUpgrade.invoke( "size" ).andThen( ( amount ) => {
             if (isA<number>(amount)) this.sizeLevel = amount
+        } )
+        Functions.getBasketUpgrade.invoke( "power" ).andThen( ( amount ) => {
+            if (isA<number>(amount)) this.powerLevel = amount
+        } )
+        Functions.getBasketUpgrade.invoke( "luck" ).andThen( ( amount ) => {
+            if (isA<number>(amount)) this.luckLevel = amount
         } )
         this.generateShopParts()
         this.purchase.MouseButton1Click.Connect( () => this.requestUpgrade() )
@@ -84,7 +92,7 @@ export class BasketUpgradeController implements OnInit {
         clone.Visible = true
 
         clone.Upgrade.Text = upgrade
-        const level = upgrade === "Range" ? this.rangeLevel : this.sizeLevel
+        const level = this.getLevel(upgrade)
         clone.Bar.Progress.Size = UDim2.fromScale( level / areasMaxLevel[this.area], 1 )
         clone.Level.Text = `LVL ${level}`
         clone.MouseButton1Click.Connect(() => this.displayInfo(upgrade))
@@ -96,7 +104,7 @@ export class BasketUpgradeController implements OnInit {
         this.info.Upgrade.Text = upgrade
         this.info.Description.Text = UPGRADE_DESCRIPTION[upgrade]
 
-        const level = upgrade === "Range" ? this.rangeLevel : this.sizeLevel
+        const level = this.getLevel(upgrade)
         const price = getBasketUpgradePrice( upgrade, level + 1 ) || "MAXED OUT!"
         const priceString = price === "MAXED OUT!" ? price : `Price: ${price}`
         this.info.Price.Text = priceString
@@ -112,10 +120,25 @@ export class BasketUpgradeController implements OnInit {
             if ( result === "Success" ) {
                 if (this.selectedUpgrade === "Range") this.rangeLevel += 1
                 if ( this.selectedUpgrade === "Size" ) this.sizeLevel += 1
+                if ( this.selectedUpgrade === "Power" ) this.powerLevel += 1
+                if ( this.selectedUpgrade === "Luck" ) this.luckLevel += 1
                 this.displayInfo( this.selectedUpgrade )
                 this.cleanup()
                 this.generateUpgrades()
             }
         })
+    }
+
+    private getLevel ( upgrade: BasketUpgrades ): number {
+        switch (upgrade) {
+            case "Size":
+                return this.sizeLevel
+            case "Range":
+                return this.rangeLevel
+            case "Power":
+                return this.powerLevel
+            case "Luck":
+                return this.luckLevel
+        }
     }
 }

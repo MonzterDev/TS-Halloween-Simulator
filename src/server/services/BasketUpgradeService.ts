@@ -1,7 +1,7 @@
 import { Service, OnStart, OnInit, Dependency } from "@flamework/core";
 import { Workspace } from "@rbxts/services";
 import { Functions } from "server/network";
-import { BasketShopConfig, BasketUpgradeResponse, BasketUpgrades } from "shared/constants/Basket";
+import { BasketShopConfig, BasketUpgradeResponse, BasketUpgrades, getBasketUpgradeAsProp } from "shared/constants/Basket";
 import { PlayerDataService } from "./PlayerDataService";
 
 
@@ -18,16 +18,15 @@ export class BasketUpgradeService implements OnInit {
         const profile = this.playerDataService.getProfile( player )
         if ( !profile ) return false
 
-        const basketConfig = upgrade === "Range" ? BasketShopConfig.range : BasketShopConfig.size
-        const currentLevel = upgrade === "Range" ? profile.data.basket_upgrades.range : profile.data.basket_upgrades.size
+        const basketConfig = BasketShopConfig[getBasketUpgradeAsProp(upgrade)]
+        const currentLevel = profile.data.basket_upgrades[getBasketUpgradeAsProp(upgrade)]
         if (currentLevel >= 50) return "Max"
         const price = basketConfig[currentLevel + 1]
 
         if ( profile.data.money < price ) return "No Money"
 
         profile.adjustMoney( -price )
-        if (upgrade === "Range") profile.data.basket_upgrades.range += 1
-        if ( upgrade === "Size" ) profile.data.basket_upgrades.size += 1
+        profile.data.basket_upgrades[getBasketUpgradeAsProp(upgrade)] += 1
         return "Success"
     }
 

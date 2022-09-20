@@ -6,6 +6,8 @@ export const DEFAULT_PLAYER_DATA: PlayerData = {
     money: 10000,
     basket_upgrades: {
         size: 0,
-        range: 0
+        range: 0,
+        power: 0,
+        luck: 0
     }
 }
