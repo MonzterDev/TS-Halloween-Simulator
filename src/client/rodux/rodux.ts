@@ -16,6 +16,7 @@ export const clientStore = new Store( combinedReducer );
 
 Events.updateCurrency.connect( ( currency, amount ) => clientStore.dispatch( { type: "updateCurrency", currency: currency, amount: amount } ) )
 Events.givePet.connect( ( uuid, props ) => clientStore.dispatch( { type: "addPet", uuid: uuid, props: props } ) )
+Events.deletePet.connect((uuid) => clientStore.dispatch( { type: "removePet", uuid: uuid }))
 
 Functions.getAllData.invoke().andThen( ( data ) => {
 	if (isA<PlayerData>(data)) clientStore.dispatch({type: "updatePlayerData", data: data})

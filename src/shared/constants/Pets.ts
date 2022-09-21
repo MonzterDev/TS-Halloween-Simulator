@@ -2,6 +2,8 @@
 export interface PetInstanceProps {
     type: PetTypes
     rarity: Rarities
+    locked?: boolean
+    equipped?: boolean
 }
 
 export type PetInventory = Map<UUID, PetInstanceProps>

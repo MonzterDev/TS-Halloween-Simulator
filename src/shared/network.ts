@@ -1,12 +1,14 @@
 import { Networking } from "@flamework/networking";
 import { BasketUpgradeResponse, BasketUpgrades } from "./constants/Basket";
 import { Currency } from "./constants/Currencies";
-import { PetInstanceProps, UUID } from "./constants/Pets";
+import { PetInstanceProps, PetTypes, UUID } from "./constants/Pets";
 import { AreaTypes } from "./constants/Piles";
 import { PlayerData } from "./types/PlayerData";
 
 interface ServerEvents {
     sell: () => void
+    deletePets: (uuids: UUID[]) => void
+    equipPet: (uuid: UUID) => void
 }
 
 interface ServerFunctions {
@@ -22,7 +24,9 @@ interface ClientEvents {
     givePet: ( uuid: UUID, props: PetInstanceProps ) => void
 
     displayBasketUpgradeShop: (area: AreaTypes) => void
-    luckyReward: (amount: number) => void
+    luckyReward: ( amount: number ) => void
+    deletePet: (uuid: UUID) => void
+    equipPet: (player: Player, uuid: UUID, pet: PetTypes) => void
 }
 
 

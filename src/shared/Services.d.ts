@@ -17,6 +17,7 @@ interface Workspace extends Model {
 	Snow: Part & {
 		Weld: Weld;
 	};
+	Pets: Folder
 	Piles: Folder & {
 		Grass: Folder & {
 			Large: Part & {
@@ -120,6 +121,7 @@ interface PlayerGui extends BasePlayerGui {
 	PetInventory: ScreenGui & {
 		Frame: Frame & {
 			Exit: TextButton;
+			Title: TextLabel;
 			Info: Frame & {
 				Locked: ImageLabel;
 				Buttons: Frame & {
@@ -128,25 +130,29 @@ interface PlayerGui extends BasePlayerGui {
 					Delete: TextButton;
 					Lock: TextButton;
 				};
-				Upgrade: TextLabel;
+				Power: TextLabel;
 				ViewportFrame: ViewportFrame;
 				Temp: TextLabel;
 				Equipped: ImageLabel;
-				Power: TextLabel;
+				PetName: TextLabel;
 			};
 			Buttons: Frame & {
-				EquipBest: TextButton;
 				UIGridLayout: UIGridLayout;
 				Trash: TextButton;
-				Lock: TextButton;
+				EquipBest: TextButton;
 			};
-			Title: TextLabel;
+			Confirmation: Frame & {
+				Confirm: TextButton;
+				UIGridLayout: UIGridLayout;
+				Cancel: TextButton;
+			};
 			Background: ImageLabel;
 			UIAspectRatioConstraint: UIAspectRatioConstraint;
 			Container: ScrollingFrame & {
 				Template: ImageButton & {
 					ViewportFrame: ViewportFrame;
 					Locked: ImageLabel;
+					IsSelected: ImageLabel;
 					Equipped: ImageLabel;
 					Power: TextLabel;
 				};
@@ -207,6 +213,7 @@ interface ReplicatedStorage extends Instance {
 			Progress: ImageLabel;
 		};
 	};
+	Pets: Folder
 	TS: Folder & {
 		network: ModuleScript;
 		util: Folder & {
