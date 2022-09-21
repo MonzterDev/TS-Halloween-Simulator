@@ -1,25 +1,62 @@
 interface Workspace extends Model {
-	Sell: Folder
-	Piles: Folder & {
-		["1"]: Part & {
-			Weld: Weld;
-		};
-		["4"]: Part & {
-			Weld: Weld;
-		};
-		["3"]: Part & {
-			Weld: Weld;
-		};
-		["2"]: Part & {
-			Weld: Weld;
-		};
+	Grass: Part & {
+		Weld: Weld;
 	};
-	Camera: Camera;
 	SpawnLocation: SpawnLocation & {
 		Decal: Decal;
 	};
+	Eggs: Folder & {
+		Common: Part & {
+			Prompt: ProximityPrompt;
+		};
+	};
+	Camera: Camera;
 	Baseplate: Part & {
 		Texture: Texture;
+	};
+	Snow: Part & {
+		Weld: Weld;
+	};
+	Piles: Folder & {
+		Grass: Folder & {
+			Large: Part & {
+				Weld: Weld;
+			};
+			Medium: Part & {
+				Weld: Weld;
+			};
+		};
+		Snow: Folder & {
+			Large: Part & {
+				Weld: Weld;
+			};
+			Medium: Part & {
+				Weld: Weld;
+			};
+		};
+		Spawn: Folder & {
+			Large: Part & {
+				Weld: Weld;
+			};
+			Medium: Part & {
+				Weld: Weld;
+			};
+		};
+	};
+	Sell: Folder & {
+		Snow: Part;
+		Spawn: Part;
+	};
+	Shops: Folder & {
+		Snow: Part & {
+			Weld: Weld;
+		};
+		Spawn: Part & {
+			Weld: Weld;
+		};
+	};
+	Spawn: Part & {
+		Weld: Weld;
 	};
 }
 

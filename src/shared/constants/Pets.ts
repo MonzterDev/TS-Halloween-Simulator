@@ -1,9 +1,10 @@
 
-interface PetInstanceProps {
+export interface PetInstanceProps {
     type: PetTypes
     rarity: Rarities
 }
-export type PetInstance = Record<UUID, PetInstanceProps>
+
+export type PetInventory = Map<UUID, PetInstanceProps>
 
 export const Rarities = ["Common", "Uncommon", "Rare"] as const
 export type Rarities = typeof Rarities[number]
@@ -16,13 +17,18 @@ export type PetTypes = typeof PetTypes[number]
 
 export type Power = number
 export type Chance = number
-export type UUID = number
+export type UUID = string
 
-type PetEggProps = Partial<Record<PetTypes, Chance>>
+interface Props {
+    chance: number
+    rarity: Rarities
+}
+
+export type EggPetProps = Partial<Record<PetTypes, Props>>
 
 interface EggProps {
     price: number,
-    pets: PetEggProps
+    pets: EggPetProps
 }
 
 
@@ -30,8 +36,8 @@ export const EggShopConfig: Record<EggTypes, EggProps> = {
     Starter: {
         price: 10,
         pets: {
-            Dog: 1,
-            Cat: 5,
+            Dog: {chance: 1, rarity: "Common"},
+            Cat: {chance: 5, rarity: "Uncommon"},
         }
     }
 }

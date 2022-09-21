@@ -1,6 +1,7 @@
 import { Networking } from "@flamework/networking";
 import { BasketUpgradeResponse, BasketUpgrades } from "./constants/Basket";
 import { Currency } from "./constants/Currencies";
+import { PetInstanceProps, UUID } from "./constants/Pets";
 import { AreaTypes } from "./constants/Piles";
 import { PlayerData } from "./types/PlayerData";
 
@@ -9,6 +10,7 @@ interface ServerEvents {
 }
 
 interface ServerFunctions {
+    getAllData: () => PlayerData | false
     getData: <k extends keyof PlayerData>( data: k ) => PlayerData[k] | false
     getBasketUpgrade: <k extends keyof PlayerData["basket_upgrades"]>( data: k ) => number | false
     purchaseBasketUpgrade: ( upgrade: BasketUpgrades ) => BasketUpgradeResponse
@@ -17,6 +19,7 @@ interface ServerFunctions {
 interface ClientEvents {
     updatePileHealth: (uuid: string) => void
     updateCurrency: ( currency: Currency, amount: number ) => void
+    givePet: ( uuid: UUID, props: PetInstanceProps ) => void
 
     displayBasketUpgradeShop: (area: AreaTypes) => void
     luckyReward: (amount: number) => void

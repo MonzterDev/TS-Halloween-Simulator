@@ -30,8 +30,11 @@ export class PlayerDataService implements OnInit {
 		Functions.getBasketUpgrade.setCallback( ( player, upgrade ) => {
 			const profile = this.profiles.get( player );
 			return profile?.Data?.basket_upgrades[upgrade] ?? 0;
+		} )
 
-		})
+		Functions.getAllData.setCallback( ( player ) => {
+			return this.profiles.get( player )?.Data || false
+		} )
 	}
 
 	private createLeaderstats (player: Player, data: PlayerData) {
