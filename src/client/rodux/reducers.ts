@@ -21,9 +21,14 @@ interface AddPetAction extends Action<"addPet"> {
 interface RemovePetAction extends Action<"removePet"> {
     uuid: UUID
 }
+interface UpdatePetAction extends Action<"updatePet"> {
+    uuid: UUID
+    locked?: boolean
+    equipped?: boolean
+}
 
 export type DataState = PlayerData;
-export type DataActions = UpdateDataAction | UpdateCurrencyAction | UpdateUpgradeAction | AddPetAction | RemovePetAction;
+export type DataActions = UpdateDataAction | UpdateCurrencyAction | UpdateUpgradeAction | AddPetAction | RemovePetAction | UpdatePetAction;
 
 export const dataReducer = createReducer<DataState, DataActions>(DEFAULT_PLAYER_DATA, {
     updatePlayerData: ( state, action ) => action.data,
@@ -42,6 +47,12 @@ export const dataReducer = createReducer<DataState, DataActions>(DEFAULT_PLAYER_
     },
     removePet: ( state, action ) => {
         state.pet_inventory.delete( action.uuid)
+        return state
+    },
+    updatePet: ( state, action ) => {
+        const pet = state.pet_inventory.get( action.uuid )
+        if ( action.equipped !== undefined ) pet!.equipped = action.equipped
+        if ( action.locked !== undefined ) pet!.locked = action.locked
         return state
     },
 } );

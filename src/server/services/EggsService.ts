@@ -10,7 +10,7 @@ export class EggsService implements OnInit {
     private playerDataService = Dependency(PlayerDataService)
     private petsService = Dependency( PetsService )
 
-    private playerCooldown = new PlayerCooldown(5)
+    private playerCooldown = new PlayerCooldown(1)
     private eggs = Workspace.Eggs
 
     onInit () {

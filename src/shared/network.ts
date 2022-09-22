@@ -8,7 +8,11 @@ import { PlayerData } from "./types/PlayerData";
 interface ServerEvents {
     sell: () => void
     deletePets: (uuids: UUID[]) => void
+    deletePet: (uuid: UUID) => void
+    unlockPet: (uuid: UUID) => void
+    lockPet: (uuid: UUID) => void
     equipPet: (uuid: UUID) => void
+    unequipPet: (uuid: UUID) => void
 }
 
 interface ServerFunctions {
@@ -25,8 +29,12 @@ interface ClientEvents {
 
     displayBasketUpgradeShop: (area: AreaTypes) => void
     luckyReward: ( amount: number ) => void
+
+    unlockPet: (uuid: UUID) => void
+    lockPet: (uuid: UUID) => void
     deletePet: (uuid: UUID) => void
     equipPet: (player: Player, uuid: UUID, pet: PetTypes) => void
+    unequipPet: ( player: Player, uuid: UUID ) => void
 }
 
 

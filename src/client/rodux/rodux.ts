@@ -1,4 +1,5 @@
 import { combineReducers, Store } from "@rbxts/rodux";
+import { Players } from "@rbxts/services";
 import { Events, Functions } from "client/network";
 import { PlayerData } from "shared/types/PlayerData";
 import { isA } from "shared/util/functions/isA";
@@ -17,6 +18,20 @@ export const clientStore = new Store( combinedReducer );
 Events.updateCurrency.connect( ( currency, amount ) => clientStore.dispatch( { type: "updateCurrency", currency: currency, amount: amount } ) )
 Events.givePet.connect( ( uuid, props ) => clientStore.dispatch( { type: "addPet", uuid: uuid, props: props } ) )
 Events.deletePet.connect((uuid) => clientStore.dispatch( { type: "removePet", uuid: uuid }))
+Events.unequipPet.connect( (player, uuid) => {
+	if ( player !== Players.LocalPlayer ) return
+	clientStore.dispatch( { type: "updatePet", uuid: uuid, equipped: false })
+})
+Events.equipPet.connect( (player, uuid) => {
+	if ( player !== Players.LocalPlayer ) return
+	clientStore.dispatch( { type: "updatePet", uuid: uuid, equipped: true })
+})
+Events.lockPet.connect( (uuid) => {
+	clientStore.dispatch( { type: "updatePet", uuid: uuid, locked: true })
+})
+Events.unlockPet.connect( (uuid) => {
+	clientStore.dispatch( { type: "updatePet", uuid: uuid, locked: false })
+})
 
 Functions.getAllData.invoke().andThen( ( data ) => {
 	if (isA<PlayerData>(data)) clientStore.dispatch({type: "updatePlayerData", data: data})
