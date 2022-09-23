@@ -23,5 +23,11 @@ export = identity<CommandDefinition>( {
             Description: "Player",
             Optional: true
         },
+        {
+            Type: "number",
+            Name: "amount",
+            Description: "Amount",
+            Optional: true
+        },
     ]
 } )

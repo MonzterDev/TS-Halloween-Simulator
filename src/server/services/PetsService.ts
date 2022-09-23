@@ -48,7 +48,7 @@ export class PetsService implements OnInit {
         topPets.forEach( ( info ) => this.equipPet(player, info.uuid))
     }
 
-    private getEquippedPets ( player: Player ) {
+    public getEquippedPets ( player: Player ) {
         const pets: string[] = []
         const profile = this.playerDataService.getProfile( player )
         if ( !profile ) return pets
@@ -70,6 +70,8 @@ export class PetsService implements OnInit {
     private deletePet ( player: Player, uuid: UUID ) {
         const profile = this.playerDataService.getProfile( player )
         if ( !profile ) return
+        const pet = profile.data.pet_inventory.get( uuid )
+        if ( !pet || pet.locked === true ) return
 
         this.unequipPet(player, uuid)
         profile.data.pet_inventory.delete( uuid )

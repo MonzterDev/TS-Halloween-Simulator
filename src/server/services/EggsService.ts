@@ -10,7 +10,7 @@ export class EggsService implements OnInit {
     private playerDataService = Dependency(PlayerDataService)
     private petsService = Dependency( PetsService )
 
-    private playerCooldown = new PlayerCooldown(1)
+    private playerCooldown = new PlayerCooldown(5)
     private eggs = Workspace.Eggs
 
     onInit () {
@@ -25,15 +25,14 @@ export class EggsService implements OnInit {
     }
 
     private hatchEgg ( player: Player, egg: EggTypes ) {
-        // Check if Player can hold more Pets in Inv
-        if ( !this.playerCooldown.cooldownIsFinished( player ) ) return
-
         const profile = this.playerDataService.getProfile( player )
         if ( !profile ) return
+        if ( !this.playerCooldown.cooldownIsFinished( player ) && !profile.data.gamepasses.remove_hatch_cooldown ) return
 
         const eggConfig = EggShopConfig[egg]
 
         if ( profile.data.money < eggConfig.price ) return
+        if (profile.data.pet_info.max_stored === profile.data.pet_inventory.size()) return
         profile.adjustMoney( -eggConfig.price )
 
         const pet = this.choosePet( eggConfig.pets )
