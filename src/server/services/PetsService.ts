@@ -4,6 +4,7 @@ import { Events, Functions } from "server/network";
 import { PetConfig, PetInstanceProps, PetTypes, Rarities, UUID } from "shared/constants/Pets";
 import { PlayerDataService } from "./PlayerDataService";
 
+
 @Service({})
 export class PetsService implements OnInit {
     private playerDataService = Dependency(PlayerDataService)
@@ -15,7 +16,7 @@ export class PetsService implements OnInit {
         Events.equipBestPets.connect((player) => this.equipBestPets(player))
         Events.unequipPet.connect((player, uuid) => this.unequipPet(player, uuid))
         Events.lockPet.connect( ( player, uuid ) => this.lockPet( player, uuid ) )
-        Events.unlockPet.connect((player, uuid) => this.unlockPet(player, uuid))
+        Events.unlockPet.connect( ( player, uuid ) => this.unlockPet( player, uuid ) )
     }
 
     private equipBestPets ( player: Player ) {
@@ -90,7 +91,7 @@ export class PetsService implements OnInit {
         if (this.getEquippedPets(player).size() === profile.data.pet_info.max_equipped) return
 
         pet.equipped = true
-        Events.equipPet.fire(Players.GetPlayers(), player, uuid, pet.type)
+        Events.equipPet.fire(this.getPlayersToNotify(player), player, uuid, pet.type)
     }
 
     private unequipPet ( player: Player, uuid: UUID ) {
@@ -100,7 +101,7 @@ export class PetsService implements OnInit {
         if ( !pet || !pet.equipped ) return
 
         pet.equipped = false
-        Events.unequipPet.fire(Players.GetPlayers(), player, uuid)
+        Events.unequipPet.fire(this.getPlayersToNotify(player), player, uuid)
     }
 
     private lockPet ( player: Player, uuid: UUID ) {
@@ -121,5 +122,47 @@ export class PetsService implements OnInit {
 
         pet.locked = false
         Events.unlockPet.fire(player, uuid)
+    }
+
+    public getOthersPets ( sendingPlayer: Player ) {
+        Players.GetPlayers().forEach( ( player ) => {
+            if ( sendingPlayer === player ) return
+            const profile = this.playerDataService.getProfile( player )
+            if ( !profile ) return
+
+            const equippedPets = this.getEquippedPets( player )
+            equippedPets.forEach( ( uuid ) => {
+                const pet = profile.data.pet_inventory.get( uuid )
+                if (pet) Events.equipPet.fire(sendingPlayer, player, uuid, pet.type)
+            } )
+        } )
+    }
+    // private getOthersPets ( sendingPlayer: Player ) {
+    //     const pets: OthersPets = new Map()
+    //     Players.GetPlayers().forEach( ( player ) => {
+    //         if ( sendingPlayer === player ) return
+    //         const profile = this.playerDataService.getProfile( player )
+    //         if ( !profile ) return
+
+    //         const playersPets: {uuid: UUID, type: PetTypes}[] = []
+    //         const equippedPets = this.getEquippedPets( player )
+    //         equippedPets.forEach( ( uuid ) => {
+    //             const pet = profile.data.pet_inventory.get( uuid )
+    //             playersPets.push({uuid: uuid, type: pet!.type})
+    //         } )
+    //         pets.set(player.UserId, playersPets)
+    //     } )
+    //     return pets
+    // }
+
+    private getPlayersToNotify (sendingPlayer :Player) {
+        const players: Player[] = [sendingPlayer]
+        Players.GetPlayers().forEach( ( player ) => {
+            if (sendingPlayer === player) return
+            const profile = this.playerDataService.getProfile( player )
+            if ( !profile ) return
+            if (!profile.data.settings.hide_others_pets) players.push(player)
+        } )
+        return players
     }
 }

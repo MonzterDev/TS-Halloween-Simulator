@@ -26,12 +26,9 @@ Events.equipPet.connect( (player, uuid) => {
 	if ( player !== Players.LocalPlayer ) return
 	clientStore.dispatch( { type: "updatePet", uuid: uuid, equipped: true })
 })
-Events.lockPet.connect( (uuid) => {
-	clientStore.dispatch( { type: "updatePet", uuid: uuid, locked: true })
-})
-Events.unlockPet.connect( (uuid) => {
-	clientStore.dispatch( { type: "updatePet", uuid: uuid, locked: false })
-})
+Events.lockPet.connect( (uuid) => clientStore.dispatch( { type: "updatePet", uuid: uuid, locked: true }))
+Events.unlockPet.connect( (uuid) => clientStore.dispatch( { type: "updatePet", uuid: uuid, locked: false }))
+Events.toggleSetting.connect( ( setting, value ) => clientStore.dispatch({type: "updateSetting", setting: setting, value: value}) )
 
 Functions.getAllData.invoke().andThen( ( data ) => {
 	if (isA<PlayerData>(data)) clientStore.dispatch({type: "updatePlayerData", data: data})

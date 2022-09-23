@@ -1,7 +1,8 @@
 import { Action, createReducer } from "@rbxts/rodux";
-import { PlayerData } from "shared/types/PlayerData";
+import { PlayerData, Settings } from "shared/types/PlayerData";
 import { DEFAULT_PLAYER_DATA } from "shared/constants/PlayerData";
 import { PetInstanceProps, UUID } from "shared/constants/Pets";
+import { getSettingAsProp, Setting } from "shared/constants/Settings";
 
 interface UpdateDataAction extends Action<"updatePlayerData"> {
 	data: DataState;
@@ -26,9 +27,13 @@ interface UpdatePetAction extends Action<"updatePet"> {
     locked?: boolean
     equipped?: boolean
 }
+interface UpdateSettingAction extends Action<"updateSetting"> {
+    setting: Setting
+    value: boolean
+}
 
 export type DataState = PlayerData;
-export type DataActions = UpdateDataAction | UpdateCurrencyAction | UpdateUpgradeAction | AddPetAction | RemovePetAction | UpdatePetAction;
+export type DataActions = UpdateDataAction | UpdateCurrencyAction | UpdateUpgradeAction | AddPetAction | RemovePetAction | UpdatePetAction | UpdateSettingAction;
 
 export const dataReducer = createReducer<DataState, DataActions>(DEFAULT_PLAYER_DATA, {
     updatePlayerData: ( state, action ) => action.data,
@@ -53,6 +58,10 @@ export const dataReducer = createReducer<DataState, DataActions>(DEFAULT_PLAYER_
         const pet = state.pet_inventory.get( action.uuid )
         if ( action.equipped !== undefined ) pet!.equipped = action.equipped
         if ( action.locked !== undefined ) pet!.locked = action.locked
+        return state
+    },
+    updateSetting: ( state, action ) => {
+        state.settings[<keyof Settings>getSettingAsProp(action.setting)] = action.value
         return state
     },
 } );

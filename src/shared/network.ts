@@ -3,6 +3,7 @@ import { BasketUpgradeResponse, BasketUpgrades } from "./constants/Basket";
 import { Currency } from "./constants/Currencies";
 import { PetInstanceProps, PetTypes, UUID } from "./constants/Pets";
 import { AreaTypes } from "./constants/Piles";
+import { Setting } from "./constants/Settings";
 import { PlayerData } from "./types/PlayerData";
 
 interface ServerEvents {
@@ -13,7 +14,8 @@ interface ServerEvents {
     lockPet: (uuid: UUID) => void
     equipPet: (uuid: UUID) => void
     equipBestPets: () => void
-    unequipPet: (uuid: UUID) => void
+    unequipPet: ( uuid: UUID ) => void
+    toggleSetting: ( setting: Setting) => void
 }
 
 interface ServerFunctions {
@@ -36,6 +38,7 @@ interface ClientEvents {
     deletePet: (uuid: UUID) => void
     equipPet: (player: Player, uuid: UUID, pet: PetTypes) => void
     unequipPet: ( player: Player, uuid: UUID ) => void
+    toggleSetting: ( setting: Setting, value: boolean) => void
 }
 
 

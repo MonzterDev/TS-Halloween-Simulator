@@ -1,4 +1,3 @@
-
 export interface PetInstanceProps {
     type: PetTypes
     rarity: Rarities

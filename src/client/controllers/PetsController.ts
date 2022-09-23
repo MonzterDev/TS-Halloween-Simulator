@@ -24,6 +24,7 @@ interface pet {
 
 @Controller({})
 export class PetsController implements OnInit {
+    private player = Players.LocalPlayer
     private petsFolder = Workspace.Pets
     private petModels = ReplicatedStorage.Pets
 
@@ -38,6 +39,20 @@ export class PetsController implements OnInit {
         Players.PlayerRemoving.Connect( ( player ) => {
             this.pets.delete( player.UserId )
             this.petsFolder.FindFirstChild(player.UserId)?.Destroy()
+        })
+    }
+
+
+    public clearActivePets () {
+        Players.GetPlayers().forEach( ( player ) => {
+            if ( player === this.player ) return
+
+            const pets = this.pets.get( player.UserId )
+            if ( !pets ) return
+            for ( let i = 0; i < pets.size(); i++ ) {
+                this.unequipPet(player, pets[i].uuid)
+                i--
+            }
         })
     }
 

@@ -71,7 +71,8 @@ export class CurrencyController implements OnInit {
         if (button === "Upgrade") this.basketUpgradeController.teleportToShop()
     }
 
-    private animateAmount (bonus?: boolean) {
+    private animateAmount ( bonus?: boolean ) {
+        if (clientStore.getState().data.settings.hide_currency_popup) return
         const clone = this.popupTemplate.Clone()
         clone.Parent = this.popup
         clone.Visible = true

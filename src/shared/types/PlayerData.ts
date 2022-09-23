@@ -8,6 +8,7 @@ export interface PlayerData {
 	pet_inventory: PetInventory
 	pet_info: PetInfo
 	gamepasses: Gamepasses
+	settings: Settings
 }
 
 interface PetInfo {
@@ -26,4 +27,10 @@ export interface Gamepasses {
 	equip_more_pets: boolean
 	equip_more_pets2: boolean
 	remove_hatch_cooldown: boolean
+}
+
+export interface Settings {
+	music: boolean
+	hide_others_pets: boolean
+	hide_currency_popup: boolean
 }
