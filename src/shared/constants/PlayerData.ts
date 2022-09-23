@@ -10,5 +10,9 @@ export const DEFAULT_PLAYER_DATA: PlayerData = {
         power: 0,
         luck: 0
     },
-    pet_inventory: new Map()
+    pet_inventory: new Map(),
+    pet_info: {
+        max_equipped: 3,
+        max_stored: 50
+    }
 }

@@ -12,6 +12,7 @@ interface ServerEvents {
     unlockPet: (uuid: UUID) => void
     lockPet: (uuid: UUID) => void
     equipPet: (uuid: UUID) => void
+    equipBestPets: () => void
     unequipPet: (uuid: UUID) => void
 }
 

@@ -2,6 +2,7 @@ import { Controller, OnStart, OnInit } from "@flamework/core";
 import Make from "@rbxts/make";
 import { Players, ReplicatedStorage, Workspace } from "@rbxts/services";
 import { Events } from "client/network";
+import { clientStore } from "client/rodux/rodux";
 import { PetTypes, UUID } from "shared/constants/Pets";
 import { forEveryPlayer } from "shared/util/functions/forEveryPlayer";
 
@@ -132,6 +133,14 @@ export class PetsController implements OnInit {
             if (!activeSlots.includes(slot)) return slot
         }
         return 0
+    }
+
+    public getEquippedPets () {
+        const pets: string[] = []
+        clientStore.getState().data.pet_inventory.forEach( ( props, uuid ) => {
+            if (props.equipped) pets.push(uuid)
+        } )
+        return pets
     }
 
 }

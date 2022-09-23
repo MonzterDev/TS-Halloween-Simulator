@@ -1,9 +1,10 @@
-import { Controller, OnStart, OnInit } from "@flamework/core";
+import { Controller, OnStart, OnInit, Dependency } from "@flamework/core";
 import { Players, ReplicatedStorage } from "@rbxts/services";
 import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
 import { PetConfig, PetInstanceProps, UUID } from "shared/constants/Pets";
 import { CleanViewport, GenerateViewport } from "shared/util/functions/Viewports";
+import { PetsController } from "./PetsController";
 
 type Mode = "Default" | "Trash"
 type Template = ImageButton & {
@@ -16,6 +17,7 @@ type Template = ImageButton & {
 
 @Controller({})
 export class PetInventoryController implements OnInit {
+    private petsController = Dependency(PetsController)
     private petsFolder = ReplicatedStorage.Pets
     private player = Players.LocalPlayer
     private playerGui = <PlayerGui>this.player.WaitForChild( "PlayerGui" )
@@ -54,8 +56,9 @@ export class PetInventoryController implements OnInit {
         this.confirmation.Confirm.MouseButton1Click.Connect( () => {
             Events.deletePets.fire(this.selectedPets)
             this.changeMode( "Default" )
-            this.selectedPets.clear()
         } )
+        this.confirmation.Cancel.MouseButton1Click.Connect( () => this.changeMode( "Default" ) )
+        this.buttons.EquipBest.MouseButton1Click.Connect(() => Events.equipBestPets.fire())
         this.info.Buttons.Equip.MouseButton1Click.Connect(() => this.equipButton())
         this.info.Buttons.Lock.MouseButton1Click.Connect(() => this.lockButton())
         this.info.Buttons.Delete.MouseButton1Click.Connect( () => {
@@ -70,6 +73,9 @@ export class PetInventoryController implements OnInit {
         const template = <Template>this.container.FindFirstChild( uuid )
         if ( !template ) return
         template.Equipped.Visible = equip
+        const props = this.getPetPropsFromUUID( uuid )
+        const power = PetConfig[props!.type][props!.rarity]
+        template.LayoutOrder = equip ? -1_000_000 - power : -power
     }
 
     private lockPet (uuid: UUID, lock: boolean ) {
@@ -88,6 +94,7 @@ export class PetInventoryController implements OnInit {
         clone.Power.Text = tostring( power )
         clone.Equipped.Visible = props.equipped ? props.equipped : false
         clone.Locked.Visible = props.locked ? props.locked : false
+        clone.LayoutOrder = props.equipped ? -1_000_000 - power : -power
 
         const pet = <Model>this.petsFolder.FindFirstChild(props.type)?.Clone()
         GenerateViewport( clone.ViewportFrame, pet )
@@ -114,7 +121,7 @@ export class PetInventoryController implements OnInit {
                 label.Visible = false
             }
         } )
-        this.selectedPets = []
+        this.selectedPets.clear()
     }
 
     private clickPet ( uuid: UUID ) {
@@ -124,6 +131,8 @@ export class PetInventoryController implements OnInit {
                 this.displayInfo(uuid)
                 break
             case "Trash":
+                const props = this.getPetPropsFromUUID( uuid )
+                if (props?.locked) return
                 const template = <Template>this.container.FindFirstChild( uuid )
                 template.IsSelected.Visible = !template.IsSelected.Visible
                 if ( template.IsSelected.Visible ) this.selectedPets.push( uuid )
@@ -153,17 +162,22 @@ export class PetInventoryController implements OnInit {
 
         this.info.Buttons.Equip.Text = !props.equipped ? "Equip" : "Unequip"
         this.info.Buttons.Equip.BackgroundColor3 = !props.equipped ? Color3.fromRGB(69,255,46) : Color3.fromRGB(64,232,41)
-        this.info.Buttons.Lock.Text = !props.equipped ? "Lock" : "Unlock"
+        this.info.Buttons.Lock.Text = !props.locked ? "Lock" : "Unlock"
         this.info.Buttons.Lock.BackgroundColor3 = !props.locked ? Color3.fromRGB(242,255,46) : Color3.fromRGB(201,212,64)
+        this.info.Buttons.Delete.Visible = !props.locked
     }
 
     private equipButton () {
         const equipped = this.getPetPropsFromUUID( this.selectedPet! )?.equipped
+        if ( !equipped && this.petsController.getEquippedPets().size() === clientStore.getState().data.pet_info.max_equipped ) {
+            print("Too many pets!")
+            return
+        }
         if (equipped) Events.unequipPet.fire(this.selectedPet!)
         else Events.equipPet.fire( this.selectedPet! )
         this.info.Buttons.Equip.Text = equipped ? "Equip" : "Unequip"
         this.info.Buttons.Equip.BackgroundColor3 = equipped ? Color3.fromRGB( 69, 255, 46 ) : Color3.fromRGB( 64, 232, 41 )
-        this.info.Equipped.Visible = !equipped!
+        this.info.Equipped.Visible = !equipped
     }
 
     private lockButton () {
@@ -172,6 +186,7 @@ export class PetInventoryController implements OnInit {
         else Events.lockPet.fire( this.selectedPet! )
         this.info.Buttons.Lock.Text = locked ? "Lock" : "Unlock"
         this.info.Buttons.Lock.BackgroundColor3 = locked ? Color3.fromRGB(242,255,46) : Color3.fromRGB(201,212,64)
-        this.info.Locked.Visible = !locked!
+        this.info.Locked.Visible = !locked
+        this.info.Buttons.Delete.Visible = locked!
     }
 }

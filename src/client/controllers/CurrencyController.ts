@@ -3,12 +3,11 @@ import { Players } from "@rbxts/services";
 import { BoatTween } from "@rbxts/boat-tween";
 import { Events, Functions } from "client/network";
 import { Currency } from "shared/constants/Currencies";
-import { isA } from "shared/util/functions/isA";
-import { abbreviator, noDecimalPlaceAbbreviator } from "shared/util/functions/abbreviate";
 import { SellController } from "./SellController";
 import { BasketUpgradeController } from "./BasketUpgradeController";
 import { clientStore } from "client/rodux/rodux";
 import { BasketUpgradeConfig } from "shared/constants/Basket";
+import { FormatCompact } from "@rbxts/format-number";
 
 @Controller({})
 export class CurrencyController implements OnInit {
@@ -49,10 +48,10 @@ export class CurrencyController implements OnInit {
     }
 
     private updateAmount ( currency: Currency, amount: number ) {
-        const displayAmount = <string>abbreviator.abbreviate(amount)
+        const displayAmount = <string>FormatCompact(amount)
         if ( currency === "candy" ) {
             const storage = BasketUpgradeConfig.size[clientStore.getState().data.basket_upgrades.size]
-            this.candyAmount.Text = `${noDecimalPlaceAbbreviator.abbreviate(amount)}/${storage}`
+            this.candyAmount.Text = `${FormatCompact(amount)}/${storage}`
             if ( amount > 0 ) this.animateAmount()
             if (amount >= storage) this.fullNotification()
         }

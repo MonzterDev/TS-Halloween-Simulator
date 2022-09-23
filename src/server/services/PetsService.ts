@@ -1,7 +1,7 @@
 import { Service, OnStart, OnInit, Dependency } from "@flamework/core";
 import { HttpService, Players } from "@rbxts/services";
 import { Events, Functions } from "server/network";
-import { PetInstanceProps, PetTypes, Rarities, UUID } from "shared/constants/Pets";
+import { PetConfig, PetInstanceProps, PetTypes, Rarities, UUID } from "shared/constants/Pets";
 import { PlayerDataService } from "./PlayerDataService";
 
 @Service({})
@@ -12,9 +12,60 @@ export class PetsService implements OnInit {
         Events.deletePets.connect( ( player, uuid ) => this.deletePets( player, uuid ) )
         Events.deletePet.connect( ( player, uuid ) => this.deletePet( player, uuid ) )
         Events.equipPet.connect( ( player, uuid ) => this.equipPet( player, uuid ) )
+        Events.equipBestPets.connect((player) => this.equipBestPets(player))
         Events.unequipPet.connect((player, uuid) => this.unequipPet(player, uuid))
         Events.lockPet.connect( ( player, uuid ) => this.lockPet( player, uuid ) )
         Events.unlockPet.connect((player, uuid) => this.unlockPet(player, uuid))
+    }
+
+    private equipBestPets ( player: Player ) {
+        const profile = this.playerDataService.getProfile( player )
+        if ( !profile ) return
+
+        const petA: {uuid: string, power: number}[] = []
+        profile.data.pet_inventory.forEach( ( props, uuid ) => {
+            const power = PetConfig[props.type][props.rarity]
+            petA.push({uuid: uuid, power: power})
+        } )
+
+        petA.sort( ( a, b ) => {
+            return a.power > b.power
+        } )
+
+        const maxEquipped = profile.data.pet_info.max_equipped
+        const topPets: { uuid: string, power: number }[] = []
+        for ( let x = 0; x < maxEquipped; x++ ) {
+            topPets.insert(x, petA[x])
+        }
+
+        print(topPets)
+        const equippedPets = this.getEquippedPets( player )
+        print(topPets.size())
+        topPets.forEach( ( info, index ) => {
+            print(info.uuid)
+            if ( equippedPets.includes( info.uuid ) ) {
+                topPets.remove( index )
+                equippedPets.remove(equippedPets.indexOf(info.uuid))
+            }
+        } )
+        print(equippedPets)
+        print(topPets)
+        equippedPets.forEach( ( uuid ) => {
+            this.unequipPet( player, uuid )
+        } )
+        topPets.forEach( ( info ) => {
+            this.equipPet(player, info.uuid)
+        })
+    }
+
+    private getEquippedPets ( player: Player ) {
+        const pets: string[] = []
+        const profile = this.playerDataService.getProfile( player )
+        if ( !profile ) return pets
+        profile.data.pet_inventory.forEach( ( props, uuid ) => {
+            if (props.equipped) pets.push(uuid)
+        } )
+        return pets
     }
 
     public rewardPet ( player: Player, petType: PetTypes, rarity: Rarities ) {
@@ -44,9 +95,9 @@ export class PetsService implements OnInit {
         if ( !profile ) return
         const pet = profile.data.pet_inventory.get( uuid )
         if ( !pet || pet.equipped ) return
+        if (this.getEquippedPets(player).size() === profile.data.pet_info.max_equipped) return
 
         pet.equipped = true
-        // Check if has pet & if not equipped & if can equip another pet
         Events.equipPet.fire(Players.GetPlayers(), player, uuid, pet.type)
     }
 

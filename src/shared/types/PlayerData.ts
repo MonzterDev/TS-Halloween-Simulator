@@ -6,6 +6,12 @@ export interface PlayerData {
 	money: number;
 	basket_upgrades: BasketUpgrades
 	pet_inventory: PetInventory
+	pet_info: PetInfo
+}
+
+interface PetInfo {
+	max_stored: number
+	max_equipped: number
 }
 
 export interface BasketUpgrades {
