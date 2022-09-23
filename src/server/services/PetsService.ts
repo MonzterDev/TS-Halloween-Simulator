@@ -22,40 +22,30 @@ export class PetsService implements OnInit {
         const profile = this.playerDataService.getProfile( player )
         if ( !profile ) return
 
-        const petA: {uuid: string, power: number}[] = []
+        const allPets: {uuid: string, power: number}[] = []
         profile.data.pet_inventory.forEach( ( props, uuid ) => {
             const power = PetConfig[props.type][props.rarity]
-            petA.push({uuid: uuid, power: power})
+            allPets.push({uuid: uuid, power: power})
         } )
 
-        petA.sort( ( a, b ) => {
+        allPets.sort( ( a, b ) => {
             return a.power > b.power
         } )
 
         const maxEquipped = profile.data.pet_info.max_equipped
         const topPets: { uuid: string, power: number }[] = []
-        for ( let x = 0; x < maxEquipped; x++ ) {
-            topPets.insert(x, petA[x])
-        }
+        for ( let x = 0; x < maxEquipped; x++ ) topPets.insert(x, allPets[x])
 
-        print(topPets)
         const equippedPets = this.getEquippedPets( player )
-        print(topPets.size())
-        topPets.forEach( ( info, index ) => {
-            print(info.uuid)
-            if ( equippedPets.includes( info.uuid ) ) {
-                topPets.remove( index )
-                equippedPets.remove(equippedPets.indexOf(info.uuid))
-            }
-        } )
-        print(equippedPets)
-        print(topPets)
-        equippedPets.forEach( ( uuid ) => {
-            this.unequipPet( player, uuid )
-        } )
-        topPets.forEach( ( info ) => {
-            this.equipPet(player, info.uuid)
-        })
+        for ( let i = 0; i < topPets.size(); i++ ) {
+            const info = topPets[i]
+            if ( !equippedPets.includes( info.uuid ) ) continue
+            equippedPets.remove(equippedPets.indexOf(info.uuid))
+            topPets.remove( i )
+            i--
+        }
+        equippedPets.forEach( ( uuid ) => this.unequipPet( player, uuid ))
+        topPets.forEach( ( info ) => this.equipPet(player, info.uuid))
     }
 
     private getEquippedPets ( player: Player ) {

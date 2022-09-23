@@ -7,9 +7,9 @@ import { PetTypes, UUID } from "shared/constants/Pets";
 import { forEveryPlayer } from "shared/util/functions/forEveryPlayer";
 
 const positions = [
-    new Vector3( 0, 1, 10 ),
-    new Vector3( -7.5, 1, 8 ),
-    new Vector3( 7.5, 1, 8 ),
+    new Vector3( 0, 1, 8 ),
+    new Vector3( -7.5, 1, 6 ),
+    new Vector3( 7.5, 1, 6 ),
 ]
 const orientations = [
     new Vector3( 0, -90, 0 ),
@@ -39,6 +39,23 @@ export class PetsController implements OnInit {
             this.pets.delete( player.UserId )
             this.petsFolder.FindFirstChild(player.UserId)?.Destroy()
         })
+    }
+
+    private animatePets () {
+        let mode: .5 | -.5 = .5
+        while ( true ) {
+            Players.GetPlayers().forEach( ( player ) => {
+                const character = player.Character
+                if ( !character ) return
+                const humanoidRootPart = <BasePart>character.FindFirstChild( "HumanoidRootPart" )
+                if ( !humanoidRootPart ) return
+                humanoidRootPart.GetChildren().forEach( ( child ) => {
+                    if ( child.Name === "PetAttachment" && child.IsA( "Attachment" ) ) child.Position = new Vector3( child.Position.X, child.Position.Y + mode, child.Position.Z )
+                })
+            } )
+            mode = mode === .5 ? -.5 : .5
+            task.wait(1)
+        }
     }
 
     private respawnPet ( player: Player ) {
@@ -94,8 +111,9 @@ export class PetsController implements OnInit {
         model.PivotTo( humanoidRootPart.CFrame )
 
         const charAttachment = Make( "Attachment", {
+            Name: "PetAttachment",
             Parent: humanoidRootPart,
-            Visible: false
+            Visible: false,
         } )
         const petAttachment = Make( "Attachment", {
             Parent: model.PrimaryPart,
@@ -104,14 +122,12 @@ export class PetsController implements OnInit {
 
         const alignPosition = Make( "AlignPosition", {
             Parent: model,
-            MaxForce: 25_000,
             Attachment0: petAttachment,
             Attachment1: charAttachment,
             Responsiveness: 25
         } )
         const alignOrientation = Make( "AlignOrientation", {
             Parent: model,
-            MaxTorque: 25_000,
             Attachment0: petAttachment,
             Attachment1: charAttachment,
             Responsiveness: 25

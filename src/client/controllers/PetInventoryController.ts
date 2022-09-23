@@ -14,6 +14,7 @@ type Template = ImageButton & {
     Equipped: ImageLabel;
     Power: TextLabel;
 };
+type Warning = "Too Many Pets"
 
 @Controller({})
 export class PetInventoryController implements OnInit {
@@ -32,6 +33,9 @@ export class PetInventoryController implements OnInit {
     private confirmation = this.frame.Confirmation
     private container = this.frame.Container
     private info = this.frame.Info
+    private warning = this.frame.Warning
+    private stored = this.frame.Stored
+    private equipped = this.frame.Equipped
 
     private template = this.container.Template
 
@@ -49,7 +53,10 @@ export class PetInventoryController implements OnInit {
         Events.lockPet.connect((uuid) => this.lockPet(uuid, true))
         Events.unlockPet.connect((uuid) => this.lockPet(uuid, false))
         Events.givePet.connect( ( uuid, props ) => this.generatePet( uuid, props ) )
-        Events.deletePet.connect((uuid) => this.container.FindFirstChild(uuid)?.Destroy())
+        Events.deletePet.connect( ( uuid ) => {
+            this.container.FindFirstChild( uuid )?.Destroy()
+            this.updateLabels()
+        } )
         this.exit.MouseButton1Click.Connect( () => this.gui.Enabled = false )
         this.openButton.MouseButton1Click.Connect( () => this.gui.Enabled = true )
         this.trashMode.MouseButton1Click.Connect( () => this.changeMode( "Trash" ) )
@@ -68,6 +75,16 @@ export class PetInventoryController implements OnInit {
         } )
     }
 
+    private updateLabels () {
+        task.wait(.1)
+        const maxStored = clientStore.getState().data.pet_info.max_stored
+        const currentStored = clientStore.getState().data.pet_inventory.size()
+        const maxEquipped = clientStore.getState().data.pet_info.max_equipped
+        const currentEquipped = this.petsController.getEquippedPets().size()
+        this.stored.Text = `${currentStored}/${maxStored} Stored`
+        this.equipped.Text = `${currentEquipped}/${maxEquipped} Equipped`
+    }
+
     private equipPet ( player: Player, uuid: UUID, equip: boolean ) {
         if (player !== this.player) return
         const template = <Template>this.container.FindFirstChild( uuid )
@@ -76,6 +93,7 @@ export class PetInventoryController implements OnInit {
         const props = this.getPetPropsFromUUID( uuid )
         const power = PetConfig[props!.type][props!.rarity]
         template.LayoutOrder = equip ? -1_000_000 - power : -power
+        this.updateLabels()
     }
 
     private lockPet (uuid: UUID, lock: boolean ) {
@@ -99,7 +117,8 @@ export class PetInventoryController implements OnInit {
         const pet = <Model>this.petsFolder.FindFirstChild(props.type)?.Clone()
         GenerateViewport( clone.ViewportFrame, pet )
 
-        clone.MouseButton1Click.Connect(() => this.clickPet(uuid))
+        clone.MouseButton1Click.Connect( () => this.clickPet( uuid ) )
+        this.updateLabels()
     }
 
     private changeMode ( mode: Mode ) {
@@ -167,10 +186,18 @@ export class PetInventoryController implements OnInit {
         this.info.Buttons.Delete.Visible = !props.locked
     }
 
+    private warn ( message: Warning ) {
+        let text = ""
+        if ( message === "Too Many Pets" ) text = "You cannot equip more pets!"
+        this.warning.Text = text
+        this.warning.Visible = true
+        task.delay(3, () => this.warning.Visible = false)
+    }
+
     private equipButton () {
         const equipped = this.getPetPropsFromUUID( this.selectedPet! )?.equipped
         if ( !equipped && this.petsController.getEquippedPets().size() === clientStore.getState().data.pet_info.max_equipped ) {
-            print("Too many pets!")
+            this.warn("Too Many Pets")
             return
         }
         if (equipped) Events.unequipPet.fire(this.selectedPet!)
