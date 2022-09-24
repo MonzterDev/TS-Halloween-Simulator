@@ -1,6 +1,7 @@
 import { Networking } from "@flamework/networking";
 import { BasketUpgradeResponse, BasketUpgrades } from "./constants/Basket";
 import { Currency } from "./constants/Currencies";
+import { DevProduct, Gamepass } from "./constants/Gamepasses";
 import { PetInstanceProps, PetTypes, UUID } from "./constants/Pets";
 import { AreaTypes } from "./constants/Piles";
 import { Setting } from "./constants/Settings";
@@ -28,6 +29,7 @@ interface ServerFunctions {
 interface ClientEvents {
     updatePileHealth: (uuid: string) => void
     updateCurrency: ( currency: Currency, amount: number ) => void
+    updateGamepass: ( gamepass: Gamepass ) => void
     givePet: ( uuid: UUID, props: PetInstanceProps ) => void
 
     displayBasketUpgradeShop: (area: AreaTypes) => void
@@ -38,7 +40,8 @@ interface ClientEvents {
     deletePet: (uuid: UUID) => void
     equipPet: (player: Player, uuid: UUID, pet: PetTypes) => void
     unequipPet: ( player: Player, uuid: UUID ) => void
-    toggleSetting: ( setting: Setting, value: boolean) => void
+    toggleSetting: ( setting: Setting, value: boolean ) => void
+    purchaseSuccess: ( product: Gamepass | DevProduct ) => void
 }
 
 

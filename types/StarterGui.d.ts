@@ -109,6 +109,15 @@ interface StarterGui extends BasePlayerGui {
 			};
 		};
 	};
+	Monetization: ScreenGui & {
+		Frame: Frame & {
+			Message: TextLabel;
+			UIGradient: UIGradient;
+			UICorner: UICorner;
+			UIStroke: UIStroke;
+			UIAspectRatioConstraint: UIAspectRatioConstraint;
+		};
+	};
 	Settings: ScreenGui & {
 		Frame: Frame & {
 			Exit: TextButton;

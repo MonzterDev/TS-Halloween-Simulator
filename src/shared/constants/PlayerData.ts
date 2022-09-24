@@ -11,10 +11,6 @@ export const DEFAULT_PLAYER_DATA: PlayerData = {
         luck: 0
     },
     pet_inventory: new Map(),
-    pet_info: {
-        max_equipped: 3,
-        max_stored: 50
-    },
     gamepasses: {
         equip_more_pets: false,
         equip_more_pets2: false,
@@ -24,5 +20,9 @@ export const DEFAULT_PLAYER_DATA: PlayerData = {
         music: true,
         hide_others_pets: false,
         hide_currency_popup: false
+    },
+    analytics: {
+        dev_products_purchased: 0,
+        gamepasses_purchased: 0
     }
 }

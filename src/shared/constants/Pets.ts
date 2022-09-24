@@ -1,3 +1,6 @@
+export const DEFAULT_MAX_PET_STORAGE_AMOUNT = 50
+export const DEFAULT_MAX_PET_EQUIPPED_AMOUNT = 3
+
 export interface PetInstanceProps {
     type: PetTypes
     rarity: Rarities

@@ -1,8 +1,9 @@
 import { Action, createReducer } from "@rbxts/rodux";
-import { PlayerData, Settings } from "shared/types/PlayerData";
+import { Gamepasses, PlayerData, Settings } from "shared/types/PlayerData";
 import { DEFAULT_PLAYER_DATA } from "shared/constants/PlayerData";
 import { PetInstanceProps, UUID } from "shared/constants/Pets";
 import { getSettingAsProp, Setting } from "shared/constants/Settings";
+import { Gamepass, getGamepassAsProp } from "shared/constants/Gamepasses";
 
 interface UpdateDataAction extends Action<"updatePlayerData"> {
 	data: DataState;
@@ -31,9 +32,12 @@ interface UpdateSettingAction extends Action<"updateSetting"> {
     setting: Setting
     value: boolean
 }
+interface UpdateGamepassAction extends Action<"updateGamepass"> {
+    gamepass: Gamepass
+}
 
 export type DataState = PlayerData;
-export type DataActions = UpdateDataAction | UpdateCurrencyAction | UpdateUpgradeAction | AddPetAction | RemovePetAction | UpdatePetAction | UpdateSettingAction;
+export type DataActions = UpdateDataAction | UpdateCurrencyAction | UpdateUpgradeAction | AddPetAction | RemovePetAction | UpdatePetAction | UpdateSettingAction | UpdateGamepassAction;
 
 export const dataReducer = createReducer<DataState, DataActions>(DEFAULT_PLAYER_DATA, {
     updatePlayerData: ( state, action ) => action.data,
@@ -62,6 +66,10 @@ export const dataReducer = createReducer<DataState, DataActions>(DEFAULT_PLAYER_
     },
     updateSetting: ( state, action ) => {
         state.settings[<keyof Settings>getSettingAsProp(action.setting)] = action.value
+        return state
+    },
+    updateGamepass: ( state, action ) => {
+        state.gamepasses[<keyof Gamepasses>getGamepassAsProp(action.gamepass)] = true
         return state
     },
 } );

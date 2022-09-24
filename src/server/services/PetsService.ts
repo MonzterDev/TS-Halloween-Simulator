@@ -1,7 +1,7 @@
 import { Service, OnStart, OnInit, Dependency } from "@flamework/core";
 import { HttpService, Players } from "@rbxts/services";
 import { Events, Functions } from "server/network";
-import { PetConfig, PetInstanceProps, PetTypes, Rarities, UUID } from "shared/constants/Pets";
+import { DEFAULT_MAX_PET_EQUIPPED_AMOUNT, DEFAULT_MAX_PET_STORAGE_AMOUNT, PetConfig, PetInstanceProps, PetTypes, Rarities, UUID } from "shared/constants/Pets";
 import { PlayerDataService } from "./PlayerDataService";
 
 
@@ -33,7 +33,7 @@ export class PetsService implements OnInit {
             return a.power > b.power
         } )
 
-        const maxEquipped = profile.data.pet_info.max_equipped
+        const maxEquipped = this.getMaxPetEquipped(player)
         const topPets: { uuid: string, power: number }[] = []
         for ( let x = 0; x < maxEquipped; x++ ) topPets.insert(x, allPets[x])
 
@@ -88,7 +88,7 @@ export class PetsService implements OnInit {
         if ( !profile ) return
         const pet = profile.data.pet_inventory.get( uuid )
         if ( !pet || pet.equipped ) return
-        if (this.getEquippedPets(player).size() === profile.data.pet_info.max_equipped) return
+        if (this.getEquippedPets(player).size() === this.getMaxPetEquipped(player)) return
 
         pet.equipped = true
         Events.equipPet.fire(this.getPlayersToNotify(player), player, uuid, pet.type)
@@ -164,5 +164,25 @@ export class PetsService implements OnInit {
             if (!profile.data.settings.hide_others_pets) players.push(player)
         } )
         return players
+    }
+
+    public getMaxPetStorage (player: Player) {
+        const profile = this.playerDataService.getProfile( player )
+        if ( !profile ) return DEFAULT_MAX_PET_STORAGE_AMOUNT
+
+        let total = DEFAULT_MAX_PET_STORAGE_AMOUNT
+        // if ( profile.data.gamepasses.equip_more_pets ) total += 2
+        // if ( profile.data.gamepasses.equip_more_pets2 ) total += 5
+        return total
+    }
+
+    public getMaxPetEquipped ( player: Player ) {
+        const profile = this.playerDataService.getProfile( player )
+        if ( !profile ) return DEFAULT_MAX_PET_EQUIPPED_AMOUNT
+
+        let total = DEFAULT_MAX_PET_EQUIPPED_AMOUNT
+        if ( profile.data.gamepasses.equip_more_pets ) total += 2
+        if ( profile.data.gamepasses.equip_more_pets2 ) total += 5
+        return total
     }
 }

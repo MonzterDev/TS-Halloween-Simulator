@@ -48,6 +48,7 @@ export class PetInventoryController implements OnInit {
     private selectedPets: UUID[] = []
 
     onInit () {
+        Events.updateGamepass.connect( ( gamepass ) => this.updateLabels() )
         Events.equipPet.connect((player, uuid, pet) => this.equipPet(player, uuid, true))
         Events.unequipPet.connect((player, uuid) => this.equipPet(player, uuid, false))
         Events.lockPet.connect((uuid) => this.lockPet(uuid, true))
@@ -77,9 +78,9 @@ export class PetInventoryController implements OnInit {
 
     private updateLabels () {
         task.wait(.1)
-        const maxStored = clientStore.getState().data.pet_info.max_stored
+        const maxStored = this.petsController.getMaxPetStorage()
         const currentStored = clientStore.getState().data.pet_inventory.size()
-        const maxEquipped = clientStore.getState().data.pet_info.max_equipped
+        const maxEquipped = this.petsController.getMaxPetEquipped()
         const currentEquipped = this.petsController.getEquippedPets().size()
         this.stored.Text = `${currentStored}/${maxStored} Stored`
         this.equipped.Text = `${currentEquipped}/${maxEquipped} Equipped`
@@ -196,7 +197,7 @@ export class PetInventoryController implements OnInit {
 
     private equipButton () {
         const equipped = this.getPetPropsFromUUID( this.selectedPet! )?.equipped
-        if ( !equipped && this.petsController.getEquippedPets().size() === clientStore.getState().data.pet_info.max_equipped ) {
+        if ( !equipped && this.petsController.getEquippedPets().size() === this.petsController.getMaxPetEquipped() ) {
             this.warn("Too Many Pets")
             return
         }

@@ -3,7 +3,7 @@ import Make from "@rbxts/make";
 import { Players, ReplicatedStorage, Workspace } from "@rbxts/services";
 import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
-import { PetTypes, UUID } from "shared/constants/Pets";
+import { DEFAULT_MAX_PET_EQUIPPED_AMOUNT, DEFAULT_MAX_PET_STORAGE_AMOUNT, PetTypes, UUID } from "shared/constants/Pets";
 import { forEveryPlayer } from "shared/util/functions/forEveryPlayer";
 
 const positions = [
@@ -172,6 +172,20 @@ export class PetsController implements OnInit {
             if (props.equipped) pets.push(uuid)
         } )
         return pets
+    }
+
+    public getMaxPetStorage () {
+        let total = DEFAULT_MAX_PET_STORAGE_AMOUNT
+        // if (clientStore.getState().data.gamepasses.equip_more_pets) total += 2
+        // if ( clientStore.getState().data.gamepasses.equip_more_pets2 ) total += 5
+        return total
+    }
+
+    public getMaxPetEquipped () {
+        let total = DEFAULT_MAX_PET_EQUIPPED_AMOUNT
+        if (clientStore.getState().data.gamepasses.equip_more_pets) total += 2
+        if ( clientStore.getState().data.gamepasses.equip_more_pets2 ) total += 5
+        return total
     }
 
 }

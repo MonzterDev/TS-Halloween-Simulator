@@ -32,7 +32,7 @@ export class EggsService implements OnInit {
         const eggConfig = EggShopConfig[egg]
 
         if ( profile.data.money < eggConfig.price ) return
-        if (profile.data.pet_info.max_stored === profile.data.pet_inventory.size()) return
+        if (this.petsService.getMaxPetStorage(player) === profile.data.pet_inventory.size()) return
         profile.adjustMoney( -eggConfig.price )
 
         const pet = this.choosePet( eggConfig.pets )

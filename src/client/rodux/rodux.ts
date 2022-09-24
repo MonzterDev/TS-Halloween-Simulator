@@ -28,7 +28,9 @@ Events.equipPet.connect( (player, uuid) => {
 })
 Events.lockPet.connect( (uuid) => clientStore.dispatch( { type: "updatePet", uuid: uuid, locked: true }))
 Events.unlockPet.connect( (uuid) => clientStore.dispatch( { type: "updatePet", uuid: uuid, locked: false }))
-Events.toggleSetting.connect( ( setting, value ) => clientStore.dispatch({type: "updateSetting", setting: setting, value: value}) )
+Events.toggleSetting.connect( ( setting, value ) => clientStore.dispatch( { type: "updateSetting", setting: setting, value: value } ) )
+
+Events.updateGamepass.connect( ( gamepass ) => clientStore.dispatch({type: "updateGamepass", gamepass: gamepass}) )
 
 Functions.getAllData.invoke().andThen( ( data ) => {
 	if (isA<PlayerData>(data)) clientStore.dispatch({type: "updatePlayerData", data: data})

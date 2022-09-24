@@ -6,14 +6,9 @@ export interface PlayerData {
 	money: number;
 	basket_upgrades: BasketUpgrades
 	pet_inventory: PetInventory
-	pet_info: PetInfo
 	gamepasses: Gamepasses
 	settings: Settings
-}
-
-interface PetInfo {
-	max_stored: number
-	max_equipped: number
+	analytics: Analytics
 }
 
 export interface BasketUpgrades {
@@ -33,4 +28,9 @@ export interface Settings {
 	music: boolean
 	hide_others_pets: boolean
 	hide_currency_popup: boolean
+}
+
+export interface Analytics {
+	gamepasses_purchased: number
+	dev_products_purchased: number
 }
