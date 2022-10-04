@@ -1,0 +1,4 @@
+export const COLOR_ACTIVE_BUTTON = Color3.fromRGB( 98, 200, 130 )
+export const COLOR_ON_BUTTON = COLOR_ACTIVE_BUTTON
+export const COLOR_INACTIVE_BUTTON = Color3.fromRGB( 255, 46, 10 )
+export const COLOR_OFF_BUTTON = COLOR_INACTIVE_BUTTON

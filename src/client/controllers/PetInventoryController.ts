@@ -1,9 +1,9 @@
 import { Controller, OnStart, OnInit, Dependency } from "@flamework/core";
 import { Players, ReplicatedStorage } from "@rbxts/services";
+import { CleanViewport, GenerateViewport } from "@rbxts/viewport-model";
 import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
 import { PetConfig, PetInstanceProps, UUID } from "shared/constants/Pets";
-import { CleanViewport, GenerateViewport } from "shared/util/functions/Viewports";
 import { PetsController } from "./PetsController";
 
 type Mode = "Default" | "Trash"
@@ -115,8 +115,8 @@ export class PetInventoryController implements OnInit {
         clone.Locked.Visible = props.locked ? props.locked : false
         clone.LayoutOrder = props.equipped ? -1_000_000 - power : -power
 
-        const pet = <Model>this.petsFolder.FindFirstChild(props.type)?.Clone()
-        GenerateViewport( clone.ViewportFrame, pet )
+        const pet = <Model>this.petsFolder.FindFirstChild( props.type )?.Clone()
+        GenerateViewport( clone.ViewportFrame, pet, CFrame.Angles(0, math.rad(-90), 0) )
 
         clone.MouseButton1Click.Connect( () => this.clickPet( uuid ) )
         this.updateLabels()
@@ -177,7 +177,7 @@ export class PetInventoryController implements OnInit {
 
         const pet = <Model>this.petsFolder.FindFirstChild( props.type )?.Clone()
         CleanViewport(this.info.ViewportFrame)
-        GenerateViewport( this.info.ViewportFrame, pet )
+        GenerateViewport( this.info.ViewportFrame, pet, CFrame.Angles(0, math.rad(-90), 0) )
         this.info.Visible = true
 
         this.info.Buttons.Equip.Text = !props.equipped ? "Equip" : "Unequip"

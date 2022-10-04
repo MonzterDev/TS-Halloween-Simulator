@@ -46,7 +46,7 @@ export class SettingsController implements OnInit {
         clone.Setting.Text = setting
 
         clone.Toggle.Image = clientStore.getState().data.settings[getSettingAsProp(setting)] ? ON_BUTTON : OFF_BUTTON
-        clone.MouseButton1Click.Connect( () =>Events.toggleSetting.fire( setting ))
+        clone.MouseButton1Click.Connect( () => Events.toggleSetting.fire( setting ))
     }
 
     private performUpdate ( setting: Setting ) {

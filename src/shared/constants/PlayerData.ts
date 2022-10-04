@@ -14,12 +14,14 @@ export const DEFAULT_PLAYER_DATA: PlayerData = {
     gamepasses: {
         equip_more_pets: false,
         equip_more_pets2: false,
-        remove_hatch_cooldown: false
+        remove_hatch_cooldown: false,
+        tripple_hatch: true,
     },
     settings: {
         music: true,
         hide_others_pets: false,
-        hide_currency_popup: false
+        hide_currency_popup: false,
+        tripple_hatch: true
     },
     analytics: {
         dev_products_purchased: 0,

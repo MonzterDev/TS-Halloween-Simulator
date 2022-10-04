@@ -1,6 +1,8 @@
 import { Service, OnInit, Dependency } from "@flamework/core";
 import { Workspace } from "@rbxts/services";
-import { EggPetProps, EggShopConfig, EggTypes } from "shared/constants/Pets";
+import { Events, Functions } from "server/network";
+import { EggPetProps, EggShopConfig, EggTypes, PetTypes } from "shared/constants/Pets";
+import { HatchEggResponse } from "shared/network";
 import { PlayerCooldown } from "shared/util/classes/PlayerCooldown";
 import { PetsService } from "./PetsService";
 import { PlayerDataService } from "./PlayerDataService";
@@ -10,35 +12,56 @@ export class EggsService implements OnInit {
     private playerDataService = Dependency(PlayerDataService)
     private petsService = Dependency( PetsService )
 
-    private playerCooldown = new PlayerCooldown(5)
+    private playerCooldown = new PlayerCooldown(3)
     private eggs = Workspace.Eggs
 
     onInit () {
-        this.generateEggs()
+        Functions.hatchEgg.setCallback((player, egg) => this.hatchEgg(player, egg))
     }
 
-    private generateEggs () {
-        this.eggs.GetChildren().forEach( ( egg ) => {
-            const prompt = <ProximityPrompt>egg.FindFirstChild( "Prompt" )
-            prompt.Triggered.Connect( ( player ) => this.hatchEgg(player, <EggTypes>egg.Name))
-        })
-    }
-
-    private hatchEgg ( player: Player, egg: EggTypes ) {
+    private hatchEgg ( player: Player, egg: EggTypes ): HatchEggResponse {
         const profile = this.playerDataService.getProfile( player )
         if ( !profile ) return
-        if ( !this.playerCooldown.cooldownIsFinished( player ) && !profile.data.gamepasses.remove_hatch_cooldown ) return
+
+        const hasRemoveHatchCooldownGamepass = profile.data.gamepasses.remove_hatch_cooldown
+        if ( !this.playerCooldown.cooldownIsFinished( player ) && !hasRemoveHatchCooldownGamepass ) return
+
+        let amountOfHatches = 1
 
         const eggConfig = EggShopConfig[egg]
 
-        if ( profile.data.money < eggConfig.price ) return
-        if (this.petsService.getMaxPetStorage(player) === profile.data.pet_inventory.size()) return
-        profile.adjustMoney( -eggConfig.price )
+        const hasTrippleHatchGamepass = profile.data.gamepasses.tripple_hatch
+        const hasTrippleHatchEnabled = profile.data.settings.tripple_hatch
 
-        const pet = this.choosePet( eggConfig.pets )
-        const rarity = eggConfig.pets[pet!]?.rarity
-        this.petsService.rewardPet( player, pet!, rarity! )
-        this.playerCooldown.giveCooldown(player)
+        const money = profile.data.money
+        const price = eggConfig.price
+
+        if ( hasTrippleHatchGamepass && hasTrippleHatchEnabled ) {
+            if ( money >= price * 3 ) {
+                amountOfHatches = 3
+            }
+        }
+
+        const pets: PetTypes[] = []
+        while ( amountOfHatches > 0 ) {
+            amountOfHatches -= 1
+
+            if ( money < price ) break
+
+            const maxStoredPets = this.petsService.getMaxPetStorage( player )
+            const sotredPets = profile.data.pet_inventory.size()
+            if ( maxStoredPets === sotredPets ) break
+
+            profile.adjustMoney( -eggConfig.price )
+
+            const pet = this.choosePet( eggConfig.pets )
+            pets.push(pet!)
+            const rarity = eggConfig.pets[pet!]?.rarity
+            this.petsService.rewardPet( player, pet!, rarity! )
+            task.wait()
+        }
+        this.playerCooldown.giveCooldown( player )
+        return pets
     }
 
     private choosePet ( pets: EggPetProps ) {

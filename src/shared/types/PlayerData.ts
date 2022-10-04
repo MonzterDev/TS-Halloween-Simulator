@@ -22,12 +22,14 @@ export interface Gamepasses {
 	equip_more_pets: boolean
 	equip_more_pets2: boolean
 	remove_hatch_cooldown: boolean
+	tripple_hatch: boolean,
 }
 
 export interface Settings {
 	music: boolean
 	hide_others_pets: boolean
 	hide_currency_popup: boolean
+	tripple_hatch: boolean
 }
 
 export interface Analytics {

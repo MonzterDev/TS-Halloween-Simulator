@@ -118,6 +118,63 @@ interface StarterGui extends BasePlayerGui {
 			UIAspectRatioConstraint: UIAspectRatioConstraint;
 		};
 	};
+	PetEgg: Folder & {
+		InteractGui: BillboardGui & {
+			Auto: ProximityPrompt;
+			Hatch: ProximityPrompt;
+			Container: Frame & {
+				Auto: TextButton & {
+					UICorner: UICorner;
+					Frame: Frame & {
+						KeyToPressMobile: ImageLabel;
+						KeyToPress: TextLabel;
+						UICorner: UICorner;
+					};
+					Action: TextLabel;
+				};
+				UIGridLayout: UIGridLayout;
+				UIPadding: UIPadding;
+				Hatch: TextButton & {
+					UICorner: UICorner;
+					Frame: Frame & {
+						KeyToPressMobile: ImageLabel;
+						KeyToPress: TextLabel;
+						UICorner: UICorner;
+					};
+					Action: TextLabel;
+				};
+			};
+		};
+		InfoGui: BillboardGui & {
+			Background: Frame & {
+				Frame: Frame & {
+					Pity: ImageLabel & {
+						BarFiller: ImageLabel;
+						BarEmpty: ImageLabel;
+						Title: TextLabel;
+					};
+					Title: TextLabel;
+					Container: Frame & {
+						UIGridLayout: UIGridLayout;
+						UIPadding: UIPadding;
+						Template: ViewportFrame & {
+							UICorner: UICorner;
+							Chance: TextLabel;
+						};
+					};
+				};
+			};
+		};
+		Animation: ScreenGui & {
+			Frame: Frame & {
+				UIGridLayout: UIGridLayout;
+				Template: ViewportFrame & {
+					Pet: TextLabel;
+				};
+				UIAspectRatioConstraint: UIAspectRatioConstraint;
+			};
+		};
+	};
 	Settings: ScreenGui & {
 		Frame: Frame & {
 			Exit: TextButton;

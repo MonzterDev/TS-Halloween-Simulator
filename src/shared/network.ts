@@ -2,10 +2,12 @@ import { Networking } from "@flamework/networking";
 import { BasketUpgradeResponse, BasketUpgrades } from "./constants/Basket";
 import { Currency } from "./constants/Currencies";
 import { DevProduct, Gamepass } from "./constants/Gamepasses";
-import { PetInstanceProps, PetTypes, UUID } from "./constants/Pets";
+import { EggTypes, PetInstanceProps, PetTypes, UUID } from "./constants/Pets";
 import { AreaTypes } from "./constants/Piles";
 import { Setting } from "./constants/Settings";
 import { PlayerData } from "./types/PlayerData";
+
+export type HatchEggResponse =  PetTypes[] | undefined
 
 interface ServerEvents {
     sell: () => void
@@ -24,6 +26,7 @@ interface ServerFunctions {
     getData: <k extends keyof PlayerData>( data: k ) => PlayerData[k] | false
     getBasketUpgrade: <k extends keyof PlayerData["basket_upgrades"]>( data: k ) => number | false
     purchaseBasketUpgrade: ( upgrade: BasketUpgrades ) => BasketUpgradeResponse
+    hatchEgg: (egg: EggTypes) => HatchEggResponse
 }
 
 interface ClientEvents {

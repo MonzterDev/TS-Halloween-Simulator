@@ -1,6 +1,6 @@
 import { Settings } from "shared/types/PlayerData"
 
-export const Setting = ["Music", "Hide Others Pets", "Hide Currency Popup"] as const
+export const Setting = ["Music", "Hide Others Pets", "Hide Currency Popup", "Tripple Hatch"] as const
 export type Setting = typeof Setting[number]
 
 export const ON_BUTTON = "rbxassetid://10708452023"
