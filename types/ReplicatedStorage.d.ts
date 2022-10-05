@@ -90,9 +90,8 @@ interface ReplicatedStorage extends Instance {
 				PlayerCooldown: ModuleScript;
 			};
 			functions: Folder & {
-				toTileCase: ModuleScript;
 				forEveryPlayer: ModuleScript;
-				Viewports: ModuleScript;
+				toTileCase: ModuleScript;
 				abbreviate: ModuleScript;
 				getClosestPart: ModuleScript;
 				makeDescendantsInvisible: ModuleScript;
@@ -104,8 +103,81 @@ interface ReplicatedStorage extends Instance {
 			PlayerData: ModuleScript;
 		};
 	};
+	Car: Model & {
+		Wheels: Model & {
+			FR: Part & {
+				SuspensionFixed: Model & {
+					Spring: Part & {
+						SpringConstraint: SpringConstraint;
+						Attachment1: Attachment;
+						Attachment0: Attachment;
+					};
+				};
+				Fixed: Model & {
+					Ski: UnionOperation;
+				};
+				Mesh: CylinderMesh;
+				Parts: Model;
+			};
+			RL: Part & {
+				Fixed: Model & {
+					Track: Model & {
+						Track: UnionOperation;
+					};
+				};
+				Mesh: CylinderMesh;
+				Parts: Model;
+			};
+			RR: Part & {
+				Fixed: Model & {
+					Track: Model & {
+						Track: UnionOperation;
+					};
+				};
+				Mesh: CylinderMesh;
+				Parts: Model;
+			};
+			FL: Part & {
+				SuspensionFixed: Model & {
+					Spring: Part & {
+						SpringConstraint: SpringConstraint;
+						Attachment1: Attachment;
+						Attachment0: Attachment;
+					};
+				};
+				Fixed: Model & {
+					Ski: UnionOperation;
+				};
+				Mesh: CylinderMesh;
+				Parts: Model;
+			};
+		};
+		Body: Model & {
+			CarBody: Model & {
+				Down: UnionOperation;
+				Taillight: UnionOperation & {
+					SpotLight: SpotLight & {
+						["On/Off Light"]: Script;
+					};
+				};
+				Color: UnionOperation;
+				Headlight: UnionOperation & {
+					SpotLight: SpotLight & {
+						["On/Off Light"]: Script;
+					};
+				};
+				Lightball: UnionOperation;
+				Lightbar: UnionOperation;
+			};
+		};
+	};
 	Egg: Folder & {
-		Starter: Part;
+		Starter: Model & {
+			Handle: Part & {
+				Mesh: SpecialMesh;
+				HatAttachment: Attachment;
+			};
+		};
 	};
 	HealthDisplay: BillboardGui & {
 		Health: TextLabel;
@@ -117,7 +189,41 @@ interface ReplicatedStorage extends Instance {
 		RuntimeLib: ModuleScript;
 		Promise: ModuleScript;
 		node_modules: Folder & {
-			["format-number"]: Folder & {
+			["boat-tween"]: Folder & {
+				src: ModuleScript & {
+					Lerps: ModuleScript;
+					TweenFunctions: ModuleScript;
+					Bezier: ModuleScript;
+					types: Folder;
+				};
+			};
+			abbreviate: Folder & {
+				src: ModuleScript & {
+					commify: ModuleScript;
+					abbreviate: ModuleScript;
+					numberToString: ModuleScript;
+					setSetting: ModuleScript;
+					numbersToSortedString: ModuleScript;
+					stringToNumber: ModuleScript;
+				};
+			};
+			profileservice: Folder & {
+				src: ModuleScript;
+			};
+			rodux: Folder & {
+				src: ModuleScript & {
+					combineReducers: ModuleScript;
+					NoYield: ModuleScript;
+					createReducer: ModuleScript;
+					loggerMiddleware: ModuleScript;
+					makeActionCreator: ModuleScript;
+					thunkMiddleware: ModuleScript;
+					prettyPrint: ModuleScript;
+					Store: ModuleScript;
+					Signal: ModuleScript;
+				};
+			};
+			formatnumber: Folder & {
 				src: ModuleScript & {
 					DoubleConversion: Folder & {
 						proxy: ModuleScript;
@@ -138,35 +244,28 @@ interface ReplicatedStorage extends Instance {
 					config: ModuleScript;
 				};
 			};
-			["boat-tween"]: Folder & {
-				src: ModuleScript & {
-					Lerps: ModuleScript;
-					TweenFunctions: ModuleScript;
-					Bezier: ModuleScript;
-					types: Folder;
+			make: ModuleScript & {
+				node_modules: Folder & {
+					["@rbxts"]: Folder & {
+						["compiler-types"]: Folder & {
+							types: Folder;
+						};
+					};
 				};
 			};
-			abbreviate: Folder & {
-				src: ModuleScript & {
-					commify: ModuleScript;
-					abbreviate: ModuleScript;
-					numberToString: ModuleScript;
-					setSetting: ModuleScript;
-					numbersToSortedString: ModuleScript;
-					stringToNumber: ModuleScript;
+			types: Folder & {
+				include: Folder & {
+					generated: Folder;
 				};
 			};
-			services: ModuleScript;
-			signal: ModuleScript;
 			t: Folder & {
 				lib: Folder & {
 					ts: ModuleScript;
 				};
 			};
-			maid: Folder & {
-				Maid: ModuleScript;
+			["compiler-types"]: Folder & {
+				types: Folder;
 			};
-			["object-utils"]: ModuleScript;
 			["@flamework"]: Folder & {
 				core: Folder & {
 					out: ModuleScript & {
@@ -202,23 +301,10 @@ interface ReplicatedStorage extends Instance {
 					};
 				};
 			};
-			rodux: Folder & {
-				src: ModuleScript & {
-					combineReducers: ModuleScript;
-					NoYield: ModuleScript;
-					createReducer: ModuleScript;
-					loggerMiddleware: ModuleScript;
-					makeActionCreator: ModuleScript;
-					thunkMiddleware: ModuleScript;
-					prettyPrint: ModuleScript;
-					Store: ModuleScript;
-					Signal: ModuleScript;
-				};
+			["viewport-model"]: Folder & {
+				src: ModuleScript;
 			};
-			["compiler-types"]: Folder & {
-				types: Folder;
-			};
-			formatnumber: Folder & {
+			["format-number"]: Folder & {
 				src: ModuleScript & {
 					DoubleConversion: Folder & {
 						proxy: ModuleScript;
@@ -239,17 +325,10 @@ interface ReplicatedStorage extends Instance {
 					config: ModuleScript;
 				};
 			};
-			profileservice: Folder & {
-				src: ModuleScript;
-			};
-			make: ModuleScript & {
-				node_modules: Folder & {
-					["@rbxts"]: Folder & {
-						["compiler-types"]: Folder & {
-							types: Folder;
-						};
-					};
-				};
+			services: ModuleScript;
+			["object-utils"]: ModuleScript;
+			maid: Folder & {
+				Maid: ModuleScript;
 			};
 			cmdr: Folder & {
 				Cmdr: ModuleScript & {
@@ -344,11 +423,7 @@ interface ReplicatedStorage extends Instance {
 				};
 				TS: ModuleScript;
 			};
-			types: Folder & {
-				include: Folder & {
-					generated: Folder;
-				};
-			};
+			signal: ModuleScript;
 		};
 	};
 }

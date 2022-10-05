@@ -1,7 +1,7 @@
 import { Controller, OnStart, OnInit, Dependency } from "@flamework/core";
 import { BoatTween } from "@rbxts/boat-tween";
 import Make from "@rbxts/make";
-import { Debris, Players, ReplicatedStorage, RunService, Workspace } from "@rbxts/services";
+import { Debris, Lighting, Players, ReplicatedStorage, RunService, Workspace } from "@rbxts/services";
 import { CleanViewport, GenerateViewport } from "@rbxts/viewport-model";
 import { Events, Functions } from "client/network";
 import { clientStore } from "client/rodux/rodux";
@@ -97,7 +97,23 @@ export class PetEggController implements OnInit {
         })
     }
 
+    private toggleGuis () {
+        Lighting.Blur.Enabled = true
+        const enabledGuis: ScreenGui[] = []
+        this.playerGui.GetChildren().forEach( ( gui ) => {
+            if ( !gui.IsA( "ScreenGui" ) ) return
+            if ( gui.Enabled ) enabledGuis.push( gui )
+            gui.Enabled = false
+        } )
+
+        task.delay( 3, () => {
+            enabledGuis.forEach( ( gui ) => gui.Enabled = true )
+            Lighting.Blur.Enabled = false
+        } )
+    }
+
     private hatchAnimation ( egg: EggTypes, pet: PetTypes ) {
+        this.toggleGuis()
         this.animation.Enabled = true
 
         const petModel = <Model>ReplicatedStorage.Pets.FindFirstChild(pet)?.Clone()
@@ -113,7 +129,7 @@ export class PetEggController implements OnInit {
             EasingStyle: "Cubic",
             EasingDirection: "InOut",
             Reverses: true,
-            RepeatCount: 2,
+            RepeatCount: 1,
             StepType: "Heartbeat",
             Goal: { Orientation: new Vector3(0, 0, 70) }
         } )
@@ -124,8 +140,7 @@ export class PetEggController implements OnInit {
             CleanViewport( template )
             template.Pet.Visible = true
             GenerateViewport( template, petModel, CFrame.Angles( 0, math.rad( -90 ), 0 ) )
-            task.wait(2)
-            this.animation.Enabled = false
+            task.wait(1)
             template.Destroy()
         } )
     }
