@@ -23,11 +23,7 @@ export class PetInventoryController implements OnInit {
     private player = Players.LocalPlayer
     private playerGui = <PlayerGui>this.player.WaitForChild( "PlayerGui" )
 
-    private test = this.playerGui.WaitForChild( "Currency" )
-
-    private openButton = this.playerGui.Buttons.Frame.Pet
-
-    private gui = this.playerGui.PetInventory
+    private gui = <StarterGui["PetInventory"]>this.playerGui.WaitForChild("PetInventory")
     private frame = this.gui.Frame
     private buttons = this.frame.Buttons
     private confirmation = this.frame.Confirmation
@@ -41,7 +37,6 @@ export class PetInventoryController implements OnInit {
 
     private equipBest = this.buttons.EquipBest
     private trashMode = this.buttons.Trash
-    private exit = this.frame.Exit
 
     private mode: Mode = "Default"
     private selectedPet: UUID | undefined
@@ -58,8 +53,6 @@ export class PetInventoryController implements OnInit {
             this.container.FindFirstChild( uuid )?.Destroy()
             this.updateLabels()
         } )
-        this.exit.MouseButton1Click.Connect( () => this.gui.Enabled = false )
-        this.openButton.MouseButton1Click.Connect( () => this.gui.Enabled = true )
         this.trashMode.MouseButton1Click.Connect( () => this.changeMode( "Trash" ) )
         this.confirmation.Confirm.MouseButton1Click.Connect( () => {
             Events.deletePets.fire(this.selectedPets)

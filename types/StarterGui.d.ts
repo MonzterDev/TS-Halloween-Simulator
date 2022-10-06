@@ -1,51 +1,21 @@
 interface StarterGui extends BasePlayerGui {
-	Currency: ScreenGui & {
+	Inventory: ScreenGui & {
 		Frame: Frame & {
-			CandyHolder: ImageLabel & {
-				Icon: ImageLabel;
-				Amount: TextLabel;
-			};
-			CandyCornHolder: ImageLabel & {
-				Icon: ImageLabel;
-				Amount: TextLabel;
-			};
-			UIListLayout: UIListLayout;
-			MoneyHolder: ImageLabel & {
-				Icon: ImageLabel;
-				Amount: TextLabel;
-			};
-			UIAspectRatioConstraint: UIAspectRatioConstraint;
-		};
-		Full: Frame & {
-			Tip: TextLabel;
+			Exit: TextButton;
 			Title: TextLabel;
-			Upgrade: TextButton;
-			UICorner: UICorner;
-			Sell: TextButton;
-			UIAspectRatioConstraint: UIAspectRatioConstraint;
-		};
-		Popup: Frame & {
-			Template: Frame & {
-				Icon: ImageLabel;
-				UICorner: UICorner;
+			Buttons: Frame & {
+				Pets: TextButton;
+				UIGridLayout: UIGridLayout;
+				Boosts: TextButton;
 			};
+			Background: ImageLabel;
+			UIAspectRatioConstraint: UIAspectRatioConstraint;
 		};
 	};
 	PetInventory: ScreenGui & {
 		Frame: Frame & {
-			Exit: TextButton;
-			Warning: TextLabel;
-			Buttons: Frame & {
-				UIGridLayout: UIGridLayout;
-				Trash: TextButton;
-				EquipBest: TextButton;
-			};
-			Confirmation: Frame & {
-				Confirm: TextButton;
-				UIGridLayout: UIGridLayout;
-				Cancel: TextButton;
-			};
 			UIAspectRatioConstraint: UIAspectRatioConstraint;
+			Warning: TextLabel;
 			Info: Frame & {
 				Locked: ImageLabel;
 				Buttons: Frame & {
@@ -60,9 +30,17 @@ interface StarterGui extends BasePlayerGui {
 				Equipped: ImageLabel;
 				PetName: TextLabel;
 			};
-			Title: TextLabel;
+			Buttons: Frame & {
+				UIGridLayout: UIGridLayout;
+				Trash: TextButton;
+				EquipBest: TextButton;
+			};
+			Confirmation: Frame & {
+				Confirm: TextButton;
+				UIGridLayout: UIGridLayout;
+				Cancel: TextButton;
+			};
 			Stored: TextLabel;
-			Background: ImageLabel;
 			Equipped: TextLabel;
 			Container: ScrollingFrame & {
 				Template: ImageButton & {
@@ -78,43 +56,10 @@ interface StarterGui extends BasePlayerGui {
 	};
 	Buttons: ScreenGui & {
 		Frame: Frame & {
+			Inventory: TextButton;
 			UIGridLayout: UIGridLayout;
 			Settings: TextButton;
 			Sell: TextButton;
-			UIAspectRatioConstraint: UIAspectRatioConstraint;
-			Pet: TextButton;
-		};
-	};
-	BasketUpgrade: ScreenGui & {
-		Frame: Frame & {
-			Exit: TextButton;
-			Title: TextLabel;
-			Upgrades: Frame & {
-				Template: ImageButton & {
-					Level: TextLabel;
-					Upgrade: TextLabel;
-					Bar: ImageLabel & {
-						Progress: ImageLabel;
-					};
-				};
-				UIGridLayout: UIGridLayout;
-			};
-			Background: ImageLabel;
-			UIAspectRatioConstraint: UIAspectRatioConstraint;
-			Info: Frame & {
-				Price: TextLabel;
-				Buy: TextButton;
-				Description: TextLabel;
-				Upgrade: TextLabel;
-			};
-		};
-	};
-	Monetization: ScreenGui & {
-		Frame: Frame & {
-			Message: TextLabel;
-			UIGradient: UIGradient;
-			UICorner: UICorner;
-			UIStroke: UIStroke;
 			UIAspectRatioConstraint: UIAspectRatioConstraint;
 		};
 	};
@@ -175,6 +120,38 @@ interface StarterGui extends BasePlayerGui {
 			};
 		};
 	};
+	Currency: ScreenGui & {
+		Frame: Frame & {
+			CandyHolder: ImageLabel & {
+				Icon: ImageLabel;
+				Amount: TextLabel;
+			};
+			CandyCornHolder: ImageLabel & {
+				Icon: ImageLabel;
+				Amount: TextLabel;
+			};
+			UIListLayout: UIListLayout;
+			MoneyHolder: ImageLabel & {
+				Icon: ImageLabel;
+				Amount: TextLabel;
+			};
+			UIAspectRatioConstraint: UIAspectRatioConstraint;
+		};
+		Full: Frame & {
+			Tip: TextLabel;
+			Title: TextLabel;
+			Upgrade: TextButton;
+			UICorner: UICorner;
+			Sell: TextButton;
+			UIAspectRatioConstraint: UIAspectRatioConstraint;
+		};
+		Popup: Frame & {
+			Template: Frame & {
+				Icon: ImageLabel;
+				UICorner: UICorner;
+			};
+		};
+	};
 	Settings: ScreenGui & {
 		Frame: Frame & {
 			Exit: TextButton;
@@ -186,6 +163,57 @@ interface StarterGui extends BasePlayerGui {
 				Template: ImageButton & {
 					Toggle: ImageLabel;
 					Setting: TextLabel;
+				};
+				UIGridLayout: UIGridLayout;
+			};
+		};
+	};
+	Monetization: ScreenGui & {
+		Frame: Frame & {
+			Message: TextLabel;
+			UIGradient: UIGradient;
+			UICorner: UICorner;
+			UIStroke: UIStroke;
+			UIAspectRatioConstraint: UIAspectRatioConstraint;
+		};
+	};
+	BasketUpgrade: ScreenGui & {
+		Frame: Frame & {
+			Exit: TextButton;
+			Title: TextLabel;
+			Upgrades: Frame & {
+				Template: ImageButton & {
+					Level: TextLabel;
+					Upgrade: TextLabel;
+					Bar: ImageLabel & {
+						Progress: ImageLabel;
+					};
+				};
+				UIGridLayout: UIGridLayout;
+			};
+			Background: ImageLabel;
+			UIAspectRatioConstraint: UIAspectRatioConstraint;
+			Info: Frame & {
+				Price: TextLabel;
+				Buy: TextButton;
+				Description: TextLabel;
+				Upgrade: TextLabel;
+			};
+		};
+	};
+	BoostInventory: ScreenGui & {
+		Frame: Frame & {
+			UIAspectRatioConstraint: UIAspectRatioConstraint;
+			Info: Frame & {
+				Description: TextLabel;
+				Boost: ImageLabel;
+				BoostName: TextLabel;
+				Use: TextButton;
+			};
+			Container: ScrollingFrame & {
+				Template: ImageButton & {
+					Multiplier: TextLabel;
+					Boost: ImageLabel;
 				};
 				UIGridLayout: UIGridLayout;
 			};

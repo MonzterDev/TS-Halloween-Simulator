@@ -13,7 +13,6 @@ export class EggsService implements OnInit {
     private petsService = Dependency( PetsService )
 
     private playerCooldown = new PlayerCooldown(3)
-    private eggs = Workspace.Eggs
 
     onInit () {
         Functions.hatchEgg.setCallback((player, egg) => this.hatchEgg(player, egg))
@@ -37,9 +36,7 @@ export class EggsService implements OnInit {
         const price = eggConfig.price
 
         if ( hasTrippleHatchGamepass && hasTrippleHatchEnabled ) {
-            if ( money >= price * 3 ) {
-                amountOfHatches = 3
-            }
+            if ( money >= price * 3 ) amountOfHatches = 3
         }
 
         const pets: PetTypes[] = []

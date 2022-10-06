@@ -9,9 +9,8 @@ export class SellController implements OnInit {
     private player = Players.LocalPlayer
     private playerGui = <PlayerGui>this.player.WaitForChild( "PlayerGui" )
 
-    private test = this.playerGui.WaitForChild( "Buttons" )
-
-    private button = this.playerGui.Buttons.Frame.Sell
+    private buttons = <StarterGui["Buttons"]>this.playerGui.WaitForChild( "Buttons" )
+    private button = this.buttons.Frame.Sell
 
     private ownsSellGamepass = false
 

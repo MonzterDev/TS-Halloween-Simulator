@@ -5,13 +5,12 @@ import { Debris, Lighting, Players, ReplicatedStorage, RunService, Workspace } f
 import { CleanViewport, GenerateViewport } from "@rbxts/viewport-model";
 import { Events, Functions } from "client/network";
 import { clientStore } from "client/rodux/rodux";
-import { COLOR_ACTIVE_BUTTON, COLOR_INACTIVE_BUTTON } from "shared/constants/Gui";
 import { EggShopConfig, EggTypes, PetConfig, PetInstanceProps, PetTypes, UUID } from "shared/constants/Pets";
-import { HatchEggResponse } from "shared/network";
-import { makeDescendantsInvisible } from "shared/util/functions/makeDescendantsInvisible";
 import { toTitleCase } from "shared/util/functions/toTileCase";
 
 type PetTemplate = StarterGui["PetEgg"]["InfoGui"]["Background"]["Frame"]["Container"]["Template"]
+
+const MAX_DISTANCE_FROM_EGG = 25
 
 @Controller({})
 export class PetEggController implements OnInit {
@@ -51,12 +50,14 @@ export class PetEggController implements OnInit {
         } )
         const eggModel = <Workspace["Eggs"]["Starter"]>this.eggs.FindFirstChild(egg)
         const infoClone = this.infoGui.Clone()
+        infoClone.Enabled = true
         infoClone.Parent = folder
         infoClone.Adornee = eggModel.Info
         infoClone.Background.Frame.Title.Text = `${egg.upper()} EGG`
         this.populatePets( infoClone.Background.Frame.Container, egg )
 
         const interactClone = this.interact.Clone()
+        interactClone.Enabled = true
         interactClone.Parent = folder
         interactClone.Adornee = eggModel.Interact
 
@@ -89,7 +90,7 @@ export class PetEggController implements OnInit {
         if ( !character || !humanoidRootPart ) return
 
         const distanceBetween = ( humanoidRootPart.Position.sub( eggModel.Position ) ).Magnitude
-        if ( distanceBetween > 10 ) return
+        if ( distanceBetween > MAX_DISTANCE_FROM_EGG ) return
 
         Functions.hatchEgg( egg ).andThen( ( pets ) => {
             if ( !pets ) return

@@ -18,9 +18,8 @@ export class BasketUpgradeController implements OnInit {
 
     private player = Players.LocalPlayer
     private playerGui = <PlayerGui>this.player.WaitForChild( "PlayerGui" )
-    private test = this.playerGui.WaitForChild( "Currency" )
 
-    private gui = this.playerGui.BasketUpgrade
+    private gui = <StarterGui["BasketUpgrade"]>this.playerGui.WaitForChild("BasketUpgrade")
     private frame = this.gui.Frame
     private upgrades = this.frame.Upgrades
     private info = this.frame.Info
