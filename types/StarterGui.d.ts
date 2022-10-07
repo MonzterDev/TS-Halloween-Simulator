@@ -120,6 +120,16 @@ interface StarterGui extends BasePlayerGui {
 			};
 		};
 	};
+	AreaWalls: Folder & {
+		Unlock: ProximityPrompt;
+		AreaDisplay: BillboardGui & {
+			Price: TextLabel & {
+				UIStroke: UIStroke;
+			};
+			Icon: ImageLabel;
+			Area: TextLabel;
+		};
+	};
 	Currency: ScreenGui & {
 		Frame: Frame & {
 			CandyHolder: ImageLabel & {

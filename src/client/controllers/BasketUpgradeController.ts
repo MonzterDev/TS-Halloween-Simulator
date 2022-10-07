@@ -2,14 +2,14 @@ import { Controller, OnStart, OnInit } from "@flamework/core";
 import { Players, Workspace } from "@rbxts/services";
 import { Events, Functions } from "client/network";
 import { clientStore } from "client/rodux/rodux";
+import { Area } from "shared/constants/Areas";
 import { BasketShopConfig, BasketUpgrades, getBasketUpgradeAsProp, getBasketUpgradePrice, UPGRADE_DESCRIPTION } from "shared/constants/Basket";
-import { AreaTypes } from "shared/constants/Piles";
 import { abbreviator } from "shared/util/functions/abbreviate";
 import { getClosestUpgradePart } from "shared/util/functions/getClosestPart";
 
-const areasMaxLevel: Record<AreaTypes, number> = {
+const areasMaxLevel: Record<Area, number> = {
     "Spawn": 10,
-    "Snow": 20
+    "Camp": 20
 }
 
 @Controller({})
@@ -28,7 +28,7 @@ export class BasketUpgradeController implements OnInit {
 
     private template = this.upgrades.Template
 
-    private area: AreaTypes = "Spawn"
+    private area: Area = "Spawn"
     private selectedUpgrade: BasketUpgrades = "Range"
 
     onInit () {
@@ -62,7 +62,7 @@ export class BasketUpgradeController implements OnInit {
         })
     }
 
-    private display ( area: AreaTypes ) {
+    private display ( area: Area ) {
         this.area = area
         this.gui.Enabled = true
         this.cleanup()

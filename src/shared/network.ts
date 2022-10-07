@@ -1,10 +1,10 @@
 import { Networking } from "@flamework/networking";
+import { Area } from "./constants/Areas";
 import { BasketUpgradeResponse, BasketUpgrades } from "./constants/Basket";
 import { Boosts } from "./constants/Boosts";
 import { Currency } from "./constants/Currencies";
 import { DevProduct, Gamepass } from "./constants/Gamepasses";
 import { EggTypes, PetInstanceProps, PetTypes, Rarities, UUID } from "./constants/Pets";
-import { AreaTypes } from "./constants/Piles";
 import { Setting } from "./constants/Settings";
 import { PlayerData } from "./types/PlayerData";
 
@@ -37,7 +37,7 @@ interface ClientEvents {
     updateGamepass: ( gamepass: Gamepass ) => void
     givePet: ( uuid: UUID, props: PetInstanceProps ) => void
 
-    displayBasketUpgradeShop: (area: AreaTypes) => void
+    displayBasketUpgradeShop: (area: Area) => void
     luckyReward: ( amount: number ) => void
 
     unlockPet: (uuid: UUID) => void

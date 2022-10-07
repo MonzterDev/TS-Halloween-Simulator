@@ -4,7 +4,8 @@ import { CollectionService, HttpService, Players, ServerStorage, Workspace } fro
 import { PileComponent } from "server/components/PileComponent";
 import { Events } from "server/network";
 import { getLuckStat, getPowerStat, getRangeStat, getSizeStat } from "server/utils/Stats";
-import { AreasConfig, PilesConfig } from "shared/constants/Piles";
+import { AreaPileConfig } from "shared/constants/Areas";
+import { PilesConfig } from "shared/constants/Piles";
 import { PlayerDataService } from "./PlayerDataService";
 
 @Service({})
@@ -23,7 +24,7 @@ export class PilesService implements OnInit {
 
     private generatePiles () {
         this.areaFolder.GetChildren().forEach( ( folder ) => {
-            const areaConfig = AreasConfig[folder.Name]
+            const areaConfig = AreaPileConfig[folder.Name]
             folder.GetChildren().forEach( ( spawnPart ) => {
                 if ( !spawnPart.IsA( "BasePart" ) ) return
                 const pileConfig = PilesConfig[spawnPart.Name]

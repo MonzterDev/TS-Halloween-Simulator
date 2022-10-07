@@ -1,3 +1,4 @@
+import { Area } from "./Areas"
 
 export const PileTypes = ["Small", "Medium", "Large"]
 export type PileTypes = typeof PileTypes[number]
@@ -17,30 +18,5 @@ export const PilesConfig: PilesConfig = {
     },
     "Large": {
         health: 25,
-    },
-}
-
-export const AreaTypes = ["Spawn", "Snow", "Grass"]
-export type AreaTypes = typeof AreaTypes[number]
-
-export interface AreaProperties {
-    health_multiplier: number
-    reward_multiplier: number
-}
-
-export type AreasConfig = Record<AreaTypes, AreaProperties>
-
-export const AreasConfig: AreasConfig = {
-    "Spawn": {
-        health_multiplier: 1,
-        reward_multiplier: 1,
-    },
-    "Snow": {
-        health_multiplier: 2,
-        reward_multiplier: 2,
-    },
-    "Grass": {
-        health_multiplier: 3,
-        reward_multiplier: 3,
     },
 }

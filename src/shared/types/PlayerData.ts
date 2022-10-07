@@ -1,3 +1,4 @@
+import { Area } from "shared/constants/Areas";
 import { ActiveBoosts, BoostInventory } from "shared/constants/Boosts";
 import { PetInventory } from "shared/constants/Pets";
 
@@ -12,6 +13,7 @@ export interface PlayerData {
 	gamepasses: Gamepasses
 	settings: Settings
 	analytics: Analytics
+	areas_unlocked: AreasUnlocked
 }
 
 export interface BasketUpgrades {
@@ -39,3 +41,5 @@ export interface Analytics {
 	gamepasses_purchased: number
 	dev_products_purchased: number
 }
+
+export type AreasUnlocked = Record<Area, boolean>

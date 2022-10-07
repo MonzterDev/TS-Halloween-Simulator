@@ -1,12 +1,6 @@
 import { TypeDefinition, Registry } from "@rbxts/cmdr";
-import { AreaTypes } from "shared/constants/Piles";
-
-const currencyType: TypeDefinition = {
-    Parse: ( value ) => {
-        return value
-    }
-}
+import { AREAS } from "shared/constants/Areas";
 
 export = function ( registry: Registry ) {
-    registry.RegisterType( "area", registry.Cmdr.Util.MakeEnumType( "area", AreaTypes ) )
+    registry.RegisterType( "area", registry.Cmdr.Util.MakeEnumType( "area", AREAS ) )
 }

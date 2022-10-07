@@ -1,4 +1,4 @@
-import { PlayerData } from "../types/PlayerData";
+import { AreasUnlocked, PlayerData } from "../types/PlayerData";
 import { BoostInventory, Boosts } from "./Boosts";
 import { Rarities } from "./Pets";
 
@@ -10,7 +10,7 @@ Boosts.forEach( ( boost ) => {
         Rare: 0,
     }
     DEFAULT_BOOSTS.set(boost, rarityTable)
-})
+} )
 
 export const DEFAULT_PLAYER_DATA: PlayerData = {
     candy: 0,
@@ -40,5 +40,11 @@ export const DEFAULT_PLAYER_DATA: PlayerData = {
     analytics: {
         dev_products_purchased: 0,
         gamepasses_purchased: 0
+    },
+    areas_unlocked: {
+        Spawn: true,
+        Camp: false,
+        Crystal_Valley: false,
+        Swap: false
     }
 }

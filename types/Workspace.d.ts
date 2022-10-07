@@ -222,6 +222,29 @@ interface Workspace extends Model {
 		};
 		["Meshes/ocean cliff 2"]: MeshPart;
 	};
+	Areas: Folder & {
+		Crystal_Valley: Folder & {
+			Wall: Part & {
+				Display: Attachment;
+				Block: Part;
+			};
+			Spawn: Part;
+		};
+		Camp: Folder & {
+			Wall: Part & {
+				Display: Attachment;
+				Block: Part;
+			};
+			Spawn: Part;
+		};
+		Swamp: Folder & {
+			Wall: Part & {
+				Display: Attachment;
+				Block: Part;
+			};
+			Spawn: Part;
+		};
+	};
 	Piles: Folder & {
 		Grass: Folder & {
 			Large: Part;
@@ -259,7 +282,6 @@ interface Workspace extends Model {
 	};
 	Eggs: Folder & {
 		Starter: Part & {
-			Prompt: ProximityPrompt;
 			Info: Attachment;
 			Interact: Attachment;
 		};
