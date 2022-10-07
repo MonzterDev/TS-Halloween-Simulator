@@ -1,5 +1,6 @@
 import { Controller, OnStart, OnInit, Dependency } from "@flamework/core";
 import { Players, ReplicatedStorage } from "@rbxts/services";
+import { openGui } from "client/utils/openGui";
 
 type Mode = "Pets" | "Boosts"
 
@@ -24,7 +25,10 @@ export class PetInventoryController implements OnInit {
     private mode: Mode = "Pets"
 
     onInit () {
-        this.openButton.MouseButton1Click.Connect( () => this.displayGui( true ) )
+        this.openButton.MouseButton1Click.Connect( () => {
+            openGui(this.gui)
+            this.displayGui( this.gui.Enabled )
+        } )
         this.exitButton.MouseButton1Click.Connect( () => this.displayGui( false ) )
         this.petsButton.MouseButton1Click.Connect(() => this.changeMode("Pets"))
         this.boostsButton.MouseButton1Click.Connect(() => this.changeMode("Boosts"))
@@ -33,7 +37,7 @@ export class PetInventoryController implements OnInit {
     private displayGui ( open: boolean ) {
         this.gui.Enabled = open
         if (this.mode === "Pets") this.petInventoryGui.Enabled = open
-        else if (this.mode === "Boosts") this.petInventoryGui.Enabled = open
+        else if (this.mode === "Boosts") this.boostInventoryGui.Enabled = open
     }
 
     private changeMode ( mode: Mode ) {
