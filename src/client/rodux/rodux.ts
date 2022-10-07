@@ -1,5 +1,6 @@
 import { combineReducers, Store } from "@rbxts/rodux";
 import { Players } from "@rbxts/services";
+import Signal from "@rbxts/signal";
 import { Events, Functions } from "client/network";
 import { BOOST_DURATION } from "shared/constants/Boosts";
 import { PlayerData } from "shared/types/PlayerData";
@@ -14,6 +15,7 @@ const combinedReducer = combineReducers<CombinedState, DataActions>({
 	data: dataReducer,
 });
 
+let isDataLoaded = false
 export const clientStore = new Store( combinedReducer );
 
 Events.updateCurrency.connect( ( currency, amount ) => clientStore.dispatch( { type: "updateCurrency", currency: currency, amount: amount } ) )
@@ -38,7 +40,3 @@ Events.useBoost.connect( ( boost, rarity ) => {
 	clientStore.dispatch( { type: "useBoost", boost: boost, rarity: rarity, duration: BOOST_DURATION } )
 } )
 Events.unlockArea.connect( ( area ) => clientStore.dispatch({type: "unlockArea", area: area}) )
-
-Functions.getAllData.invoke().andThen( ( data ) => {
-	if (isA<PlayerData>(data)) clientStore.dispatch({type: "updatePlayerData", data: data})
-})

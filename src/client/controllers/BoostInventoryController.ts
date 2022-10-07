@@ -5,6 +5,7 @@ import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
 import { Boosts, BoostsConfig, BOOST_DESCRIPTIONS, BOOST_IMAGES } from "shared/constants/Boosts";
 import { PetConfig, PetInstanceProps, Rarities, RarityColors, UUID } from "shared/constants/Pets";
+import { DEFAULT_PLAYER_DATA } from "shared/constants/PlayerData";
 import { PetsController } from "./PetsController";
 
 @Controller({})
@@ -25,14 +26,21 @@ export class PetInventoryController implements OnInit {
     private selectedBooster: Boosts | undefined
     private selectedBoosterRarity: Rarities | undefined
 
+    private dataLoaded = false
+    private connection = clientStore.changed.connect( ( newState ) => {
+        if ( !this.dataLoaded ) newState.data.boost_inventory.forEach( ( rarities, boost ) => {
+            for ( const [rarity, duration] of pairs( rarities ) )
+                this.updateBoost( boost, rarity )
+            })
+        else this.connection.disconnect()
+    })
+
     onInit () {
         this.generateBoosts()
+
         this.useButton.MouseButton1Click.Connect( () => this.useBoost() )
         Events.useBoost.connect((boost, rarity) => task.defer(() => this.updateBoost(boost, rarity)))
         Events.gainBoost.connect( ( boost, rarity ) => task.defer( () => this.updateBoost( boost, rarity ) ) )
-        task.delay(1, () => clientStore.getState().data.boost_inventory.forEach( ( rarities, boost ) => {
-            for ( const [rarity, duration] of pairs( rarities ) ) this.updateBoost(boost, rarity)
-        }))
     }
 
     private getTemplate ( boost: Boosts, rarity: Rarities ): typeof this.template | undefined {
@@ -46,6 +54,7 @@ export class PetInventoryController implements OnInit {
     }
 
     private updateBoost ( boost: Boosts, rarity: Rarities ) {
+        this.dataLoaded = true
         const template = this.getTemplate( boost, rarity )!
         template.Amount.Text = tostring( clientStore.getState().data.boost_inventory.get( boost )![rarity] )
     }

@@ -4,6 +4,7 @@ import { CleanViewport, GenerateViewport } from "@rbxts/viewport-model";
 import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
 import { PetConfig, PetInstanceProps, UUID } from "shared/constants/Pets";
+import { DEFAULT_PLAYER_DATA } from "shared/constants/PlayerData";
 import { PetsController } from "./PetsController";
 
 type Mode = "Default" | "Trash"
@@ -42,8 +43,15 @@ export class PetInventoryController implements OnInit {
     private selectedPet: UUID | undefined
     private selectedPets: UUID[] = []
 
+    private dataLoaded = false
+    private connection = clientStore.changed.connect( ( newState ) => {
+        if ( !this.dataLoaded ) newState.data.pet_inventory.forEach( ( props, uuid ) => this.generatePet( uuid, props ) )
+        else this.connection.disconnect()
+    })
+
     onInit () {
-        task.delay(1, () => clientStore.getState().data.pet_inventory.forEach((props, uuid) => this.generatePet(uuid, props)))
+        clientStore.getState().data.pet_inventory.forEach( ( props, uuid ) => this.generatePet( uuid, props ) )
+
         Events.updateGamepass.connect( ( gamepass ) => this.updateLabels() )
         Events.equipPet.connect((player, uuid, pet) => this.equipPet(player, uuid, true))
         Events.unequipPet.connect((player, uuid) => this.equipPet(player, uuid, false))
@@ -71,13 +79,15 @@ export class PetInventoryController implements OnInit {
     }
 
     private updateLabels () {
-        task.wait(.1)
-        const maxStored = this.petsController.getMaxPetStorage()
-        const currentStored = clientStore.getState().data.pet_inventory.size()
-        const maxEquipped = this.petsController.getMaxPetEquipped()
-        const currentEquipped = this.petsController.getEquippedPets().size()
-        this.stored.Text = `${currentStored}/${maxStored} Stored`
-        this.equipped.Text = `${currentEquipped}/${maxEquipped} Equipped`
+        task.spawn( () => {
+            task.wait(.1)
+            const maxStored = this.petsController.getMaxPetStorage()
+            const currentStored = clientStore.getState().data.pet_inventory.size()
+            const maxEquipped = this.petsController.getMaxPetEquipped()
+            const currentEquipped = this.petsController.getEquippedPets().size()
+            this.stored.Text = `${currentStored}/${maxStored} Stored`
+            this.equipped.Text = `${currentEquipped}/${maxEquipped} Equipped`
+        })
     }
 
     private equipPet ( player: Player, uuid: UUID, equip: boolean ) {
@@ -97,7 +107,8 @@ export class PetInventoryController implements OnInit {
         template.Locked.Visible = lock
     }
 
-    private generatePet (uuid: UUID, props: PetInstanceProps) {
+    private generatePet ( uuid: UUID, props: PetInstanceProps ) {
+        this.dataLoaded = true
         const clone = this.template.Clone()
         clone.Parent = this.container
         clone.Visible = true

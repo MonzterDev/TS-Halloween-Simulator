@@ -4,6 +4,7 @@ import { Players, ReplicatedStorage, Workspace } from "@rbxts/services";
 import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
 import { DEFAULT_MAX_PET_EQUIPPED_AMOUNT, DEFAULT_MAX_PET_STORAGE_AMOUNT, PetTypes, UUID } from "shared/constants/Pets";
+import { DEFAULT_PLAYER_DATA } from "shared/constants/PlayerData";
 
 const positions = [
     new Vector3( 0, 1, 8 ),
@@ -29,8 +30,19 @@ export class PetsController implements OnInit {
 
     private pets: Map<number, [pet]> = new Map()
 
+    private dataLoaded = false
+    private connection = clientStore.changed.connect( ( newState ) => {
+        if ( !this.dataLoaded ) newState.data.pet_inventory.forEach( ( props, uuid ) => {
+                if (props.equipped) this.equipPet( this.player, uuid, props.type )
+            } )
+        else this.connection.disconnect()
+    })
+
     onInit () {
-        task.delay(1, () => clientStore.getState().data.pet_inventory.forEach((props, uuid) => this.equipPet(this.player, uuid, props.type)))
+        clientStore.getState().data.pet_inventory.forEach( ( props, uuid ) => {
+            if (props.equipped) this.equipPet( this.player, uuid, props.type )
+        } )
+
         Events.equipPet.connect((player, uuid, pet) => this.equipPet(player, uuid, pet))
         Events.unequipPet.connect( ( player, uuid ) => this.unequipPet( player, uuid ) )
 
@@ -101,6 +113,7 @@ export class PetsController implements OnInit {
     }
 
     private equipPet ( player: Player, uuid: UUID, pet: PetTypes ) {
+        this.dataLoaded = true
         const playerPets = this.pets.get( player.UserId )
         if (!playerPets) this.pets.set(player.UserId, [{uuid: uuid, type: pet}])
         else playerPets.push( { type: pet, uuid: uuid } )

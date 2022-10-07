@@ -23,11 +23,17 @@ export class BoostController implements OnInit {
 
     private selectedArea: Area | undefined
 
+    // In case the Data wasn't loaded onInit
+    private connection = clientStore.changed.connect( ( newState ) => {
+        this.prugeWalls()
+        this.generateWalls()
+        this.connection.disconnect()
+    })
+
     onInit () {
-        task.delay( 1, () => {
-            this.prugeWalls()
-            this.generateWalls()
-        } )
+        this.prugeWalls()
+        this.generateWalls()
+
         Events.unlockArea.connect( ( area ) => {
             this.unlockWall( area )
             this.pruchaseGui.Enabled = false
@@ -39,11 +45,14 @@ export class BoostController implements OnInit {
     private prugeWalls () {
         const areaData = clientStore.getState().data.areas_unlocked
         for ( const [area, unlocked] of pairs( areaData ) ) {
-            if ( !unlocked ) return
+            if ( !unlocked ) continue
+
             const areaFolder = this.areasFolder.FindFirstChild( area )
-            if ( !areaFolder ) return
+            if ( !areaFolder ) continue
 
             const wallInstance = <Part>areaFolder.FindFirstChild( "Wall" )
+            if ( !wallInstance ) continue
+
             wallInstance.Destroy()
         }
     }

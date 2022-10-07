@@ -2,6 +2,7 @@ import { Controller, OnStart, OnInit, Dependency } from "@flamework/core";
 import { Players } from "@rbxts/services";
 import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
+import { DEFAULT_PLAYER_DATA } from "shared/constants/PlayerData";
 import { getSettingAsProp, OFF_BUTTON, ON_BUTTON, Setting } from "shared/constants/Settings";
 import { Settings } from "shared/types/PlayerData";
 import { PetsController } from "./PetsController";
@@ -25,10 +26,15 @@ export class SettingsController implements OnInit {
     private template = this.container.Template
 
     onInit () {
-        this.openButton.MouseButton1Click.Connect(() => this.gui.Enabled = !this.gui.Enabled)
+        Setting.forEach( ( setting ) => this.generateTemplate( setting ) )
+        clientStore.changed.connect( ( newS, oldS ) => {
+            if ( DEFAULT_PLAYER_DATA.settings !== oldS.data.settings ) return
+            Setting.forEach( ( setting ) => this.updateSetting( setting, newS.data.settings[getSettingAsProp(setting)]) )
+        } )
+
+        this.openButton.MouseButton1Click.Connect( () => this.gui.Enabled = !this.gui.Enabled )
         this.exit.MouseButton1Click.Connect(() => this.gui.Enabled = false)
         Events.toggleSetting.connect( ( setting, value ) => this.updateSetting( setting, value ) )
-        Setting.forEach((setting) => this.generateTemplate(setting))
     }
 
     private updateSetting ( setting: Setting, value: boolean ) {

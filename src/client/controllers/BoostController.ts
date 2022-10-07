@@ -4,6 +4,7 @@ import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
 import { Boosts, BOOST_IMAGES } from "shared/constants/Boosts";
 import { Rarities, RarityColors } from "shared/constants/Pets";
+import { DEFAULT_PLAYER_DATA } from "shared/constants/PlayerData";
 
 @Controller({})
 export class BoostController implements OnInit {
@@ -15,13 +16,21 @@ export class BoostController implements OnInit {
 
     private template = this.frame.Template
 
+    private dataLoaded = false
+    private connection = clientStore.changed.connect( ( newState ) => {
+        if ( !this.dataLoaded ) newState.data.active_boosts.forEach( ( props, boost ) => this.generateBoost( boost, props.rarity ) )
+        else this.connection.disconnect()
+    })
+
     onInit () {
-        task.delay(1, () => clientStore.getState().data.active_boosts.forEach((props, boost) => this.generateBoost(boost, props.rarity)))
+        clientStore.getState().data.active_boosts.forEach( ( props, boost ) => this.generateBoost( boost, props.rarity ) )
+
         Events.useBoost.connect( ( boost, rarity ) => task.defer(() => this.generateBoost( boost, rarity )) )
         task.spawn(() => this.updateBoostTime())
     }
 
     private generateBoost ( boost: Boosts, rarity: Rarities ) {
+        this.dataLoaded = true
         const clone = this.template.Clone()
         clone.Parent = this.frame
         clone.Visible = true
