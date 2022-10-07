@@ -1,4 +1,16 @@
 import { PlayerData } from "../types/PlayerData";
+import { BoostInventory, Boosts } from "./Boosts";
+import { Rarities } from "./Pets";
+
+const DEFAULT_BOOSTS: BoostInventory = new Map()
+Boosts.forEach( ( boost ) => {
+    const rarityTable: Record<Rarities, number> = {
+        Common: 0,
+        Uncommon: 0,
+        Rare: 0,
+    }
+    DEFAULT_BOOSTS.set(boost, rarityTable)
+})
 
 export const DEFAULT_PLAYER_DATA: PlayerData = {
     candy: 0,
@@ -11,6 +23,8 @@ export const DEFAULT_PLAYER_DATA: PlayerData = {
         luck: 0
     },
     pet_inventory: new Map(),
+    active_boosts: new Map(),
+    boost_inventory: DEFAULT_BOOSTS,
     gamepasses: {
         equip_more_pets: false,
         equip_more_pets2: false,

@@ -9,6 +9,7 @@ export class PetInventoryController implements OnInit {
     private playerGui = <PlayerGui>this.player.WaitForChild( "PlayerGui" )
 
     private petInventoryGui = <StarterGui["PetInventory"]>this.playerGui.WaitForChild( "PetInventory" )
+    private boostInventoryGui = <StarterGui["BoostInventory"]>this.playerGui.WaitForChild( "BoostInventory" )
 
     private buttons = <StarterGui["Buttons"]>this.playerGui.WaitForChild( "Buttons" )
     private gui = <StarterGui["Inventory"]>this.playerGui.WaitForChild( "Inventory" )
@@ -40,6 +41,6 @@ export class PetInventoryController implements OnInit {
         this.mode = mode
         this.title.Text = mode.upper()
         this.petInventoryGui.Enabled = mode === "Pets"
-        // this.petInventoryGui.Enabled = mode === "Boosts"
+        this.boostInventoryGui.Enabled = mode === "Boosts"
     }
 }

@@ -1,12 +1,13 @@
 import { TypeDefinition, Registry } from "@rbxts/cmdr";
-import { AreaTypes } from "shared/constants/Piles";
+import { DEFAULT_PLAYER_DATA } from "shared/constants/PlayerData";
 
-const currencyType: TypeDefinition = {
-    Parse: ( value ) => {
-        return value
-    }
+const keyOfPlayerData: string[] = []
+
+for ( const [key, value] of pairs( DEFAULT_PLAYER_DATA ) ) {
+    keyOfPlayerData.push(tostring(key))
 }
 
+
 export = function ( registry: Registry ) {
-    registry.RegisterType( "area", registry.Cmdr.Util.MakeEnumType( "area", AreaTypes ) )
+    registry.RegisterType( "dataDirectory", registry.Cmdr.Util.MakeEnumType( "dataDirectory", keyOfPlayerData ) )
 }

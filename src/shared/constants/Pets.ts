@@ -13,6 +13,12 @@ export type PetInventory = Map<UUID, PetInstanceProps>
 export const Rarities = ["Common", "Uncommon", "Rare"] as const
 export type Rarities = typeof Rarities[number]
 
+export const RarityColors: Record<Rarities, Color3> = {
+    Common: Color3.fromRGB(191,191,191),
+    Uncommon: Color3.fromRGB(28,179,23),
+    Rare: Color3.fromRGB(51,222,227),
+}
+
 export const EggTypes = ["Starter"] as const
 export type EggTypes = typeof EggTypes[number]
 

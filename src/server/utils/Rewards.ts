@@ -1,5 +1,7 @@
 import { Dependency } from "@flamework/core";
 import { PlayerDataService } from "server/services/PlayerDataService";
+import { Boosts } from "shared/constants/Boosts";
+import { Rarities } from "shared/constants/Pets";
 
 const playerDataService = Dependency(PlayerDataService)
 

@@ -168,6 +168,14 @@ interface StarterGui extends BasePlayerGui {
 			};
 		};
 	};
+	ActiveBoosts: ScreenGui & {
+		Frame: Frame & {
+			Template: ImageLabel & {
+				Duration: TextLabel;
+			};
+			UIGridLayout: UIGridLayout;
+		};
+	};
 	Monetization: ScreenGui & {
 		Frame: Frame & {
 			Message: TextLabel;
@@ -212,8 +220,8 @@ interface StarterGui extends BasePlayerGui {
 			};
 			Container: ScrollingFrame & {
 				Template: ImageButton & {
-					Multiplier: TextLabel;
 					Boost: ImageLabel;
+					Amount: TextLabel;
 				};
 				UIGridLayout: UIGridLayout;
 			};

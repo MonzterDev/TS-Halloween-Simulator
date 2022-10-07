@@ -1,3 +1,4 @@
+import { ActiveBoosts, BoostInventory } from "shared/constants/Boosts";
 import { PetInventory } from "shared/constants/Pets";
 
 export interface PlayerData {
@@ -6,6 +7,8 @@ export interface PlayerData {
 	money: number;
 	basket_upgrades: BasketUpgrades
 	pet_inventory: PetInventory
+	active_boosts: ActiveBoosts
+	boost_inventory: BoostInventory
 	gamepasses: Gamepasses
 	settings: Settings
 	analytics: Analytics

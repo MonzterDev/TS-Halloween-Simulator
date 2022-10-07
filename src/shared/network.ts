@@ -1,8 +1,9 @@
 import { Networking } from "@flamework/networking";
 import { BasketUpgradeResponse, BasketUpgrades } from "./constants/Basket";
+import { Boosts } from "./constants/Boosts";
 import { Currency } from "./constants/Currencies";
 import { DevProduct, Gamepass } from "./constants/Gamepasses";
-import { EggTypes, PetInstanceProps, PetTypes, UUID } from "./constants/Pets";
+import { EggTypes, PetInstanceProps, PetTypes, Rarities, UUID } from "./constants/Pets";
 import { AreaTypes } from "./constants/Piles";
 import { Setting } from "./constants/Settings";
 import { PlayerData } from "./types/PlayerData";
@@ -19,6 +20,7 @@ interface ServerEvents {
     equipBestPets: () => void
     unequipPet: ( uuid: UUID ) => void
     toggleSetting: ( setting: Setting) => void
+    useBoost: ( boost: Boosts, rarity: Rarities) => void
 }
 
 interface ServerFunctions {
@@ -45,6 +47,10 @@ interface ClientEvents {
     unequipPet: ( player: Player, uuid: UUID ) => void
     toggleSetting: ( setting: Setting, value: boolean ) => void
     purchaseSuccess: ( product: Gamepass | DevProduct ) => void
+
+    gainBoost: ( boost: Boosts, rarity: Rarities) => void
+    useBoost: ( boost: Boosts, rarity: Rarities) => void
+    endBoost: ( boost: Boosts) => void
 }
 
 

@@ -1,6 +1,7 @@
 import { combineReducers, Store } from "@rbxts/rodux";
 import { Players } from "@rbxts/services";
 import { Events, Functions } from "client/network";
+import { BOOST_DURATION } from "shared/constants/Boosts";
 import { PlayerData } from "shared/types/PlayerData";
 import { isA } from "shared/util/functions/isA";
 import { DataActions, dataReducer, DataState } from "./reducers";
@@ -31,6 +32,11 @@ Events.unlockPet.connect( (uuid) => clientStore.dispatch( { type: "updatePet", u
 Events.toggleSetting.connect( ( setting, value ) => clientStore.dispatch( { type: "updateSetting", setting: setting, value: value } ) )
 
 Events.updateGamepass.connect( ( gamepass ) => clientStore.dispatch({type: "updateGamepass", gamepass: gamepass}) )
+Events.gainBoost.connect( ( boost, rarity ) => clientStore.dispatch({type: "addBoost", boost: boost, rarity: rarity}) )
+Events.useBoost.connect( ( boost, rarity ) => {
+	clientStore.dispatch( { type: "removeBoost", boost: boost, rarity: rarity } )
+	clientStore.dispatch( { type: "useBoost", boost: boost, rarity: rarity, duration: BOOST_DURATION } )
+} )
 
 Functions.getAllData.invoke().andThen( ( data ) => {
 	if (isA<PlayerData>(data)) clientStore.dispatch({type: "updatePlayerData", data: data})
