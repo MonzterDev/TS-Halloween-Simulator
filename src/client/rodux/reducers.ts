@@ -5,6 +5,7 @@ import { PetInstanceProps, Rarities, UUID } from "shared/constants/Pets";
 import { getSettingAsProp, Setting } from "shared/constants/Settings";
 import { Gamepass, getGamepassAsProp } from "shared/constants/Gamepasses";
 import { Boosts, BOOST_DURATION } from "shared/constants/Boosts";
+import { Area } from "shared/constants/Areas";
 
 interface UpdateDataAction extends Action<"updatePlayerData"> {
 	data: DataState;
@@ -57,9 +58,12 @@ interface UpdateBoostAction extends Action<"updateBoost"> {
 interface EndBoostAction extends Action<"endBoost"> {
     boost: Boosts,
 }
+interface UnlockAreaAction extends Action<"unlockArea"> {
+    area: Area,
+}
 
 export type DataState = PlayerData;
-export type DataActions = UpdateDataAction | UpdateCurrencyAction | UpdateUpgradeAction | AddPetAction | RemovePetAction | UpdatePetAction | UpdateSettingAction | UpdateGamepassAction | AddBoostAction | RemoveBoostAction | UseBoostAction | UpdateBoostAction | EndBoostAction;
+export type DataActions = UpdateDataAction | UpdateCurrencyAction | UpdateUpgradeAction | AddPetAction | RemovePetAction | UpdatePetAction | UpdateSettingAction | UpdateGamepassAction | AddBoostAction | RemoveBoostAction | UseBoostAction | UpdateBoostAction | EndBoostAction | UnlockAreaAction;
 
 export const dataReducer = createReducer<DataState, DataActions>(DEFAULT_PLAYER_DATA, {
     updatePlayerData: ( state, action ) => action.data,
@@ -112,6 +116,10 @@ export const dataReducer = createReducer<DataState, DataActions>(DEFAULT_PLAYER_
     },
     endBoost: ( state, action ) => {
         state.active_boosts.delete(action.boost)
+        return state
+    },
+    unlockArea: ( state, action ) => {
+        state.areas_unlocked[action.area] = true
         return state
     },
 } );

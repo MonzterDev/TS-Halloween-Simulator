@@ -37,6 +37,7 @@ Events.useBoost.connect( ( boost, rarity ) => {
 	clientStore.dispatch( { type: "removeBoost", boost: boost, rarity: rarity } )
 	clientStore.dispatch( { type: "useBoost", boost: boost, rarity: rarity, duration: BOOST_DURATION } )
 } )
+Events.unlockArea.connect( ( area ) => clientStore.dispatch({type: "unlockArea", area: area}) )
 
 Functions.getAllData.invoke().andThen( ( data ) => {
 	if (isA<PlayerData>(data)) clientStore.dispatch({type: "updatePlayerData", data: data})

@@ -20,7 +20,8 @@ interface ServerEvents {
     equipBestPets: () => void
     unequipPet: ( uuid: UUID ) => void
     toggleSetting: ( setting: Setting) => void
-    useBoost: ( boost: Boosts, rarity: Rarities) => void
+    useBoost: ( boost: Boosts, rarity: Rarities ) => void
+    unlockArea: ( area: Area) => void
 }
 
 interface ServerFunctions {
@@ -51,6 +52,7 @@ interface ClientEvents {
     gainBoost: ( boost: Boosts, rarity: Rarities) => void
     useBoost: ( boost: Boosts, rarity: Rarities) => void
     endBoost: ( boost: Boosts) => void
+    unlockArea: ( area: Area) => void
 }
 
 
