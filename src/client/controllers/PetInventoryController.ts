@@ -43,6 +43,7 @@ export class PetInventoryController implements OnInit {
     private selectedPets: UUID[] = []
 
     onInit () {
+        task.delay(1, () => clientStore.getState().data.pet_inventory.forEach((props, uuid) => this.generatePet(uuid, props)))
         Events.updateGamepass.connect( ( gamepass ) => this.updateLabels() )
         Events.equipPet.connect((player, uuid, pet) => this.equipPet(player, uuid, true))
         Events.unequipPet.connect((player, uuid) => this.equipPet(player, uuid, false))

@@ -31,6 +31,7 @@ export class PetsController implements OnInit {
     private pets: Map<number, [pet]> = new Map()
 
     onInit () {
+        task.delay(1, () => clientStore.getState().data.pet_inventory.forEach((props, uuid) => this.equipPet(this.player, uuid, props.type)))
         Events.equipPet.connect((player, uuid, pet) => this.equipPet(player, uuid, pet))
         Events.unequipPet.connect( ( player, uuid ) => this.unequipPet( player, uuid ) )
 
