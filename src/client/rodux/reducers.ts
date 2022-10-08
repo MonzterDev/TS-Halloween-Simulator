@@ -6,6 +6,7 @@ import { getSettingAsProp, Setting } from "shared/constants/Settings";
 import { Gamepass, getGamepassAsProp } from "shared/constants/Gamepasses";
 import { Boosts, BOOST_DURATION } from "shared/constants/Boosts";
 import { Area } from "shared/constants/Areas";
+import { Quest } from "shared/constants/Quests";
 
 interface UpdateDataAction extends Action<"updatePlayerData"> {
 	data: DataState;
@@ -61,9 +62,22 @@ interface EndBoostAction extends Action<"endBoost"> {
 interface UnlockAreaAction extends Action<"unlockArea"> {
     area: Area,
 }
+interface UpdateQuestPointsAction extends Action<"updateQuestPoints"> {
+    quest: Quest,
+    tier: number,
+    points: number
+}
+interface CompleteQuestAction extends Action<"completeQuest"> {
+    quest: Quest,
+    tier: number,
+}
+interface ClaimQuestAction extends Action<"claimQuest"> {
+    quest: Quest,
+    tier: number,
+}
 
 export type DataState = PlayerData;
-export type DataActions = UpdateDataAction | UpdateCurrencyAction | UpdateUpgradeAction | AddPetAction | RemovePetAction | UpdatePetAction | UpdateSettingAction | UpdateGamepassAction | AddBoostAction | RemoveBoostAction | UseBoostAction | UpdateBoostAction | EndBoostAction | UnlockAreaAction;
+export type DataActions = UpdateDataAction | UpdateCurrencyAction | UpdateUpgradeAction | AddPetAction | RemovePetAction | UpdatePetAction | UpdateSettingAction | UpdateGamepassAction | AddBoostAction | RemoveBoostAction | UseBoostAction | UpdateBoostAction | EndBoostAction | UnlockAreaAction |UpdateQuestPointsAction | CompleteQuestAction | ClaimQuestAction;
 
 export const dataReducer = createReducer<DataState, DataActions>(DEFAULT_PLAYER_DATA, {
     updatePlayerData: ( state, action ) => action.data,
@@ -120,6 +134,18 @@ export const dataReducer = createReducer<DataState, DataActions>(DEFAULT_PLAYER_
     },
     unlockArea: ( state, action ) => {
         state.areas_unlocked[action.area] = true
+        return state
+    },
+    updateQuestPoints: ( state, action ) => {
+        state.quests[action.quest][action.tier].points = action.points
+        return state
+    },
+    completeQuest: ( state, action ) => {
+        state.quests[action.quest][action.tier].completed = true
+        return state
+    },
+    claimQuest: ( state, action ) => {
+        state.quests[action.quest][action.tier].claimed_reward = true
         return state
     },
 } );

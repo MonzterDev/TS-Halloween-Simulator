@@ -5,6 +5,7 @@ import { Boosts } from "./constants/Boosts";
 import { Currency } from "./constants/Currencies";
 import { DevProduct, Gamepass } from "./constants/Gamepasses";
 import { EggTypes, PetInstanceProps, PetTypes, Rarities, UUID } from "./constants/Pets";
+import { Quest } from "./constants/Quests";
 import { Setting } from "./constants/Settings";
 import { PlayerData } from "./types/PlayerData";
 
@@ -21,7 +22,8 @@ interface ServerEvents {
     unequipPet: ( uuid: UUID ) => void
     toggleSetting: ( setting: Setting) => void
     useBoost: ( boost: Boosts, rarity: Rarities ) => void
-    unlockArea: ( area: Area) => void
+    unlockArea: ( area: Area ) => void
+    claimQuest: ( quest: Quest, tier: number) => void
 }
 
 interface ServerFunctions {
@@ -52,7 +54,11 @@ interface ClientEvents {
     gainBoost: ( boost: Boosts, rarity: Rarities) => void
     useBoost: ( boost: Boosts, rarity: Rarities) => void
     endBoost: ( boost: Boosts) => void
-    unlockArea: ( area: Area) => void
+    unlockArea: ( area: Area ) => void
+
+    updateQuestPoints: ( quest: Quest, tier: number, points: number) => void
+    completeQuest: ( quest: Quest, tier: number) => void
+    claimQuest: ( quest: Quest, tier: number) => void
 }
 
 

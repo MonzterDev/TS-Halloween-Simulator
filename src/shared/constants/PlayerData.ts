@@ -1,6 +1,7 @@
-import { AreasUnlocked, PlayerData } from "../types/PlayerData";
+import { AreasUnlocked, PlayerData, QuestData } from "../types/PlayerData";
 import { BoostInventory, Boosts } from "./Boosts";
 import { Rarities } from "./Pets";
+import { QuestConfig } from "./Quests";
 
 const DEFAULT_BOOSTS: BoostInventory = new Map()
 Boosts.forEach( ( boost ) => {
@@ -11,6 +12,21 @@ Boosts.forEach( ( boost ) => {
     }
     DEFAULT_BOOSTS.set(boost, rarityTable)
 } )
+
+const DEFAULT_QUESTS_DATA: QuestData = {}
+for ( const [quest, props] of pairs( QuestConfig ) ) {
+    DEFAULT_QUESTS_DATA[quest] = {}
+
+    let i = 1
+    while ( i < props.tiers ) {
+        DEFAULT_QUESTS_DATA[quest][i] = {
+            points: 5,
+            completed: false,
+            claimed_reward: false,
+        }
+        i++
+    }
+}
 
 export const DEFAULT_PLAYER_DATA: PlayerData = {
     candy: 0,
@@ -56,7 +72,8 @@ export const DEFAULT_PLAYER_DATA: PlayerData = {
         Camp: false,
         Crystal_Valley: false,
         Swamp: false
-    }
+    },
+    quests: DEFAULT_QUESTS_DATA
 }
 
 // Mock test data

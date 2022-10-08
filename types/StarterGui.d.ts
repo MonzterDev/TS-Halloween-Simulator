@@ -189,23 +189,6 @@ interface StarterGui extends BasePlayerGui {
 			};
 		};
 	};
-	ActiveBoosts: ScreenGui & {
-		Frame: Frame & {
-			Template: ImageLabel & {
-				Duration: TextLabel;
-			};
-			UIGridLayout: UIGridLayout;
-		};
-	};
-	Monetization: ScreenGui & {
-		Frame: Frame & {
-			Message: TextLabel;
-			UIGradient: UIGradient;
-			UICorner: UICorner;
-			UIStroke: UIStroke;
-			UIAspectRatioConstraint: UIAspectRatioConstraint;
-		};
-	};
 	BasketUpgrade: ScreenGui & {
 		Frame: Frame & {
 			Exit: TextButton;
@@ -227,6 +210,58 @@ interface StarterGui extends BasePlayerGui {
 				Buy: TextButton;
 				Description: TextLabel;
 				Upgrade: TextLabel;
+			};
+		};
+	};
+	ActiveBoosts: ScreenGui & {
+		Frame: Frame & {
+			Template: ImageLabel & {
+				Duration: TextLabel;
+			};
+			UIGridLayout: UIGridLayout;
+		};
+	};
+	Monetization: ScreenGui & {
+		Frame: Frame & {
+			Message: TextLabel;
+			UIGradient: UIGradient;
+			UICorner: UICorner;
+			UIStroke: UIStroke;
+			UIAspectRatioConstraint: UIAspectRatioConstraint;
+		};
+	};
+	Quests: ScreenGui & {
+		Frame: Frame & {
+			Exit: TextButton;
+			Title: TextLabel;
+			Buttons: Frame & {
+				Completed: TextButton & {
+					Background: ImageLabel;
+				};
+				UIGridLayout: UIGridLayout;
+				ActiveQuests: TextButton & {
+					Background: ImageLabel;
+				};
+				Unclaimed: TextButton & {
+					Background: ImageLabel;
+				};
+			};
+			Background: ImageLabel;
+			Container: ScrollingFrame & {
+				Template: TextButton & {
+					ProgressBar: ImageLabel & {
+						CompletedProgressBar: ImageLabel;
+					};
+					Description: TextLabel;
+					Claim: TextButton & {
+						Background: ImageLabel;
+					};
+					Background: ImageLabel;
+					Rewards: TextLabel;
+					Quest: TextLabel;
+					ProgressPercent: TextLabel;
+				};
+				UIGridLayout: UIGridLayout;
 			};
 		};
 	};

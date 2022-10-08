@@ -5,6 +5,7 @@ import { Profile } from "@rbxts/profileservice/globals";
 import { Events, Functions } from "server/network";
 import { Currency } from "shared/constants/Currencies";
 import { DEFAULT_PLAYER_DATA } from "shared/constants/PlayerData";
+import { Quest } from "shared/constants/Quests";
 import { PlayerData } from "shared/types/PlayerData";
 import { forEveryPlayer } from "shared/util/functions/forEveryPlayer";
 
@@ -115,6 +116,11 @@ export class PlayerDataService implements OnInit {
 				setMoney( amount )
 			}
 
+			const adjustQuestPoints = ( quest: Quest, tier: number, points: number ) => {
+        		profile.Data.quests[quest][tier].points += points
+				Events.updateQuestPoints.fire(player, quest, tier, points)
+			}
+
 			return {
 				data: profile.Data,
 				setCandy: setCandy,
@@ -123,6 +129,7 @@ export class PlayerDataService implements OnInit {
 				adjustMoney: adjustMoney,
 				setCandyCorn: setCandyCorn,
 				adjustCandyCorn: adjustCandyCorn,
+				adjustQuestPoints: adjustQuestPoints,
 			};
 		}
 

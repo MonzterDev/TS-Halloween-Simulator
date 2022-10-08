@@ -39,4 +39,8 @@ Events.useBoost.connect( ( boost, rarity ) => {
 	clientStore.dispatch( { type: "removeBoost", boost: boost, rarity: rarity } )
 	clientStore.dispatch( { type: "useBoost", boost: boost, rarity: rarity, duration: BOOST_DURATION } )
 } )
-Events.unlockArea.connect( ( area ) => clientStore.dispatch({type: "unlockArea", area: area}) )
+Events.unlockArea.connect( ( area ) => clientStore.dispatch( { type: "unlockArea", area: area } ) )
+
+Events.updateQuestPoints.connect( ( quest, tier, points ) => clientStore.dispatch({type: "updateQuestPoints", quest: quest, tier: tier, points: points}) )
+Events.completeQuest.connect( ( quest, tier ) => clientStore.dispatch({type: "completeQuest", quest: quest, tier: tier}) )
+Events.claimQuest.connect( ( quest, tier ) => clientStore.dispatch({type: "claimQuest", quest: quest, tier: tier}) )
