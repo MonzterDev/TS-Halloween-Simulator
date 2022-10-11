@@ -1,7 +1,7 @@
 import { Players, StarterGui } from "@rbxts/services"
 
 const player = Players.LocalPlayer
-const playerGui = <PlayerGui>player.WaitForChild( "PlayerGui" )
+const playerGui = <StarterGui>player.WaitForChild( "PlayerGui" )
 
 const GUIS_TO_HIDE = ["BasketUpgrade", "BoostInventory", "Inventory", "PetInventory", "Settings", "Quests", "Map"]
 
@@ -14,5 +14,7 @@ export function hideGuis ( openingGui: ScreenGui ) {
         if (openingGui.Name === "Inventory" && gui.Name === "PetInventory") return
 
         gui.Enabled = false
-    })
+    } )
+
+    playerGui.AreaWalls.Purchase.Enabled = openingGui.Name === "Purchase"
 }

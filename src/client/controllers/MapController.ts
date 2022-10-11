@@ -4,11 +4,11 @@ import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
 import { openGui } from "client/utils/openGui";
 import { Area, AREAS } from "shared/constants/Areas";
-import { OFF_BUTTON } from "shared/constants/Settings";
 import { AreaController } from "./AreaController";
 
 const LOCKED_COLOR = Color3.fromRGB(117, 117, 117)
 const UNLOCKED_COLOR = Color3.fromRGB(255, 255, 255)
+const CURRENT_COLOR = Color3.fromRGB(243, 255, 0)
 
 @Controller({})
 export class MapController implements OnInit {
@@ -37,10 +37,26 @@ export class MapController implements OnInit {
 
     onInit () {
         this.generateMap()
+        this.updateCurrentArea( this.areaController.currentArea )
+
         this.openButton.MouseButton1Click.Connect( () => openGui( this.gui ) )
         this.exitButton.MouseButton1Click.Connect( () => this.gui.Enabled = false )
 
-        Events.unlockArea.connect((area) => this.unlockArea(area))
+        Events.unlockArea.connect( ( area ) => this.unlockArea( area ) )
+        this.areaController.areaChanged.Connect((area) => this.updateCurrentArea(area))
+    }
+
+    private updateCurrentArea (area: Area) {
+        this.container.GetChildren().forEach( ( child ) => {
+            if ( !child.IsA( "TextButton" ) || !child.Visible ) return
+
+            const template = <typeof this.template>child
+            const isUnlocked = clientStore.getState().data.areas_unlocked[template.Name]
+
+            if (template.Name === area && isUnlocked) template.Background.ImageColor3 = CURRENT_COLOR
+            else if (isUnlocked) template.Background.ImageColor3 = UNLOCKED_COLOR
+            else template.Background.ImageColor3 = LOCKED_COLOR
+        })
     }
 
     private unlockArea ( area: Area ) {
