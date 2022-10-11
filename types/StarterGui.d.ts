@@ -59,6 +59,7 @@ interface StarterGui extends BasePlayerGui {
 			Inventory: TextButton;
 			UIGridLayout: UIGridLayout;
 			Settings: TextButton;
+			Map: TextButton;
 			Sell: TextButton;
 			UIAspectRatioConstraint: UIAspectRatioConstraint;
 			Quests: TextButton;
@@ -139,6 +140,20 @@ interface StarterGui extends BasePlayerGui {
 				Background: ImageLabel;
 				UIAspectRatioConstraint: UIAspectRatioConstraint;
 				Area: TextLabel;
+			};
+		};
+	};
+	Map: ScreenGui & {
+		Frame: Frame & {
+			Exit: TextButton;
+			Background: ImageLabel;
+			Title: TextLabel;
+			Container: ScrollingFrame & {
+				Template: TextButton & {
+					Background: ImageLabel;
+					Area: TextLabel;
+				};
+				UIGridLayout: UIGridLayout;
 			};
 		};
 	};

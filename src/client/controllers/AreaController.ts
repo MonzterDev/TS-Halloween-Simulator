@@ -41,8 +41,8 @@ export class AreaController implements OnInit {
         })
     }
 
-    public getPart (part: "Spawn" | "Sell" | "Area" | "Shop" | "Wall"): Part {
-        const areaFolder = <Workspace["Areas"]["Spawn"]>Workspace.Areas.FindFirstChild( this.currentArea )
+    public getPart (part: "Spawn" | "Sell" | "Area" | "Shop" | "Wall", area: Area = this.currentArea): Part {
+        const areaFolder = <Workspace["Areas"]["Spawn"]>Workspace.Areas.FindFirstChild( area )
         return <Part> areaFolder.FindFirstChild(part)
     }
 }
