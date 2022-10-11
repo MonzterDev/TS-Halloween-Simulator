@@ -15,12 +15,18 @@ export class BoostsService implements OnInit {
         task.spawn(() => this.updateBoosts())
     }
 
-    public rewardBoost ( player: Player, boost: Boosts, rarity: Rarities ) {
+    public rewardBoost ( player: Player, boost: Boosts, rarity: Rarities, amount: number = 1 ) {
         const profile = this.playerDataService.getProfile( player )
         if ( !profile ) return
 
-        profile.data.boost_inventory.get( boost )![rarity] += 1
-        Events.gainBoost.fire(player, boost, rarity)
+        profile.data.boost_inventory.get( boost )![rarity] += amount
+        task.spawn( () => {
+            while ( amount > 0 ) {
+                Events.gainBoost.fire(player, boost, rarity)
+                amount -= 1
+                task.wait()
+            }
+        })
     }
 
     private useBoost ( player: Player, boost: Boosts, rarity: Rarities ) {

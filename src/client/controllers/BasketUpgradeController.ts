@@ -1,4 +1,4 @@
-import { Controller, OnStart, OnInit } from "@flamework/core";
+import { Controller, OnStart, OnInit, Dependency } from "@flamework/core";
 import { Players, Workspace } from "@rbxts/services";
 import { Events, Functions } from "client/network";
 import { clientStore } from "client/rodux/rodux";
@@ -6,6 +6,7 @@ import { Area } from "shared/constants/Areas";
 import { BasketShopConfig, BasketUpgrades, getBasketUpgradeAsProp, getBasketUpgradePrice, UPGRADE_DESCRIPTION } from "shared/constants/Basket";
 import { abbreviator } from "shared/util/functions/abbreviate";
 import { getClosestUpgradePart } from "shared/util/functions/getClosestPart";
+import { AreaController } from "./AreaController";
 
 const areasMaxLevel: Record<Area, number> = {
     "Spawn": 10,
@@ -14,7 +15,7 @@ const areasMaxLevel: Record<Area, number> = {
 
 @Controller({})
 export class BasketUpgradeController implements OnInit {
-    private shops = <Folder>Workspace.FindFirstChild("Shops")
+    private areaController = Dependency(AreaController)
 
     private player = Players.LocalPlayer
     private playerGui = <PlayerGui>this.player.WaitForChild( "PlayerGui" )
@@ -42,22 +43,22 @@ export class BasketUpgradeController implements OnInit {
     }
 
     public teleportToShop () {
-        const closestPart = getClosestUpgradePart(this.player, this.shops)
+        const closestPart = this.areaController.getPart("Shop")
         const character = this.player.Character
         if ( !character || !closestPart ) return
         character.PivotTo(closestPart.CFrame)
     }
 
     private generateShopParts () {
-        this.shops.GetChildren().forEach( ( part ) => {
-            if ( !part.IsA( "Part" ) ) return
-            part.Touched.Connect( ( otherPart ) => {
-                if ( !otherPart.Parent?.IsA( "Model" ) ) return
-                const character = otherPart.FindFirstAncestorWhichIsA( "Model" )
-                if ( !character ) return
-                const player = Players.GetPlayerFromCharacter( character )
-                if ( !player ) return
-                if (player === this.player) this.display(part.Name)
+        Workspace.Areas.GetChildren().forEach( ( areaFolder ) => {
+            const shopPart = <Part>areaFolder.FindFirstChild( "Shop" )
+            if (!shopPart) return
+
+            shopPart.Touched.Connect( ( otherPart ) => {
+                if ( !otherPart.IsA( "BasePart" ) ) return
+
+                const player = Players.GetPlayerFromCharacter( otherPart.Parent )
+                if (player && player === this.player) this.display(areaFolder.Name)
             })
         })
     }

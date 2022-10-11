@@ -116,9 +116,14 @@ export class PlayerDataService implements OnInit {
 				setMoney( amount )
 			}
 
-			const adjustQuestPoints = ( quest: Quest, tier: number, points: number ) => {
-        		profile.Data.quests[quest][tier].points += points
+			const setQuestPoints = ( quest: Quest, tier: number, points: number ) => {
+        		profile.Data.quests[quest][tier].points = points
 				Events.updateQuestPoints.fire(player, quest, tier, points)
+			}
+
+			const adjustQuestPoints = ( quest: Quest, tier: number, points: number ) => {
+				const amount = profile.Data.quests[quest][tier].points + points
+				setQuestPoints(quest, tier, amount)
 			}
 
 			return {
@@ -130,6 +135,7 @@ export class PlayerDataService implements OnInit {
 				setCandyCorn: setCandyCorn,
 				adjustCandyCorn: adjustCandyCorn,
 				adjustQuestPoints: adjustQuestPoints,
+				setQuestPoints: setQuestPoints,
 			};
 		}
 

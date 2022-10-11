@@ -30,7 +30,7 @@ export const QuestConfig: QuestConfig = {
         tiers: 5,
         points_per_tier: 100,
         reward: {
-            1: {"Luck": { amount: 1, rarity: "Common" }, "candy": 100},
+            1: {"Luck": { amount: 2, rarity: "Common" }, "candy": 100},
             2: {"candy": 100},
             3: {"candy": 100},
             4: {"candy": 100},

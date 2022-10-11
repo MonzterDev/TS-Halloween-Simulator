@@ -1,30 +1,39 @@
 import { Service, OnStart, OnInit, Dependency } from "@flamework/core";
 import { Events } from "server/network";
-import { Quest, QuestConfig } from "shared/constants/Quests";
+import { Boosts } from "shared/constants/Boosts";
+import { BoosterQuestRewardProps, getActiveQuestTier, Quest, QuestConfig } from "shared/constants/Quests";
+import { BoostsService } from "./BoostsService";
 import { PlayerDataService } from "./PlayerDataService";
 
 @Service({})
 export class QuestsService implements OnInit {
     private playerDataService = Dependency(PlayerDataService)
+    private boostsService = Dependency(BoostsService)
 
-    onInit() {
-
+    onInit () {
+        Events.claimQuest.connect((player, quest, tier) => this.claimQuest(player, quest, tier))
     }
 
-    public addPoint (player: Player, quest: Quest, tier: number, amount: number = 1 ) {
+    public addPoint (player: Player, quest: Quest, tier?: number, amount: number = 1 ) {
         const profile = this.playerDataService.getProfile( player )
         if ( !profile ) return
+
+        if (!tier) tier = getActiveQuestTier(profile.data.quests[quest])
+        if (!profile.data.quests[quest][tier]) return // Completed all tiers of that quest
 
         const questConfig = QuestConfig[quest]
         const requiredPoints = questConfig.points_per_tier * tier
 
         profile.adjustQuestPoints( quest, tier, amount )
-        if (profile.data.quests[quest][tier].points === requiredPoints ) this.completeQuest(player, quest, tier)
+        if (profile.data.quests[quest][tier].points >= requiredPoints ) this.completeQuest(player, quest, tier)
     }
 
     public completeQuest ( player: Player, quest: Quest, tier: number ) {
         const profile = this.playerDataService.getProfile( player )
         if ( !profile ) return
+
+        const isCompleted = profile.data.quests[quest][tier].completed
+        if (isCompleted) return
 
         const questConfig = QuestConfig[quest]
         const requiredPoints = questConfig.points_per_tier * tier
@@ -34,4 +43,34 @@ export class QuestsService implements OnInit {
         profile.data.quests[quest][tier].completed = true
         Events.completeQuest.fire( player, quest, tier )
     }
+
+    private claimQuest ( player: Player, quest: Quest, tier: number ) {
+        const profile = this.playerDataService.getProfile( player )
+        if ( !profile ) return
+
+        const questConfig = QuestConfig[quest]
+        const rewards = questConfig.reward[tier]
+
+        const isCompleted = profile.data.quests[quest][tier].completed
+        const isClaimed = profile.data.quests[quest][tier].claimed_reward
+        if ( isClaimed || !isCompleted ) return
+
+        for ( const [rewardType, props] of pairs( rewards ) ) {
+            const isABoost = Boosts.includes( <Boosts>rewardType )
+            if ( isABoost ) {
+                const boosterInfo = <BoosterQuestRewardProps> props
+                this.boostsService.rewardBoost(player, <Boosts>rewardType, boosterInfo.rarity, boosterInfo.amount)
+            } else {
+                const currencyAmount =  <number> props
+                if ( rewardType === "candy" ) profile.adjustCandy(currencyAmount )
+                else if ( rewardType === "money" ) profile.adjustMoney(currencyAmount )
+            }
+        }
+
+        profile.data.quests[quest][tier].claimed_reward = true
+        Events.claimQuest.fire(player, quest, tier)
+    }
+
+
+
 }

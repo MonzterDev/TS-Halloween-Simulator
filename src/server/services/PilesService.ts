@@ -7,11 +7,13 @@ import { getLuckStat, getPowerStat, getRangeStat, getSizeStat } from "server/uti
 import { AreaPileConfig } from "shared/constants/Areas";
 import { PilesConfig } from "shared/constants/Piles";
 import { PlayerDataService } from "./PlayerDataService";
+import { QuestsService } from "./QuestsService";
 
 @Service({})
 export class PilesService implements OnInit {
     private components = Dependency( Components )
     private playerDataService = Dependency( PlayerDataService )
+    private questsService = Dependency( QuestsService )
 
     private areaFolder = Workspace.Piles
     private pileModels = ServerStorage.Piles
@@ -93,6 +95,7 @@ export class PilesService implements OnInit {
         reward += bonusReward
 
         profile.adjustCandy( reward )
+        this.questsService.addPoint(player, "Candy Collector", 0, reward)
         if (wasLucky) Events.luckyReward.fire(player, bonusReward)
     }
 

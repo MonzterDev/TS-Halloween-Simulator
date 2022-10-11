@@ -7,7 +7,7 @@ const DEFAULT_BOOSTS: BoostInventory = new Map()
 Boosts.forEach( ( boost ) => {
     const rarityTable: Record<Rarities, number> = {
         Common: 0,
-        Uncommon: 1,
+        Uncommon: 0,
         Rare: 0,
     }
     DEFAULT_BOOSTS.set(boost, rarityTable)
@@ -18,9 +18,9 @@ for ( const [quest, props] of pairs( QuestConfig ) ) {
     DEFAULT_QUESTS_DATA[quest] = {}
 
     let i = 1
-    while ( i < props.tiers ) {
+    while ( i <= props.tiers ) {
         DEFAULT_QUESTS_DATA[quest][i] = {
-            points: 5,
+            points: 0,
             completed: false,
             claimed_reward: false,
         }

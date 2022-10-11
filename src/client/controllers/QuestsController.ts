@@ -3,6 +3,7 @@ import { FormatCompact } from "@rbxts/format-number";
 import { Players } from "@rbxts/services";
 import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
+import { openGui } from "client/utils/openGui";
 import { Boosts } from "shared/constants/Boosts";
 import { BoosterQuestRewardProps, getActiveQuestTier, Quest, QuestConfig, QuestRewardProps, Reward2 } from "shared/constants/Quests";
 import { toTitleCase } from "shared/util/functions/toTileCase";
@@ -13,6 +14,9 @@ type Mode = "Active" | "Unclaimed" | "Completed"
 export class QuestsController implements OnInit {
     private player = Players.LocalPlayer
     private playerGui = <PlayerGui>this.player.WaitForChild( "PlayerGui" )
+
+    private buttonsGui = <StarterGui["Buttons"]>this.playerGui.WaitForChild( "Buttons" )
+    private openButton = this.buttonsGui.Frame.Quests
 
     private gui = <StarterGui["Quests"]>this.playerGui.WaitForChild( "Quests" )
     private frame = this.gui.Frame
@@ -34,7 +38,9 @@ export class QuestsController implements OnInit {
         this.buttons.ActiveQuests.MouseButton1Click.Connect(() => this.changeMode("Active"))
         this.buttons.Unclaimed.MouseButton1Click.Connect(() => this.changeMode("Unclaimed"))
         this.buttons.Completed.MouseButton1Click.Connect(() => this.changeMode("Completed"))
-        this.changeMode("Active")
+        this.changeMode( "Active" )
+        this.exit.MouseButton1Click.Connect( () => this.gui.Enabled = false )
+        this.openButton.MouseButton1Click.Connect(() => openGui(this.gui))
     }
 
     private updateQuestPoints ( quest: Quest, tier: number, points: number ) {
@@ -45,7 +51,7 @@ export class QuestsController implements OnInit {
         const questConfig = QuestConfig[quest]
         const requiredPoints = questConfig.points_per_tier * tier
 
-        const percent = (requiredPoints / points) / 10
+        const percent = (points / requiredPoints) * 100
 
         template.ProgressPercent.Text = `${percent}%`
         template.ProgressBar.CompletedProgressBar.Size = UDim2.fromScale(points / requiredPoints, 1)
@@ -54,6 +60,7 @@ export class QuestsController implements OnInit {
     private changeMode ( mode: Mode ) {
         this.cleanup()
         this.mode = mode
+        this.title.Text = `${mode} QUESTS`.upper()
 
         if (mode === "Active") this.generateActiveQuests()
         else if (mode === "Unclaimed") this.generateUnclaimedQuests()
@@ -69,6 +76,7 @@ export class QuestsController implements OnInit {
     private generateActiveQuests () {
         for ( const [quest, props] of pairs( clientStore.getState().data.quests ) ) {
             const tier = getActiveQuestTier( props )
+            if (!props[tier]) continue // Completed all tiers of that quest
             const currentPoints = props[tier].points
             this.generateQuest(quest, tier, currentPoints)
         }
@@ -113,7 +121,7 @@ export class QuestsController implements OnInit {
 
     private updateClaimButton ( template: typeof this.template, completed: boolean, isClaimed: boolean ) {
         const button = template.Claim
-        if ( !completed ) {
+        if ( !completed || isClaimed ) {
             button.TextTransparency = .5
             button.Background.ImageTransparency = .5
             button.Selectable = false
@@ -122,7 +130,7 @@ export class QuestsController implements OnInit {
             button.Background.ImageTransparency = 0
             button.Selectable = true
             button.MouseButton1Click.Connect(() => Events.claimQuest.fire(template.Name, tonumber(template.GetAttribute("tier")!)!))
-        } else if (isClaimed) button.Destroy()
+        }
     }
 
     private getRewardsToTextForm ( rewardProps: QuestRewardProps, tier: number ): string {

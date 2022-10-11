@@ -61,6 +61,7 @@ interface StarterGui extends BasePlayerGui {
 			Settings: TextButton;
 			Sell: TextButton;
 			UIAspectRatioConstraint: UIAspectRatioConstraint;
+			Quests: TextButton;
 		};
 	};
 	PetEgg: Folder & {

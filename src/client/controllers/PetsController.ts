@@ -4,7 +4,6 @@ import { Players, ReplicatedStorage, Workspace } from "@rbxts/services";
 import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
 import { DEFAULT_MAX_PET_EQUIPPED_AMOUNT, DEFAULT_MAX_PET_STORAGE_AMOUNT, PetTypes, UUID } from "shared/constants/Pets";
-import { DEFAULT_PLAYER_DATA } from "shared/constants/PlayerData";
 
 const positions = [
     new Vector3( 0, 1, 8 ),

@@ -1,4 +1,43 @@
 interface Workspace extends Model {
+	Pets: Folder;
+	Camera: Camera;
+	Baseplate: Part & {
+		Texture: Texture;
+	};
+	Areas: Folder & {
+		Crystal_Valley: Folder & {
+			Wall: Part & {
+				Display: Attachment;
+				Block: Part;
+			};
+			Sell: Part;
+			Spawn: Part;
+		};
+		Camp: Folder & {
+			Shop: Part;
+			Wall: Part & {
+				Display: Attachment;
+				Block: Part;
+			};
+			Sell: Part;
+			Spawn: SpawnLocation;
+			Area: Part;
+		};
+		Swamp: Folder & {
+			Wall: Part & {
+				Display: Attachment;
+				Block: Part;
+			};
+			Sell: Part;
+			Spawn: Part;
+		};
+		Spawn: Folder & {
+			Shop: Part;
+			Sell: Part;
+			Spawn: SpawnLocation;
+			Area: Part;
+		};
+	};
 	Map: Folder & {
 		Dummy: Model & {
 			LeftLowerArm: MeshPart & {
@@ -222,62 +261,18 @@ interface Workspace extends Model {
 		};
 		["Meshes/ocean cliff 2"]: MeshPart;
 	};
-	Areas: Folder & {
-		Crystal_Valley: Folder & {
-			Wall: Part & {
-				Display: Attachment;
-				Block: Part;
-			};
-			Spawn: Part;
-		};
-		Camp: Folder & {
-			Wall: Part & {
-				Display: Attachment;
-				Block: Part;
-			};
-			Spawn: Part;
-		};
-		Swamp: Folder & {
-			Wall: Part & {
-				Display: Attachment;
-				Block: Part;
-			};
-			Spawn: Part;
-		};
-	};
 	Piles: Folder & {
-		Grass: Folder & {
+		Camp: Folder & {
 			Large: Part;
 			Medium: Part;
 		};
-		Snow: Folder & {
+		Swamp: Folder & {
 			Large: Part;
 			Medium: Part;
 		};
 		Spawn: Folder & {
 			Large: Part;
 			Medium: Part;
-		};
-	};
-	Pets: Folder;
-	Camera: Camera;
-	Baseplate: Part & {
-		Texture: Texture;
-	};
-	SpawnLocation: SpawnLocation & {
-		Decal: Decal;
-		Weld: Weld;
-	};
-	Sell: Folder & {
-		Snow: Part;
-		Spawn: Part;
-	};
-	Shops: Folder & {
-		Snow: Part & {
-			Weld: Weld;
-		};
-		Spawn: Part & {
-			Weld: Weld;
 		};
 	};
 	Eggs: Folder & {

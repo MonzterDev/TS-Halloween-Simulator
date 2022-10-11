@@ -1,9 +1,9 @@
 import { CommandArgument, CommandDefinition } from "@rbxts/cmdr";
 
 export = identity<CommandDefinition>( {
-    Name: "completeQuest",
-    Aliases: ["cQ completeQ"],
-    Description: "Completes a Quest for a Player",
+    Name: "adjustQuestPoints",
+    Aliases: ["aQ aQP"],
+    Description: "Adjusts the points of a Quest for a Player",
     Group: "Admin",
     Args: [
         {
