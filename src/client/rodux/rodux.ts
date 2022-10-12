@@ -43,4 +43,9 @@ Events.unlockArea.connect( ( area ) => clientStore.dispatch( { type: "unlockArea
 
 Events.updateQuestPoints.connect( ( quest, tier, points ) => clientStore.dispatch({type: "updateQuestPoints", quest: quest, tier: tier, points: points}) )
 Events.completeQuest.connect( ( quest, tier ) => clientStore.dispatch({type: "completeQuest", quest: quest, tier: tier}) )
-Events.claimQuest.connect( ( quest, tier ) => clientStore.dispatch({type: "claimQuest", quest: quest, tier: tier}) )
+Events.claimQuest.connect( ( quest, tier ) => clientStore.dispatch( { type: "claimQuest", quest: quest, tier: tier } ) )
+
+Events.claimGift.connect( ( gift ) => clientStore.dispatch({type: "claimGift", gift: gift }) )
+Events.updateGiftPlayDuration.connect( ( amount ) => clientStore.dispatch({type: "updateGiftPlayDuration", amount: amount}) )
+Events.updateGiftResetTime.connect( ( time ) => clientStore.dispatch({type: "updateGiftResetTime", amount: time}) )
+Events.resetGifts.connect( ( ) => clientStore.dispatch({type: "resetGifts"}) )

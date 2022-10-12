@@ -3,7 +3,7 @@ import { Players, StarterGui } from "@rbxts/services"
 const player = Players.LocalPlayer
 const playerGui = <StarterGui>player.WaitForChild( "PlayerGui" )
 
-const GUIS_TO_HIDE = ["BasketUpgrade", "BoostInventory", "Inventory", "PetInventory", "Settings", "Quests", "Map"]
+const GUIS_TO_HIDE = ["BasketUpgrade", "BoostInventory", "Inventory", "PetInventory", "Settings", "Quests", "Map", "Gifts"]
 
 export function hideGuis ( openingGui: ScreenGui ) {
     GUIS_TO_HIDE.forEach( ( guiName ) => {

@@ -12,6 +12,13 @@ interface StarterGui extends BasePlayerGui {
 			UIAspectRatioConstraint: UIAspectRatioConstraint;
 		};
 	};
+	GiftButton: ScreenGui & {
+		Button: TextButton & {
+			ProgressBar: ImageLabel & {
+				CompletedProgressBar: ImageLabel;
+			};
+		};
+	};
 	PetInventory: ScreenGui & {
 		Frame: Frame & {
 			UIAspectRatioConstraint: UIAspectRatioConstraint;
@@ -143,6 +150,14 @@ interface StarterGui extends BasePlayerGui {
 			};
 		};
 	};
+	ActiveBoosts: ScreenGui & {
+		Frame: Frame & {
+			Template: ImageLabel & {
+				Duration: TextLabel;
+			};
+			UIGridLayout: UIGridLayout;
+		};
+	};
 	Map: ScreenGui & {
 		Frame: Frame & {
 			Exit: TextButton;
@@ -229,12 +244,22 @@ interface StarterGui extends BasePlayerGui {
 			};
 		};
 	};
-	ActiveBoosts: ScreenGui & {
+	Gifts: ScreenGui & {
 		Frame: Frame & {
-			Template: ImageLabel & {
-				Duration: TextLabel;
+			Exit: TextButton;
+			Title: TextLabel;
+			Background: ImageLabel;
+			UIAspectRatioConstraint: UIAspectRatioConstraint;
+			Container: Frame & {
+				Template: TextButton & {
+					Claimed: ImageLabel;
+					ProgressBar: ImageLabel & {
+						CompletedProgressBar: ImageLabel;
+					};
+					Time: TextLabel;
+				};
+				UIGridLayout: UIGridLayout;
 			};
-			UIGridLayout: UIGridLayout;
 		};
 	};
 	Monetization: ScreenGui & {

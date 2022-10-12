@@ -1,5 +1,6 @@
-import { AreasUnlocked, PlayerData, QuestData } from "../types/PlayerData";
+import { AreasUnlocked, GiftData, PlayerData, QuestData } from "../types/PlayerData";
 import { BoostInventory, Boosts } from "./Boosts";
+import { GiftConfig } from "./Gifts";
 import { Rarities } from "./Pets";
 import { QuestConfig } from "./Quests";
 
@@ -26,6 +27,11 @@ for ( const [quest, props] of pairs( QuestConfig ) ) {
         }
         i++
     }
+}
+
+export const DEFAULT_GIFTS_DATA: GiftData = {}
+for ( const [giftTime, reward] of pairs( GiftConfig ) ) {
+    DEFAULT_GIFTS_DATA[giftTime] = false
 }
 
 export const DEFAULT_PLAYER_DATA: PlayerData = {
@@ -73,7 +79,10 @@ export const DEFAULT_PLAYER_DATA: PlayerData = {
         Crystal_Valley: false,
         Swamp: false
     },
-    quests: DEFAULT_QUESTS_DATA
+    quests: DEFAULT_QUESTS_DATA,
+    gift_time_played: 0,
+    gift_reset_time: os.time() + 86400,
+    gifts: DEFAULT_GIFTS_DATA
 }
 
 // Mock test data

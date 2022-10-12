@@ -2,6 +2,7 @@ import { OnInit, Service } from "@flamework/core";
 import Make from "@rbxts/make";
 import ProfileService from "@rbxts/profileservice";
 import { Profile } from "@rbxts/profileservice/globals";
+import Signal from "@rbxts/signal";
 import { Events, Functions } from "server/network";
 import { Currency } from "shared/constants/Currencies";
 import { DEFAULT_PLAYER_DATA } from "shared/constants/PlayerData";
@@ -16,6 +17,8 @@ const KEY_TEMPLATE = "%d_Data";
 export class PlayerDataService implements OnInit {
 	private profileStore = ProfileService.GetProfileStore( DATASTORE_NAME, DEFAULT_PLAYER_DATA );
 	private profiles = new Map<Player, Profile<PlayerData>>();
+
+	public profileLoaded = new Signal<( player: Player, profile: Profile<PlayerData> ) => void>();
 
 	onInit () {
 		forEveryPlayer(
@@ -72,6 +75,7 @@ export class PlayerDataService implements OnInit {
 
 		this.createLeaderstats(player, profile.Data)
 		this.profiles.set( player, profile );
+		this.profileLoaded.Fire(player, profile)
 	}
 
 	private removeProfile ( player: Player ) {

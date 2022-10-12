@@ -1,5 +1,6 @@
 import { Area } from "shared/constants/Areas";
 import { ActiveBoosts, BoostInventory } from "shared/constants/Boosts";
+import { GiftTime } from "shared/constants/Gifts";
 import { PetInventory } from "shared/constants/Pets";
 import { Quest } from "shared/constants/Quests";
 
@@ -16,6 +17,9 @@ export interface PlayerData {
 	analytics: Analytics
 	areas_unlocked: AreasUnlocked
 	quests: QuestData
+	gift_time_played: number
+	gift_reset_time: number
+	gifts: GiftData
 }
 
 export interface BasketUpgrades {
@@ -45,10 +49,12 @@ export interface Analytics {
 }
 
 export type AreasUnlocked = Record<Area, boolean>
+
 export type QuestDataLevels = Record<number, {
 	points: number
 	completed: boolean
 	claimed_reward: boolean
 }>
-
 export type QuestData = Record<Quest, QuestDataLevels>
+
+export type GiftData = Record<GiftTime, boolean>

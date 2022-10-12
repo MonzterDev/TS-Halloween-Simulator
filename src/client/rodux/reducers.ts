@@ -1,6 +1,6 @@
 import { Action, createReducer } from "@rbxts/rodux";
 import { Gamepasses, PlayerData, Settings } from "shared/types/PlayerData";
-import { DEFAULT_PLAYER_DATA } from "shared/constants/PlayerData";
+import { DEFAULT_GIFTS_DATA, DEFAULT_PLAYER_DATA } from "shared/constants/PlayerData";
 import { PetInstanceProps, Rarities, UUID } from "shared/constants/Pets";
 import { getSettingAsProp, Setting } from "shared/constants/Settings";
 import { Gamepass, getGamepassAsProp } from "shared/constants/Gamepasses";
@@ -76,8 +76,20 @@ interface ClaimQuestAction extends Action<"claimQuest"> {
     tier: number,
 }
 
+interface UpdateGiftPlayDurationAction extends Action<"updateGiftPlayDuration"> {
+    amount: number,
+}
+interface UpdateGiftResetTimeAction extends Action<"updateGiftResetTime"> {
+    amount: number,
+}
+interface ResetGiftsAction extends Action<"resetGifts"> {
+}
+interface ClaimGiftAction extends Action<"claimGift"> {
+    gift: number
+}
+
 export type DataState = PlayerData;
-export type DataActions = UpdateDataAction | UpdateCurrencyAction | UpdateUpgradeAction | AddPetAction | RemovePetAction | UpdatePetAction | UpdateSettingAction | UpdateGamepassAction | AddBoostAction | RemoveBoostAction | UseBoostAction | UpdateBoostAction | EndBoostAction | UnlockAreaAction |UpdateQuestPointsAction | CompleteQuestAction | ClaimQuestAction;
+export type DataActions = UpdateDataAction | UpdateCurrencyAction | UpdateUpgradeAction | AddPetAction | RemovePetAction | UpdatePetAction | UpdateSettingAction | UpdateGamepassAction | AddBoostAction | RemoveBoostAction | UseBoostAction | UpdateBoostAction | EndBoostAction | UnlockAreaAction |UpdateQuestPointsAction | CompleteQuestAction | ClaimQuestAction | UpdateGiftPlayDurationAction | UpdateGiftResetTimeAction | ResetGiftsAction | ClaimGiftAction;
 
 export const dataReducer = createReducer<DataState, DataActions>(DEFAULT_PLAYER_DATA, {
     updatePlayerData: ( state, action ) => action.data,
@@ -146,6 +158,22 @@ export const dataReducer = createReducer<DataState, DataActions>(DEFAULT_PLAYER_
     },
     claimQuest: ( state, action ) => {
         state.quests[action.quest][action.tier].claimed_reward = true
+        return state
+    },
+    updateGiftPlayDuration: ( state, action ) => {
+        state.gift_time_played = action.amount
+        return state
+    },
+    updateGiftResetTime: ( state, action ) => {
+        state.gift_reset_time = action.amount
+        return state
+    },
+    resetGifts: ( state, action ) => {
+        state.gifts = DEFAULT_GIFTS_DATA
+        return state
+    },
+    claimGift: ( state, action ) => {
+        state.gifts[action.gift] = true
         return state
     },
 } );
