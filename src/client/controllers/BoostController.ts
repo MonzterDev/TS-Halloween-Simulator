@@ -5,6 +5,7 @@ import { clientStore } from "client/rodux/rodux";
 import { Boosts, BOOST_IMAGES } from "shared/constants/Boosts";
 import { Rarities, RarityColors } from "shared/constants/Pets";
 import { DEFAULT_PLAYER_DATA } from "shared/constants/PlayerData";
+import { timeToString } from "shared/util/functions/timeToString";
 
 @Controller({})
 export class BoostController implements OnInit {
@@ -56,7 +57,7 @@ export class BoostController implements OnInit {
                 const duration = activeBoostInstance.duration - 1
                 clientStore.dispatch( { type: "updateBoost", boost: booster, duration: duration } )
 
-                durationLabel.Text = tostring( duration )
+                durationLabel.Text = timeToString( duration )
 
                 if ( duration === 0 ) {
                     clientStore.dispatch( { type: "endBoost", boost: booster } )

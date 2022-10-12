@@ -1,5 +1,6 @@
 import { Service, OnStart, OnInit, Dependency } from "@flamework/core";
 import { Events } from "server/network";
+import { reward } from "server/utils/Rewards";
 import { Boosts } from "shared/constants/Boosts";
 import { BoosterQuestRewardProps, getActiveQuestTier, Quest, QuestConfig } from "shared/constants/Quests";
 import { BoostsService } from "./BoostsService";
@@ -55,17 +56,7 @@ export class QuestsService implements OnInit {
         const isClaimed = profile.data.quests[quest][tier].claimed_reward
         if ( isClaimed || !isCompleted ) return
 
-        for ( const [rewardType, props] of pairs( rewards ) ) {
-            const isABoost = Boosts.includes( <Boosts>rewardType )
-            if ( isABoost ) {
-                const boosterInfo = <BoosterQuestRewardProps> props
-                this.boostsService.rewardBoost(player, <Boosts>rewardType, boosterInfo.rarity, boosterInfo.amount)
-            } else {
-                const currencyAmount =  <number> props
-                if ( rewardType === "candy" ) profile.adjustCandy(currencyAmount )
-                else if ( rewardType === "money" ) profile.adjustMoney(currencyAmount )
-            }
-        }
+        reward( player, rewards )
 
         profile.data.quests[quest][tier].claimed_reward = true
         Events.claimQuest.fire(player, quest, tier)

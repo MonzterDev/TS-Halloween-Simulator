@@ -35,11 +35,6 @@ export class CurrencyController implements OnInit {
         this.updateAmount("candy", clientStore.getState().data.candy)
         this.updateAmount("money", clientStore.getState().data.money)
         this.updateAmount( "candy_corn", clientStore.getState().data.candy_corn )
-        clientStore.changed.connect( (newState) => {
-            this.updateAmount("candy", newState.data.candy)
-            this.updateAmount("money", newState.data.money)
-            this.updateAmount( "candy_corn", newState.data.candy_corn )
-        })
         Events.updateCurrency.connect( ( currency, amount ) => this.updateAmount( currency, amount ) )
         Events.luckyReward.connect( ( amount ) => this.animateAmount( true ) )
         this.sellButton.MouseButton1Click.Connect(() => this.clickFullButtons("Sell"))

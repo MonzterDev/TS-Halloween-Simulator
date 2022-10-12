@@ -1,12 +1,10 @@
 import { Controller, OnStart, OnInit, Dependency } from "@flamework/core";
 import { Players, ReplicatedStorage } from "@rbxts/services";
-import { CleanViewport, GenerateViewport } from "@rbxts/viewport-model";
 import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
 import { Boosts, BoostsConfig, BOOST_DESCRIPTIONS, BOOST_IMAGES } from "shared/constants/Boosts";
 import { PetConfig, PetInstanceProps, Rarities, RarityColors, UUID } from "shared/constants/Pets";
-import { DEFAULT_PLAYER_DATA } from "shared/constants/PlayerData";
-import { PetsController } from "./PetsController";
+import { timeToString } from "shared/util/functions/timeToString";
 
 @Controller({})
 export class PetInventoryController implements OnInit {
@@ -55,8 +53,10 @@ export class PetInventoryController implements OnInit {
 
     private updateBoost ( boost: Boosts, rarity: Rarities ) {
         this.dataLoaded = true
-        const template = this.getTemplate( boost, rarity )!
-        template.Amount.Text = tostring( clientStore.getState().data.boost_inventory.get( boost )![rarity] )
+        const template = this.getTemplate( boost, rarity )
+        if ( !template ) return
+
+        template.Amount.Text = tostring(clientStore.getState().data.boost_inventory.get( boost )![rarity])
     }
 
     private generateBoosts () {

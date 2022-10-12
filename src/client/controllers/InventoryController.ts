@@ -46,5 +46,7 @@ export class PetInventoryController implements OnInit {
         this.title.Text = mode.upper()
         this.petInventoryGui.Enabled = mode === "Pets"
         this.boostInventoryGui.Enabled = mode === "Boosts"
+        this.boostInventoryGui.Frame.Info.Visible = false
+        this.petInventoryGui.Frame.Info.Visible = false
     }
 }

@@ -248,13 +248,14 @@ interface StarterGui extends BasePlayerGui {
 		Frame: Frame & {
 			Exit: TextButton;
 			Title: TextLabel;
+			Reset: TextLabel;
 			Background: ImageLabel;
 			UIAspectRatioConstraint: UIAspectRatioConstraint;
 			Container: Frame & {
 				Template: TextButton & {
 					Claimed: ImageLabel;
 					ProgressBar: ImageLabel & {
-						CompletedProgressBar: ImageLabel;
+						Bar: ImageLabel;
 					};
 					Time: TextLabel;
 				};
