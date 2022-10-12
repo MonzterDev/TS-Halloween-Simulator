@@ -4,7 +4,6 @@ import { PlayerDataService } from "server/services/PlayerDataService"
 import { BasketUpgradeConfig } from "shared/constants/Basket"
 import { Boosts, BoostsConfig } from "shared/constants/Boosts"
 
-const playerDataService = Dependency(PlayerDataService)
 
 const DEFAULT_RANGE = 5
 
@@ -20,6 +19,8 @@ function getBooster ( player: Player, booster: Boosts ): number {
 }
 
 export function getSizeStat ( player: Player ): number {
+    const playerDataService = Dependency(PlayerDataService)
+
     let amount = 0
     const profile = playerDataService.getProfile( player )
     if ( !profile ) return amount
@@ -32,6 +33,8 @@ export function getSizeStat ( player: Player ): number {
 }
 
 export function getPowerStat ( player: Player ): number {
+    const playerDataService = Dependency(PlayerDataService)
+
     let amount = 0
     const profile = playerDataService.getProfile( player )
     if ( !profile ) return amount
@@ -44,6 +47,8 @@ export function getPowerStat ( player: Player ): number {
 }
 
 export function getRangeStat ( player: Player ): number {
+    const playerDataService = Dependency( PlayerDataService )
+
     let amount = DEFAULT_RANGE
     const profile = playerDataService.getProfile( player )
     if ( !profile ) return amount
@@ -56,6 +61,8 @@ export function getRangeStat ( player: Player ): number {
 }
 
 export function getLuckStat ( player: Player ): number {
+    const playerDataService = Dependency( PlayerDataService )
+
     let amount = 0
     const profile = playerDataService.getProfile( player )
     if ( !profile ) return amount

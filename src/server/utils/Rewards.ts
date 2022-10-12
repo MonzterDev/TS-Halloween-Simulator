@@ -4,9 +4,9 @@ import { PlayerDataService } from "server/services/PlayerDataService";
 import { Boosts } from "shared/constants/Boosts";
 import { BoosterQuestRewardProps, Reward, Reward2 } from "shared/constants/Quests";
 
-const playerDataService = Dependency(PlayerDataService)
 
 export function rewardMoney ( player: Player, amount: number, useMultiplier: boolean ) {
+    const playerDataService = Dependency(PlayerDataService)
     const profile = playerDataService.getProfile( player )
     if ( !profile ) return
 
@@ -15,6 +15,7 @@ export function rewardMoney ( player: Player, amount: number, useMultiplier: boo
 
 export function reward ( player: Player, rewards: Partial<Reward> | Partial<Reward2> ) {
     const boostsService = Dependency(BoostsService)
+    const playerDataService = Dependency(PlayerDataService)
 
     const profile = playerDataService.getProfile( player )
     if ( !profile ) return

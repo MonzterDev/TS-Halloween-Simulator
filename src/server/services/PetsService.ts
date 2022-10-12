@@ -1,7 +1,7 @@
 import { Service, OnStart, OnInit, Dependency } from "@flamework/core";
 import { HttpService, Players } from "@rbxts/services";
 import { Events, Functions } from "server/network";
-import { DEFAULT_MAX_PET_EQUIPPED_AMOUNT, DEFAULT_MAX_PET_STORAGE_AMOUNT, PetConfig, PetInstanceProps, PetTypes, Rarities, UUID } from "shared/constants/Pets";
+import { DEFAULT_MAX_PET_EQUIPPED_AMOUNT, DEFAULT_MAX_PET_STORAGE_AMOUNT, EggTypes, PetConfig, PetInstanceProps, PetTypes, Rarities, UUID } from "shared/constants/Pets";
 import { PlayerDataService } from "./PlayerDataService";
 
 
@@ -137,6 +137,7 @@ export class PetsService implements OnInit {
             } )
         } )
     }
+
     // private getOthersPets ( sendingPlayer: Player ) {
     //     const pets: OthersPets = new Map()
     //     Players.GetPlayers().forEach( ( player ) => {
@@ -185,4 +186,5 @@ export class PetsService implements OnInit {
         if ( profile.data.gamepasses.equip_more_pets2 ) total += 5
         return total
     }
+
 }

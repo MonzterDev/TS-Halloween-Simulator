@@ -1,7 +1,7 @@
 import { Area } from "shared/constants/Areas";
 import { ActiveBoosts, BoostInventory } from "shared/constants/Boosts";
 import { GiftTime } from "shared/constants/Gifts";
-import { PetInventory } from "shared/constants/Pets";
+import { EggTypes, PetInventory, PetTypes } from "shared/constants/Pets";
 import { Quest } from "shared/constants/Quests";
 
 export interface PlayerData {
@@ -10,6 +10,7 @@ export interface PlayerData {
 	money: number;
 	basket_upgrades: BasketUpgrades
 	pet_inventory: PetInventory
+	pet_auto_delete: PetAutoDeleteData
 	active_boosts: ActiveBoosts
 	boost_inventory: BoostInventory
 	gamepasses: Gamepasses
@@ -58,3 +59,5 @@ export type QuestDataLevels = Record<number, {
 export type QuestData = Record<Quest, QuestDataLevels>
 
 export type GiftData = Record<GiftTime, boolean>
+
+export type PetAutoDeleteData = Map<EggTypes, Map<Partial<PetTypes>, boolean>>

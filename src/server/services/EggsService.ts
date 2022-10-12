@@ -15,7 +15,8 @@ export class EggsService implements OnInit {
     private playerCooldown = new PlayerCooldown(3)
 
     onInit () {
-        Functions.hatchEgg.setCallback((player, egg) => this.hatchEgg(player, egg))
+        Functions.hatchEgg.setCallback( ( player, egg ) => this.hatchEgg( player, egg ) )
+        Events.autoDeletePet.connect((player, egg, pet) => this.autoDeletePet(player, egg, pet))
     }
 
     private hatchEgg ( player: Player, egg: EggTypes ): HatchEggResponse {
@@ -39,6 +40,8 @@ export class EggsService implements OnInit {
             if ( money >= price * 3 ) amountOfHatches = 3
         }
 
+        this.playerCooldown.giveCooldown( player )
+
         const pets: PetTypes[] = []
         while ( amountOfHatches > 0 ) {
             amountOfHatches -= 1
@@ -54,10 +57,11 @@ export class EggsService implements OnInit {
             const pet = this.choosePet( eggConfig.pets )
             pets.push(pet!)
             const rarity = eggConfig.pets[pet!]?.rarity
-            this.petsService.rewardPet( player, pet!, rarity! )
+
+            const shouldDelete = profile.data.pet_auto_delete.get( egg )?.get( pet! )
+            if (!shouldDelete) this.petsService.rewardPet( player, pet!, rarity! )
             task.wait()
         }
-        this.playerCooldown.giveCooldown( player )
         return pets
     }
 
@@ -73,4 +77,12 @@ export class EggsService implements OnInit {
         }
     }
 
+    private autoDeletePet (player: Player, egg: EggTypes, pet: PetTypes) {
+        const profile = this.playerDataService.getProfile( player )
+        if ( !profile ) return
+
+        const isEnabled = profile.data.pet_auto_delete.get(egg)?.get(pet)
+        profile.data.pet_auto_delete.get( egg )?.set( pet, !isEnabled )
+        Events.autoDeletePet.fire(player, egg, pet)
+    }
 }

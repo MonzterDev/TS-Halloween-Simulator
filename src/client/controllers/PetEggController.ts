@@ -27,7 +27,15 @@ export class PetEggController implements OnInit {
     private animation = this.folder.Animation
 
     onInit () {
-        this.generateEgg("Starter")
+        this.generateEgg( "Starter" )
+        Events.autoDeletePet.connect((egg, pet) => task.defer(() => this.autoDeletePet(egg, pet)))
+    }
+
+    private autoDeletePet (egg: EggTypes, pet: PetTypes) {
+        const folder = <typeof this.folder>this.folder.FindFirstChild( egg )
+        const infoGui = folder.InfoGui
+        const template = <PetTemplate> infoGui.Background.Frame.Container.FindFirstChild( pet )
+        template.Delete.Visible = clientStore.getState().data.pet_auto_delete.get(egg)?.get(pet)!
     }
 
     private populatePets ( container: Frame, egg: EggTypes ) {
@@ -35,11 +43,14 @@ export class PetEggController implements OnInit {
         for ( const [pet, props] of pairs( pets.pets ) ) {
             const petModel = <Model>ReplicatedStorage.Pets.FindFirstChild( pet )?.Clone()
             const template = <PetTemplate>container.FindFirstChild( "Template" )?.Clone()
-            GenerateViewport( template, petModel, CFrame.Angles(0, math.rad(-90), 0) )
+            GenerateViewport( template.ViewportFrame, petModel, CFrame.Angles(0, math.rad(-90), 0) )
             template.Parent = container
             template.Visible = true
             template.Name = pet
             template.Chance.Text = `${props.chance}%`
+
+            template.Delete.Visible = clientStore.getState().data.pet_auto_delete.get(egg)?.get(pet)!
+            template.MouseButton1Click.Connect(() => Events.autoDeletePet.fire(egg, pet))
         }
     }
 
@@ -141,6 +152,7 @@ export class PetEggController implements OnInit {
             CleanViewport( template )
             template.Pet.Visible = true
             GenerateViewport( template, petModel, CFrame.Angles( 0, math.rad( -90 ), 0 ) )
+            template.Delete.Visible = clientStore.getState().data.pet_auto_delete.get(egg)?.get(pet)!
             task.wait(1)
             template.Destroy()
         } )

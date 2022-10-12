@@ -1,7 +1,7 @@
 import { Action, createReducer } from "@rbxts/rodux";
 import { Gamepasses, PlayerData, Settings } from "shared/types/PlayerData";
 import { DEFAULT_GIFTS_DATA, DEFAULT_PLAYER_DATA } from "shared/constants/PlayerData";
-import { PetInstanceProps, Rarities, UUID } from "shared/constants/Pets";
+import { EggTypes, PetInstanceProps, PetTypes, Rarities, UUID } from "shared/constants/Pets";
 import { getSettingAsProp, Setting } from "shared/constants/Settings";
 import { Gamepass, getGamepassAsProp } from "shared/constants/Gamepasses";
 import { Boosts, BOOST_DURATION } from "shared/constants/Boosts";
@@ -30,6 +30,10 @@ interface UpdatePetAction extends Action<"updatePet"> {
     uuid: UUID
     locked?: boolean
     equipped?: boolean
+}
+interface UpdateAutoDeletePetAction extends Action<"updateAutoDeletePet"> {
+    egg: EggTypes
+    pet: PetTypes
 }
 interface UpdateSettingAction extends Action<"updateSetting"> {
     setting: Setting
@@ -89,7 +93,7 @@ interface ClaimGiftAction extends Action<"claimGift"> {
 }
 
 export type DataState = PlayerData;
-export type DataActions = UpdateDataAction | UpdateCurrencyAction | UpdateUpgradeAction | AddPetAction | RemovePetAction | UpdatePetAction | UpdateSettingAction | UpdateGamepassAction | AddBoostAction | RemoveBoostAction | UseBoostAction | UpdateBoostAction | EndBoostAction | UnlockAreaAction |UpdateQuestPointsAction | CompleteQuestAction | ClaimQuestAction | UpdateGiftPlayDurationAction | UpdateGiftResetTimeAction | ResetGiftsAction | ClaimGiftAction;
+export type DataActions = UpdateDataAction | UpdateCurrencyAction | UpdateUpgradeAction | AddPetAction | RemovePetAction | UpdatePetAction | UpdateSettingAction | UpdateGamepassAction | AddBoostAction | RemoveBoostAction | UseBoostAction | UpdateBoostAction | EndBoostAction | UnlockAreaAction |UpdateQuestPointsAction | CompleteQuestAction | ClaimQuestAction | UpdateGiftPlayDurationAction | UpdateGiftResetTimeAction | ResetGiftsAction | ClaimGiftAction | UpdateAutoDeletePetAction;
 
 export const dataReducer = createReducer<DataState, DataActions>(DEFAULT_PLAYER_DATA, {
     updatePlayerData: ( state, action ) => action.data,
@@ -174,6 +178,11 @@ export const dataReducer = createReducer<DataState, DataActions>(DEFAULT_PLAYER_
     },
     claimGift: ( state, action ) => {
         state.gifts[action.gift] = true
+        return state
+    },
+    updateAutoDeletePet: ( state, action ) => {
+        const isUnlocked = state.pet_auto_delete.get(action.egg)?.get(action.pet)
+        state.pet_auto_delete.get(action.egg)?.set(action.pet, !isUnlocked)
         return state
     },
 } );

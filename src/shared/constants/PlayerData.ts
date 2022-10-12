@@ -1,7 +1,8 @@
-import { AreasUnlocked, GiftData, PlayerData, QuestData } from "../types/PlayerData";
+import { isA } from "shared/util/functions/isA";
+import { AreasUnlocked, GiftData, PetAutoDeleteData, PlayerData, QuestData } from "../types/PlayerData";
 import { BoostInventory, Boosts } from "./Boosts";
 import { GiftConfig } from "./Gifts";
-import { Rarities } from "./Pets";
+import { EggShopConfig, PetTypes, Rarities } from "./Pets";
 import { QuestConfig } from "./Quests";
 
 const DEFAULT_BOOSTS: BoostInventory = new Map()
@@ -34,6 +35,12 @@ for ( const [giftTime, reward] of pairs( GiftConfig ) ) {
     DEFAULT_GIFTS_DATA[giftTime] = false
 }
 
+export const DEFAULT_PET_AUTO_DELETE_DATA: PetAutoDeleteData = new Map()
+for ( const [egg, props] of pairs( EggShopConfig ) ) {
+    DEFAULT_PET_AUTO_DELETE_DATA.set(egg, new Map())
+    for ( const [pet, prop] of pairs( props.pets ) ) DEFAULT_PET_AUTO_DELETE_DATA.get(egg)?.set(pet, false)
+}
+
 export const DEFAULT_PLAYER_DATA: PlayerData = {
     candy: 0,
     candy_corn: 0,
@@ -50,6 +57,7 @@ export const DEFAULT_PLAYER_DATA: PlayerData = {
         //     ["Awd", { type: "Cat", rarity: "Uncommon", equipped: false, locked: true }],
         // ]
     ),
+    pet_auto_delete: DEFAULT_PET_AUTO_DELETE_DATA,
     active_boosts: new Map(
         // [
         //     ["Luck", {rarity: "Common", duration: 10}],

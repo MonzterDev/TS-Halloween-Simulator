@@ -5,7 +5,7 @@ import { openGui } from "client/utils/openGui";
 type Mode = "Pets" | "Boosts"
 
 @Controller({})
-export class PetInventoryController implements OnInit {
+export class InventoryController implements OnInit {
     private player = Players.LocalPlayer
     private playerGui = <PlayerGui>this.player.WaitForChild( "PlayerGui" )
 

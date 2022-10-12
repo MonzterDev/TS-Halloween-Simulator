@@ -21,6 +21,7 @@ interface ServerEvents {
     equipPet: (uuid: UUID) => void
     equipBestPets: () => void
     unequipPet: ( uuid: UUID ) => void
+    autoDeletePet: ( egg: EggTypes, pet: PetTypes ) => void
     toggleSetting: ( setting: Setting) => void
     useBoost: ( boost: Boosts, rarity: Rarities ) => void
     unlockArea: ( area: Area ) => void
@@ -50,6 +51,8 @@ interface ClientEvents {
     deletePet: (uuid: UUID) => void
     equipPet: (player: Player, uuid: UUID, pet: PetTypes) => void
     unequipPet: ( player: Player, uuid: UUID ) => void
+    autoDeletePet: ( egg: EggTypes, pet: PetTypes ) => void
+
     toggleSetting: ( setting: Setting, value: boolean ) => void
     purchaseSuccess: ( product: Gamepass | DevProduct ) => void
 

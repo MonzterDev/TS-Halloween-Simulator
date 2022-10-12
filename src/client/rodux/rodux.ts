@@ -1,10 +1,7 @@
 import { combineReducers, Store } from "@rbxts/rodux";
 import { Players } from "@rbxts/services";
-import Signal from "@rbxts/signal";
 import { Events, Functions } from "client/network";
 import { BOOST_DURATION } from "shared/constants/Boosts";
-import { PlayerData } from "shared/types/PlayerData";
-import { isA } from "shared/util/functions/isA";
 import { DataActions, dataReducer, DataState } from "./reducers";
 
 export interface CombinedState {
@@ -15,7 +12,6 @@ const combinedReducer = combineReducers<CombinedState, DataActions>({
 	data: dataReducer,
 });
 
-let isDataLoaded = false
 export const clientStore = new Store( combinedReducer );
 
 Events.updateCurrency.connect( ( currency, amount ) => clientStore.dispatch( { type: "updateCurrency", currency: currency, amount: amount } ) )
@@ -30,7 +26,9 @@ Events.equipPet.connect( (player, uuid) => {
 	clientStore.dispatch( { type: "updatePet", uuid: uuid, equipped: true })
 })
 Events.lockPet.connect( (uuid) => clientStore.dispatch( { type: "updatePet", uuid: uuid, locked: true }))
-Events.unlockPet.connect( (uuid) => clientStore.dispatch( { type: "updatePet", uuid: uuid, locked: false }))
+Events.unlockPet.connect( ( uuid ) => clientStore.dispatch( { type: "updatePet", uuid: uuid, locked: false } ) )
+Events.autoDeletePet.connect((egg, pet) => clientStore.dispatch({type: "updateAutoDeletePet", egg: egg, pet: pet}))
+
 Events.toggleSetting.connect( ( setting, value ) => clientStore.dispatch( { type: "updateSetting", setting: setting, value: value } ) )
 
 Events.updateGamepass.connect( ( gamepass ) => clientStore.dispatch({type: "updateGamepass", gamepass: gamepass}) )
@@ -48,4 +46,4 @@ Events.claimQuest.connect( ( quest, tier ) => clientStore.dispatch( { type: "cla
 Events.claimGift.connect( ( gift ) => clientStore.dispatch({type: "claimGift", gift: gift }) )
 Events.updateGiftPlayDuration.connect( ( amount ) => clientStore.dispatch({type: "updateGiftPlayDuration", amount: amount}) )
 Events.updateGiftResetTime.connect( ( time ) => clientStore.dispatch({type: "updateGiftResetTime", amount: time}) )
-Events.resetGifts.connect( ( ) => clientStore.dispatch({type: "resetGifts"}) )
+Events.resetGifts.connect( () => clientStore.dispatch( { type: "resetGifts" } ) )

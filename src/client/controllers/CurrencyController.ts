@@ -7,8 +7,7 @@ import { SellController } from "./SellController";
 import { BasketUpgradeController } from "./BasketUpgradeController";
 import { clientStore } from "client/rodux/rodux";
 import { BasketUpgradeConfig } from "shared/constants/Basket";
-import { FormatCompact } from "@rbxts/format-number";
-import { FormatStandard } from "@rbxts/formatnumber";
+import { FormatCompact, FormatStandard } from "@rbxts/format-number";
 
 @Controller({})
 export class CurrencyController implements OnInit {

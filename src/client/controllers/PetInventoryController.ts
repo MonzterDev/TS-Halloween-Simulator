@@ -63,12 +63,12 @@ export class PetInventoryController implements OnInit {
             this.updateLabels()
         } )
         this.trashMode.MouseButton1Click.Connect( () => this.changeMode( "Trash" ) )
+        this.equipBest.MouseButton1Click.Connect(() => Events.equipBestPets.fire())
         this.confirmation.Confirm.MouseButton1Click.Connect( () => {
             Events.deletePets.fire(this.selectedPets)
             this.changeMode( "Default" )
         } )
         this.confirmation.Cancel.MouseButton1Click.Connect( () => this.changeMode( "Default" ) )
-        this.buttons.EquipBest.MouseButton1Click.Connect(() => Events.equipBestPets.fire())
         this.info.Buttons.Equip.MouseButton1Click.Connect(() => this.equipButton())
         this.info.Buttons.Lock.MouseButton1Click.Connect(() => this.lockButton())
         this.info.Buttons.Delete.MouseButton1Click.Connect( () => {

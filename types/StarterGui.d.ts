@@ -111,8 +111,12 @@ interface StarterGui extends BasePlayerGui {
 					Container: Frame & {
 						UIGridLayout: UIGridLayout;
 						UIPadding: UIPadding;
-						Template: ViewportFrame & {
+						Template: TextButton & {
 							UICorner: UICorner;
+							Delete: TextLabel;
+							ViewportFrame: ViewportFrame & {
+								UICorner: UICorner;
+							};
 							Chance: TextLabel;
 						};
 					};
@@ -124,6 +128,7 @@ interface StarterGui extends BasePlayerGui {
 				UIGridLayout: UIGridLayout;
 				Template: ViewportFrame & {
 					Pet: TextLabel;
+					Delete: TextLabel;
 				};
 				UIAspectRatioConstraint: UIAspectRatioConstraint;
 			};
