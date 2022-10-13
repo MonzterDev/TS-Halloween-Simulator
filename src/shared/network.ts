@@ -75,6 +75,9 @@ interface ClientEvents {
     claimGift: ( gift: GiftTime ) => void
 
     redeemCode: ( code: Code ) => void
+
+    claimGroupChest: ( ) => void
+    resetGroupChest: (time: number ) => void
 }
 
 

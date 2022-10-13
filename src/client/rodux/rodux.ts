@@ -49,4 +49,7 @@ Events.updateGiftPlayDuration.connect( ( amount ) => clientStore.dispatch({type:
 Events.updateGiftResetTime.connect( ( time ) => clientStore.dispatch({type: "updateGiftResetTime", amount: time}) )
 Events.resetGifts.connect( () => clientStore.dispatch( { type: "resetGifts" } ) )
 
-Events.redeemCode.connect( (code) => clientStore.dispatch( { type: "updateCode", code: code } ) )
+Events.redeemCode.connect( ( code ) => clientStore.dispatch( { type: "updateCode", code: code } ) )
+
+Events.claimGroupChest.connect( () => clientStore.dispatch( { type: "updateGroupChest", claimed: true } ) )
+Events.resetGroupChest.connect( (time) => clientStore.dispatch( { type: "updateGroupChest", reset_time: time } ) )

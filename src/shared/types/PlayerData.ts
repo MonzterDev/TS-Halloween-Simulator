@@ -24,6 +24,12 @@ export interface PlayerData {
 	gift_reset_time: number
 	gifts: GiftData
 	codes: CodeData
+	group_chest: GroupChestProps
+}
+
+export interface GroupChestProps {
+	claimed: boolean,
+	reset_time: number,
 }
 
 export interface BasketUpgrades {

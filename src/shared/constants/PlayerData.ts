@@ -102,7 +102,11 @@ export const DEFAULT_PLAYER_DATA: PlayerData = {
     gift_time_played: 0,
     gift_reset_time: os.time() + 86400,
     gifts: DEFAULT_GIFTS_DATA,
-    codes: DEFAULT_CODE_DATA
+    codes: DEFAULT_CODE_DATA,
+    group_chest: {
+        claimed: false,
+        reset_time: os.time() + 86400
+    }
 }
 
 // Mock test data

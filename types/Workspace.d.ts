@@ -4,6 +4,14 @@ interface Workspace extends Model {
 	Baseplate: Part & {
 		Texture: Texture;
 	};
+	GroupChest: Part & {
+		Attachment: Attachment & {
+			Display: BillboardGui & {
+				Title: TextLabel;
+				Time: TextLabel;
+			};
+		};
+	};
 	Areas: Folder & {
 		Crystal_Valley: Folder & {
 			Wall: Part & {
