@@ -6,7 +6,7 @@ import { CleanViewport, GenerateViewport } from "@rbxts/viewport-model";
 import { Events, Functions } from "client/network";
 import { clientStore } from "client/rodux/rodux";
 import { EggShopConfig, EggTypes, PetTypes } from "shared/constants/Pets";
-import { toTitleCase } from "shared/util/functions/toTileCase";
+import { cleanString } from "shared/util/functions/cleanString";
 
 type PetTemplate = StarterGui["PetEgg"]["InfoGui"]["Background"]["Frame"]["Container"]["Template"]
 
@@ -156,7 +156,7 @@ export class PetEggController implements OnStart {
         const petModel = <Model>ReplicatedStorage.Pets.FindFirstChild(pet)?.Clone()
         const eggModel = <Model>ReplicatedStorage.Egg.FindFirstChild(egg)?.Clone()
         const template = this.animation.Frame.Template.Clone()
-        template.Pet.Text = toTitleCase(pet.gsub("_", " ")[0])
+        template.Pet.Text = cleanString(pet)
         template.Parent = this.animation.Frame
         template.Visible = true
         GenerateViewport( template, eggModel )

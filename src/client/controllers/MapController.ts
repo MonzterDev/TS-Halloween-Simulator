@@ -4,6 +4,7 @@ import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
 import { openGui } from "client/utils/openGui";
 import { Area, AREAS } from "shared/constants/Areas";
+import { cleanString } from "shared/util/functions/cleanString";
 import { AreaController } from "./AreaController";
 
 const LOCKED_COLOR = Color3.fromRGB(117, 117, 117)
@@ -63,7 +64,7 @@ export class MapController implements OnStart {
         const template = <typeof this.template> this.container.FindFirstChild( area )
         if ( !template ) return
 
-        template.Area.Text = area.gsub("_", " ")[0]
+        template.Area.Text = cleanString(area)
         template.Background.ImageColor3 = UNLOCKED_COLOR
     }
 

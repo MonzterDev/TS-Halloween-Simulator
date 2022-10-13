@@ -6,7 +6,7 @@ import { clientStore } from "client/rodux/rodux";
 import { openGui } from "client/utils/openGui";
 import { Boosts } from "shared/constants/Boosts";
 import { BoosterQuestRewardProps, getActiveQuestTier, Quest, QuestConfig, QuestRewardProps, Reward2 } from "shared/constants/Quests";
-import { toTitleCase } from "shared/util/functions/toTileCase";
+import { cleanString } from "shared/util/functions/cleanString";
 
 type Mode = "Active" | "Unclaimed" | "Completed"
 
@@ -144,7 +144,7 @@ export class QuestsController implements OnStart {
                 rewardString = `${rewardString} ${boosterInfo.amount}x ${boosterInfo.rarity} ${rewardType} Booster`
             } else {
                 const currencyAmount =  <number> props
-                rewardString = `${rewardString} ${FormatCompact(currencyAmount)}x ${toTitleCase(rewardType)}`
+                rewardString = `${rewardString} ${FormatCompact(currencyAmount)}x ${cleanString(rewardType)}`
             }
         }
 
