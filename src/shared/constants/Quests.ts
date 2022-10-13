@@ -9,11 +9,12 @@ export interface BoosterQuestRewardProps {
 }
 export type Reward = Record<Currency, number>
 export type Reward2 = Record<Boosts, BoosterQuestRewardProps>
+export type Rewards = Partial<Reward> | Partial<Reward2>
 
 export const QUESTS = ["Candy Collector", "Explorer"]
 export type Quest = typeof QUESTS[number]
 
-export type QuestRewardProps = Record<number, Partial<Reward> | Partial<Reward2>>
+export type QuestRewardProps = Record<number, Rewards>
 
 export interface QuestConfigProps {
     description: string

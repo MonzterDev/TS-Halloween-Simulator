@@ -1,5 +1,6 @@
 import { Area } from "shared/constants/Areas";
 import { ActiveBoosts, BoostInventory } from "shared/constants/Boosts";
+import { Code } from "shared/constants/Codes";
 import { GiftTime } from "shared/constants/Gifts";
 import { EggTypes, PetInventory, PetTypes } from "shared/constants/Pets";
 import { Quest } from "shared/constants/Quests";
@@ -21,6 +22,7 @@ export interface PlayerData {
 	gift_time_played: number
 	gift_reset_time: number
 	gifts: GiftData
+	codes: CodeData
 }
 
 export interface BasketUpgrades {
@@ -61,3 +63,5 @@ export type QuestData = Record<Quest, QuestDataLevels>
 export type GiftData = Record<GiftTime, boolean>
 
 export type PetAutoDeleteData = Map<EggTypes, Map<Partial<PetTypes>, boolean>>
+
+export type CodeData = Map<Code, boolean>

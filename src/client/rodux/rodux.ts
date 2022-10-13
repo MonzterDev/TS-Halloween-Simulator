@@ -47,3 +47,5 @@ Events.claimGift.connect( ( gift ) => clientStore.dispatch({type: "claimGift", g
 Events.updateGiftPlayDuration.connect( ( amount ) => clientStore.dispatch({type: "updateGiftPlayDuration", amount: amount}) )
 Events.updateGiftResetTime.connect( ( time ) => clientStore.dispatch({type: "updateGiftResetTime", amount: time}) )
 Events.resetGifts.connect( () => clientStore.dispatch( { type: "resetGifts" } ) )
+
+Events.redeemCode.connect( (code) => clientStore.dispatch( { type: "updateCode", code: code } ) )

@@ -66,6 +66,7 @@ interface StarterGui extends BasePlayerGui {
 			Inventory: TextButton;
 			UIGridLayout: UIGridLayout;
 			Settings: TextButton;
+			Codes: TextButton;
 			Map: TextButton;
 			Sell: TextButton;
 			UIAspectRatioConstraint: UIAspectRatioConstraint;
@@ -131,6 +132,30 @@ interface StarterGui extends BasePlayerGui {
 					Delete: TextLabel;
 				};
 				UIAspectRatioConstraint: UIAspectRatioConstraint;
+			};
+		};
+	};
+	BasketUpgrade: ScreenGui & {
+		Frame: Frame & {
+			Exit: TextButton;
+			Title: TextLabel;
+			Upgrades: Frame & {
+				Template: ImageButton & {
+					Level: TextLabel;
+					Upgrade: TextLabel;
+					Bar: ImageLabel & {
+						Progress: ImageLabel;
+					};
+				};
+				UIGridLayout: UIGridLayout;
+			};
+			Background: ImageLabel;
+			UIAspectRatioConstraint: UIAspectRatioConstraint;
+			Info: Frame & {
+				Price: TextLabel;
+				Buy: TextButton;
+				Description: TextLabel;
+				Upgrade: TextLabel;
 			};
 		};
 	};
@@ -225,28 +250,15 @@ interface StarterGui extends BasePlayerGui {
 			};
 		};
 	};
-	BasketUpgrade: ScreenGui & {
+	Codes: ScreenGui & {
 		Frame: Frame & {
 			Exit: TextButton;
 			Title: TextLabel;
-			Upgrades: Frame & {
-				Template: ImageButton & {
-					Level: TextLabel;
-					Upgrade: TextLabel;
-					Bar: ImageLabel & {
-						Progress: ImageLabel;
-					};
-				};
-				UIGridLayout: UIGridLayout;
-			};
+			Redeem: TextButton;
+			TextBox: TextBox;
 			Background: ImageLabel;
 			UIAspectRatioConstraint: UIAspectRatioConstraint;
-			Info: Frame & {
-				Price: TextLabel;
-				Buy: TextButton;
-				Description: TextLabel;
-				Upgrade: TextLabel;
-			};
+			Subtext: TextLabel;
 		};
 	};
 	Gifts: ScreenGui & {

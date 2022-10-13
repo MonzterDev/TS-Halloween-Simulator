@@ -1,6 +1,7 @@
 import { isA } from "shared/util/functions/isA";
-import { AreasUnlocked, GiftData, PetAutoDeleteData, PlayerData, QuestData } from "../types/PlayerData";
+import { AreasUnlocked, CodeData, GiftData, PetAutoDeleteData, PlayerData, QuestData } from "../types/PlayerData";
 import { BoostInventory, Boosts } from "./Boosts";
+import { CodesConfig } from "./Codes";
 import { GiftConfig } from "./Gifts";
 import { EggShopConfig, PetTypes, Rarities } from "./Pets";
 import { QuestConfig } from "./Quests";
@@ -40,6 +41,9 @@ for ( const [egg, props] of pairs( EggShopConfig ) ) {
     DEFAULT_PET_AUTO_DELETE_DATA.set(egg, new Map())
     for ( const [pet, prop] of pairs( props.pets ) ) DEFAULT_PET_AUTO_DELETE_DATA.get(egg)?.set(pet, false)
 }
+
+export const DEFAULT_CODE_DATA: CodeData = new Map()
+for ( const [code, props] of pairs( CodesConfig ) ) DEFAULT_CODE_DATA.set(code, false)
 
 export const DEFAULT_PLAYER_DATA: PlayerData = {
     candy: 0,
@@ -90,7 +94,8 @@ export const DEFAULT_PLAYER_DATA: PlayerData = {
     quests: DEFAULT_QUESTS_DATA,
     gift_time_played: 0,
     gift_reset_time: os.time() + 86400,
-    gifts: DEFAULT_GIFTS_DATA
+    gifts: DEFAULT_GIFTS_DATA,
+    codes: DEFAULT_CODE_DATA
 }
 
 // Mock test data

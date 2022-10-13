@@ -2,6 +2,7 @@ import { Networking } from "@flamework/networking";
 import { Area } from "./constants/Areas";
 import { BasketUpgradeResponse, BasketUpgrades } from "./constants/Basket";
 import { Boosts } from "./constants/Boosts";
+import { Code } from "./constants/Codes";
 import { Currency } from "./constants/Currencies";
 import { DevProduct, Gamepass } from "./constants/Gamepasses";
 import { GiftTime } from "./constants/Gifts";
@@ -27,6 +28,7 @@ interface ServerEvents {
     unlockArea: ( area: Area ) => void
     claimQuest: ( quest: Quest, tier: number ) => void
     claimGift: ( gift: GiftTime ) => void
+    redeemCode: ( code: Code ) => void
 }
 
 interface ServerFunctions {
@@ -69,6 +71,8 @@ interface ClientEvents {
     updateGiftPlayDuration: ( amount: number ) => void
     resetGifts: ( ) => void
     claimGift: ( gift: GiftTime ) => void
+
+    redeemCode: ( code: Code ) => void
 }
 
 

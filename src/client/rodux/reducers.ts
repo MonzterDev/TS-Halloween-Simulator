@@ -7,6 +7,7 @@ import { Gamepass, getGamepassAsProp } from "shared/constants/Gamepasses";
 import { Boosts, BOOST_DURATION } from "shared/constants/Boosts";
 import { Area } from "shared/constants/Areas";
 import { Quest } from "shared/constants/Quests";
+import { Code } from "shared/constants/Codes";
 
 interface UpdateDataAction extends Action<"updatePlayerData"> {
 	data: DataState;
@@ -92,8 +93,12 @@ interface ClaimGiftAction extends Action<"claimGift"> {
     gift: number
 }
 
+interface UpdateCodeAction extends Action<"updateCode"> {
+    code: Code
+}
+
 export type DataState = PlayerData;
-export type DataActions = UpdateDataAction | UpdateCurrencyAction | UpdateUpgradeAction | AddPetAction | RemovePetAction | UpdatePetAction | UpdateSettingAction | UpdateGamepassAction | AddBoostAction | RemoveBoostAction | UseBoostAction | UpdateBoostAction | EndBoostAction | UnlockAreaAction |UpdateQuestPointsAction | CompleteQuestAction | ClaimQuestAction | UpdateGiftPlayDurationAction | UpdateGiftResetTimeAction | ResetGiftsAction | ClaimGiftAction | UpdateAutoDeletePetAction;
+export type DataActions = UpdateDataAction | UpdateCurrencyAction | UpdateUpgradeAction | AddPetAction | RemovePetAction | UpdatePetAction | UpdateSettingAction | UpdateGamepassAction | AddBoostAction | RemoveBoostAction | UseBoostAction | UpdateBoostAction | EndBoostAction | UnlockAreaAction |UpdateQuestPointsAction | CompleteQuestAction | ClaimQuestAction | UpdateGiftPlayDurationAction | UpdateGiftResetTimeAction | ResetGiftsAction | ClaimGiftAction | UpdateAutoDeletePetAction | UpdateCodeAction;
 
 export const dataReducer = createReducer<DataState, DataActions>(DEFAULT_PLAYER_DATA, {
     updatePlayerData: ( state, action ) => action.data,
@@ -183,6 +188,10 @@ export const dataReducer = createReducer<DataState, DataActions>(DEFAULT_PLAYER_
     updateAutoDeletePet: ( state, action ) => {
         const isUnlocked = state.pet_auto_delete.get(action.egg)?.get(action.pet)
         state.pet_auto_delete.get(action.egg)?.set(action.pet, !isUnlocked)
+        return state
+    },
+    updateCode: ( state, action ) => {
+        state.codes.set(action.code, true)
         return state
     },
 } );
