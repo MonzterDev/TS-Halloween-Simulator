@@ -1,8 +1,8 @@
 import { CommandContext } from "@rbxts/cmdr";
 import { getLuckStat, getPowerStat, getRangeStat, getSizeStat } from "server/utils/Stats";
-import { BasketUpgrades } from "shared/constants/Basket";
+import { BasketUpgrade } from "shared/constants/Basket";
 
-export = function ( context: CommandContext, stat: BasketUpgrades, player: Player = context.Executor) {
+export = function ( context: CommandContext, stat: BasketUpgrade, player: Player = context.Executor) {
     switch (stat) {
         case "Size":
             return getSizeStat(player)

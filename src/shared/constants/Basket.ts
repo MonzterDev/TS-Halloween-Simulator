@@ -1,8 +1,8 @@
 export type BasketUpgradeResponse = "Max" | "No Money" | "Success" | false
 
-export const BasketUpgrades = ["Size", "Range", "Power", "Luck"] as const
-export type BasketUpgrades = typeof BasketUpgrades[number]
-export const UPGRADE_DESCRIPTION: Record<BasketUpgrades, string> = {
+export const BASKET_UPGRADES = ["Size", "Range", "Power", "Luck"] as const
+export type BasketUpgrade = typeof BASKET_UPGRADES[number]
+export const BASKET_UPGRADE_DESCRIPTION: Record<BasketUpgrade, string> = {
     "Size": "Hold more Candy!",
     "Range": "Pickup Candy from further away!",
     "Power": "Pickup more Candy at a time!",
@@ -19,7 +19,7 @@ interface BasketUpgradesConfig {
 }
 
 
-export const BasketShopConfig: BasketUpgradesConfig = {
+export const BASKET_SHOP_CONFIG: BasketUpgradesConfig = {
     size: {
         1: 50,
         2: 75,
@@ -71,7 +71,7 @@ export const BasketShopConfig: BasketUpgradesConfig = {
     },
 }
 
-export const BasketUpgradeConfig: BasketUpgradesConfig = {
+export const BASKET_UPGRADE_CONFIG: BasketUpgradesConfig = {
     size: {
         0: 10,
         1: 25,
@@ -102,10 +102,10 @@ export const BasketUpgradeConfig: BasketUpgradesConfig = {
     },
 }
 
-export function getBasketUpgradePrice ( upgrade: BasketUpgrades, level: number ) {
-    return BasketShopConfig[getBasketUpgradeAsProp(upgrade)][level]
+export function getBasketUpgradePrice ( upgrade: BasketUpgrade, level: number ) {
+    return BASKET_SHOP_CONFIG[getBasketUpgradeAsProp(upgrade)][level]
 }
 
-export function getBasketUpgradeAsProp ( upgrade: BasketUpgrades ) {
+export function getBasketUpgradeAsProp ( upgrade: BasketUpgrade ) {
     return <keyof BasketUpgradesConfig> upgrade.lower()
 }

@@ -2,8 +2,8 @@ import { Controller, OnStart, OnInit, Dependency } from "@flamework/core";
 import { Players, ReplicatedStorage } from "@rbxts/services";
 import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
-import { Boosts, BoostsConfig, BOOST_DESCRIPTIONS, BOOST_IMAGES } from "shared/constants/Boosts";
-import { PetConfig, PetInstanceProps, Rarities, RarityColors, UUID } from "shared/constants/Pets";
+import { Boost, BOOSTS, BOOSTS_CONFIG, BOOST_DESCRIPTIONS, BOOST_IMAGES } from "shared/constants/Boosts";
+import { PET_CONFIG, PetInstanceProps, RARITIES, RARITY_COLORS, UUID, Rarity } from "shared/constants/Pets";
 import { timeToString } from "shared/util/functions/timeToString";
 
 @Controller({})
@@ -21,8 +21,8 @@ export class PetInventoryController implements OnStart {
 
     private useButton = this.info.Use
 
-    private selectedBooster: Boosts | undefined
-    private selectedBoosterRarity: Rarities | undefined
+    private selectedBooster: Boost | undefined
+    private selectedBoosterRarity: Rarity | undefined
 
     private dataLoaded = false
     private connection = clientStore.changed.connect( ( newState ) => {
@@ -41,7 +41,7 @@ export class PetInventoryController implements OnStart {
         Events.gainBoost.connect( ( boost, rarity ) => task.defer( () => this.updateBoost( boost, rarity ) ) )
     }
 
-    private getTemplate ( boost: Boosts, rarity: Rarities ): typeof this.template | undefined {
+    private getTemplate ( boost: Boost, rarity: Rarity ): typeof this.template | undefined {
         let template
         this.container.GetChildren().forEach( ( child ) => {
             if ( !child.IsA( "ImageButton" ) || child.Name !== boost ) return
@@ -51,7 +51,7 @@ export class PetInventoryController implements OnStart {
         return template
     }
 
-    private updateBoost ( boost: Boosts, rarity: Rarities ) {
+    private updateBoost ( boost: Boost, rarity: Rarity ) {
         this.dataLoaded = true
         const template = this.getTemplate( boost, rarity )
         if ( !template ) return
@@ -68,7 +68,7 @@ export class PetInventoryController implements OnStart {
                 clone.SetAttribute( "rarity", rarity )
                 clone.Visible = true
 
-                clone.BackgroundColor3 = RarityColors[rarity]
+                clone.BackgroundColor3 = RARITY_COLORS[rarity]
                 clone.Boost.Image = BOOST_IMAGES[boost]
                 clone.Amount.Text = tostring( amount )
 
@@ -77,14 +77,14 @@ export class PetInventoryController implements OnStart {
         })
     }
 
-    private selectBoost ( boost: Boosts, rarity: Rarities ) {
+    private selectBoost ( boost: Boost, rarity: Rarity ) {
         this.selectedBooster = boost
         this.selectedBoosterRarity = rarity
 
         this.info.Boost.Image = BOOST_IMAGES[boost]
-        this.info.Boost.BackgroundColor3 = RarityColors[rarity]
+        this.info.Boost.BackgroundColor3 = RARITY_COLORS[rarity]
         this.info.BoostName.Text = boost
-        this.info.Description.Text = `${BoostsConfig[boost][rarity]}x ${BOOST_DESCRIPTIONS[boost]}`
+        this.info.Description.Text = `${BOOSTS_CONFIG[boost][rarity]}x ${BOOST_DESCRIPTIONS[boost]}`
         this.info.Visible = true
     }
 

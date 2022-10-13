@@ -1,7 +1,7 @@
 import { Service, OnStart, OnInit, Dependency } from "@flamework/core";
 import { Events } from "server/network";
 import { reward } from "server/utils/Rewards";
-import { Code, CODES, CodesConfig } from "shared/constants/Codes";
+import { Code, CODES, CODES_CONFIG } from "shared/constants/Codes";
 import { PlayerDataService } from "./PlayerDataService";
 
 @Service({})
@@ -20,7 +20,7 @@ export class CodeService implements OnStart {
         const isCodeValid = CODES.includes( code.upper() )
         if ( !isCodeValid ) return
 
-        const expirationTime = CodesConfig[code].expiration
+        const expirationTime = CODES_CONFIG[code].expiration
         if ( os.time() >= expirationTime ) return
 
         const isRedeemed = profile.data.codes.get( code )
@@ -28,7 +28,7 @@ export class CodeService implements OnStart {
 
         profile.data.codes.set( code, true )
 
-        const rewards = CodesConfig[code].reward
+        const rewards = CODES_CONFIG[code].reward
         reward( player, rewards )
         Events.redeemCode.fire(player, code)
     }

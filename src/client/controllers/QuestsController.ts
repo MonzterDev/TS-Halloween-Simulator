@@ -4,8 +4,8 @@ import { Players } from "@rbxts/services";
 import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
 import { openGui } from "client/utils/openGui";
-import { Boosts } from "shared/constants/Boosts";
-import { BoosterQuestRewardProps, getActiveQuestTier, Quest, QuestConfig, QuestRewardProps, Reward2 } from "shared/constants/Quests";
+import { Boost, BOOSTS } from "shared/constants/Boosts";
+import { BoosterQuestRewardProps, getActiveQuestTier, Quest, QUEST_CONFIG, QuestRewardProps, Reward2 } from "shared/constants/Quests";
 import { cleanString } from "shared/util/functions/cleanString";
 
 type Mode = "Active" | "Unclaimed" | "Completed"
@@ -48,7 +48,7 @@ export class QuestsController implements OnStart {
         const template = <typeof this.template>this.container.FindFirstChild( quest )
         if ( !template ) return
 
-        const questConfig = QuestConfig[quest]
+        const questConfig = QUEST_CONFIG[quest]
         const requiredPoints = questConfig.points_per_tier * tier
 
         const percent = (points / requiredPoints) * 100
@@ -99,7 +99,7 @@ export class QuestsController implements OnStart {
     }
 
     private generateQuest (quest: Quest, tier: number, currentPoints: number, isClaimed: boolean = false) {
-        const questConfig = QuestConfig[quest]
+        const questConfig = QUEST_CONFIG[quest]
         const requiredPoints = questConfig.points_per_tier * tier
         const isCompleted = requiredPoints <= currentPoints
 
@@ -138,7 +138,7 @@ export class QuestsController implements OnStart {
 
         for ( const [key, props] of pairs( rewardProps[tier] ) ) {
             const rewardType = <string>key
-            const isABoost = Boosts.includes( <Boosts>rewardType )
+            const isABoost = BOOSTS.includes( <Boost>rewardType )
             if ( isABoost ) {
                 const boosterInfo = <BoosterQuestRewardProps> props
                 rewardString = `${rewardString} ${boosterInfo.amount}x ${boosterInfo.rarity} ${rewardType} Booster`

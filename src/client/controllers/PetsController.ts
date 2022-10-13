@@ -3,7 +3,7 @@ import Make from "@rbxts/make";
 import { Players, ReplicatedStorage, Workspace } from "@rbxts/services";
 import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
-import { DEFAULT_MAX_PET_EQUIPPED_AMOUNT, DEFAULT_MAX_PET_STORAGE_AMOUNT, PetTypes, UUID } from "shared/constants/Pets";
+import { DEFAULT_MAX_PET_EQUIPPED_AMOUNT, DEFAULT_MAX_PET_STORAGE_AMOUNT, Pet, PETS, UUID } from "shared/constants/Pets";
 
 const positions = [
     new Vector3( 0, 1, 8 ),
@@ -18,7 +18,7 @@ const orientations = [
 
 interface pet {
     uuid: UUID
-    type: PetTypes
+    type: Pet
 }
 
 @Controller({})
@@ -111,7 +111,7 @@ export class PetsController implements OnStart {
         pet.Destroy()
     }
 
-    private equipPet ( player: Player, uuid: UUID, pet: PetTypes ) {
+    private equipPet ( player: Player, uuid: UUID, pet: Pet ) {
         this.dataLoaded = true
         const playerPets = this.pets.get( player.UserId )
         if (!playerPets) this.pets.set(player.UserId, [{uuid: uuid, type: pet}])
@@ -120,7 +120,7 @@ export class PetsController implements OnStart {
         this.spawnPet(player, uuid, pet)
     }
 
-    private spawnPet ( player: Player, uuid: UUID, pet: PetTypes ) {
+    private spawnPet ( player: Player, uuid: UUID, pet: Pet ) {
         const character = player.Character || player.CharacterAdded.Wait()[1]
         if ( !character ) return
         const humanoidRootPart = <Part>character.WaitForChild("HumanoidRootPart")

@@ -2,28 +2,28 @@ export const DEFAULT_MAX_PET_STORAGE_AMOUNT = 50
 export const DEFAULT_MAX_PET_EQUIPPED_AMOUNT = 3
 
 export interface PetInstanceProps {
-    type: PetTypes
-    rarity: Rarities
+    type: Pet
+    rarity: Rarity
     locked?: boolean
     equipped?: boolean
 }
 
 export type PetInventory = Map<UUID, PetInstanceProps>
 
-export const Rarities = ["Common", "Uncommon", "Rare"] as const
-export type Rarities = typeof Rarities[number]
+export const RARITIES = ["Common", "Uncommon", "Rare"] as const
+export type Rarity = typeof RARITIES[number]
 
-export const RarityColors: Record<Rarities, Color3> = {
+export const RARITY_COLORS: Record<Rarity, Color3> = {
     Common: Color3.fromRGB(191,191,191),
     Uncommon: Color3.fromRGB(28,179,23),
     Rare: Color3.fromRGB(51,222,227),
 }
 
-export const EggTypes = ["Starter"] as const
-export type EggTypes = typeof EggTypes[number]
+export const EGGS = ["Starter"] as const
+export type Egg = typeof EGGS[number]
 
-export const PetTypes = ["Dog", "Cat"] as const
-export type PetTypes = typeof PetTypes[number]
+export const PETS = ["Dog", "Cat"] as const
+export type Pet = typeof PETS[number]
 
 export type Power = number
 export type Chance = number
@@ -31,10 +31,10 @@ export type UUID = string
 
 interface Props {
     chance: number
-    rarity: Rarities
+    rarity: Rarity
 }
 
-export type EggPetProps = Partial<Record<PetTypes, Props>>
+export type EggPetProps = Partial<Record<Pet, Props>>
 
 interface EggProps {
     price: number,
@@ -42,7 +42,7 @@ interface EggProps {
 }
 
 
-export const EggShopConfig: Record<EggTypes, EggProps> = {
+export const EGG_SHOP_CONFIG: Record<Egg, EggProps> = {
     Starter: {
         price: 10,
         pets: {
@@ -52,9 +52,9 @@ export const EggShopConfig: Record<EggTypes, EggProps> = {
     }
 }
 
-type PetProps = Record<Rarities, number>
+type PetProps = Record<Rarity, number>
 
-export const PetConfig: Record<PetTypes, PetProps> = {
+export const PET_CONFIG: Record<Pet, PetProps> = {
     Dog: {
         Common: 1,
         Uncommon: 2,

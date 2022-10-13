@@ -3,7 +3,7 @@ import { Players, Workspace } from "@rbxts/services";
 import { Events, Functions } from "client/network";
 import { clientStore } from "client/rodux/rodux";
 import { Area } from "shared/constants/Areas";
-import { BasketShopConfig, BasketUpgrades, getBasketUpgradeAsProp, getBasketUpgradePrice, UPGRADE_DESCRIPTION } from "shared/constants/Basket";
+import { BASKET_SHOP_CONFIG, BASKET_UPGRADES, getBasketUpgradeAsProp, getBasketUpgradePrice, BASKET_UPGRADE_DESCRIPTION, BasketUpgrade } from "shared/constants/Basket";
 import { abbreviator } from "shared/util/functions/abbreviate";
 import { getClosestUpgradePart } from "shared/util/functions/getClosestPart";
 import { AreaController } from "./AreaController";
@@ -30,7 +30,7 @@ export class BasketUpgradeController implements OnStart {
     private template = this.upgrades.Template
 
     private area: Area = "Spawn"
-    private selectedUpgrade: BasketUpgrades = "Range"
+    private selectedUpgrade: BasketUpgrade = "Range"
 
     onStart () {
         this.generateShopParts()
@@ -77,10 +77,10 @@ export class BasketUpgradeController implements OnStart {
     }
 
     private generateUpgrades () {
-        BasketUpgrades.forEach((upgrade) => this.generateUpgrade(upgrade))
+        BASKET_UPGRADES.forEach((upgrade) => this.generateUpgrade(upgrade))
     }
 
-    private generateUpgrade (upgrade: BasketUpgrades) {
+    private generateUpgrade (upgrade: BasketUpgrade) {
         const clone = this.template.Clone()
         clone.Name = upgrade
         clone.Parent = this.upgrades
@@ -93,11 +93,11 @@ export class BasketUpgradeController implements OnStart {
         clone.MouseButton1Click.Connect(() => this.displayInfo(upgrade))
     }
 
-    private displayInfo ( upgrade: BasketUpgrades ) {
+    private displayInfo ( upgrade: BasketUpgrade ) {
         this.selectedUpgrade = upgrade
         this.info.Visible = true
         this.info.Upgrade.Text = upgrade
-        this.info.Description.Text = UPGRADE_DESCRIPTION[upgrade]
+        this.info.Description.Text = BASKET_UPGRADE_DESCRIPTION[upgrade]
 
         const level = this.getLevel( upgrade )
         const price = (level >= areasMaxLevel[this.area]) ? "MAXED OUT!" : <string>abbreviator.abbreviate(getBasketUpgradePrice( upgrade, level + 1 ))
@@ -121,7 +121,7 @@ export class BasketUpgradeController implements OnStart {
         })
     }
 
-    private getLevel ( upgrade: BasketUpgrades ): number {
+    private getLevel ( upgrade: BasketUpgrade ): number {
         return clientStore.getState().data.basket_upgrades[getBasketUpgradeAsProp(upgrade)]
     }
 }

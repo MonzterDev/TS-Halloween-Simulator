@@ -1,14 +1,14 @@
 import { QuestDataLevels } from "shared/types/PlayerData"
-import { Boosts } from "./Boosts"
+import { Boost, BOOSTS } from "./Boosts"
 import { CURRENCIES, Currency } from "./Currencies"
-import { Rarities } from "./Pets"
+import { Rarity } from "./Pets"
 
 export interface BoosterQuestRewardProps {
-    rarity: Rarities
+    rarity: Rarity
     amount: number
 }
 export type Reward = Record<Currency, number>
-export type Reward2 = Record<Boosts, BoosterQuestRewardProps>
+export type Reward2 = Record<Boost, BoosterQuestRewardProps>
 export type Rewards = Partial<Reward> | Partial<Reward2>
 
 export const QUESTS = ["Candy Collector", "Explorer"]
@@ -25,7 +25,7 @@ export interface QuestConfigProps {
 
 export type QuestConfig = Record<Quest, QuestConfigProps>
 
-export const QuestConfig: QuestConfig = {
+export const QUEST_CONFIG: QuestConfig = {
     "Candy Collector": {
         description: "Collect REPLACE pieces of Candy!",
         tiers: 5,

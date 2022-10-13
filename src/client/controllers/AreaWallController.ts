@@ -5,7 +5,7 @@ import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
 import { hideGuis } from "client/utils/hideGuis";
 import { openGui } from "client/utils/openGui";
-import { Area, AreaWallConfig } from "shared/constants/Areas";
+import { Area, AREA_WALL_CONFIG } from "shared/constants/Areas";
 
 @Controller({})
 export class BoostController implements OnStart {
@@ -71,7 +71,7 @@ export class BoostController implements OnStart {
             guiClone.Enabled = true
             guiClone.Parent = attachment
             guiClone.Area.Text = area.gsub( "_", " " )[0]
-            guiClone.Price.Text = FormatCompact( AreaWallConfig[area].coin_price )
+            guiClone.Price.Text = FormatCompact( AREA_WALL_CONFIG[area].coin_price )
 
             wallInstance.Touched.Connect( ( otherPart ) => {
                 const player = Players.GetPlayerFromCharacter(otherPart.Parent)
@@ -79,7 +79,7 @@ export class BoostController implements OnStart {
                 this.selectedArea = area
 
                 this.pruchaseGui.Frame.Area.Text = area.gsub( "_", " " )[0]
-                this.pruchaseGui.Frame.Price.Text = FormatCompact( AreaWallConfig[area].coin_price )
+                this.pruchaseGui.Frame.Price.Text = FormatCompact( AREA_WALL_CONFIG[area].coin_price )
                 this.pruchaseGui.Enabled = true
                 hideGuis(this.pruchaseGui)
             })
@@ -90,7 +90,7 @@ export class BoostController implements OnStart {
         if ( !this.selectedArea ) return
 
         const money = clientStore.getState().data.money
-        const price = AreaWallConfig[this.selectedArea].coin_price
+        const price = AREA_WALL_CONFIG[this.selectedArea].coin_price
         if ( money < price ) return
 
         Events.unlockArea.fire(this.selectedArea)

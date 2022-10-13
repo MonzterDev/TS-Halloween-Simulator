@@ -1,8 +1,8 @@
 import { Service, OnStart, OnInit, Dependency } from "@flamework/core";
 import { Players } from "@rbxts/services";
 import { Events } from "server/network";
-import { Boosts, BOOST_DURATION } from "shared/constants/Boosts";
-import { Rarities } from "shared/constants/Pets";
+import { Boost, BOOSTS, BOOST_DURATION } from "shared/constants/Boosts";
+import { RARITIES, Rarity } from "shared/constants/Pets";
 import { PlayerDataService } from "./PlayerDataService";
 
 
@@ -15,7 +15,7 @@ export class BoostsService implements OnStart {
         task.spawn(() => this.updateBoosts())
     }
 
-    public rewardBoost ( player: Player, boost: Boosts, rarity: Rarities, amount: number = 1 ) {
+    public rewardBoost ( player: Player, boost: Boost, rarity: Rarity, amount: number = 1 ) {
         const profile = this.playerDataService.getProfile( player )
         if ( !profile ) return
 
@@ -29,7 +29,7 @@ export class BoostsService implements OnStart {
         })
     }
 
-    private useBoost ( player: Player, boost: Boosts, rarity: Rarities ) {
+    private useBoost ( player: Player, boost: Boost, rarity: Rarity ) {
         const profile = this.playerDataService.getProfile( player )
         if ( !profile ) return
 
@@ -77,8 +77,8 @@ export class BoostsService implements OnStart {
         }
     }
 
-    public getActiveBoosts ( player: Player ): Map<Boosts, Rarities> {
-        const activeBoosts: Map<Boosts, Rarities> = new Map()
+    public getActiveBoosts ( player: Player ): Map<Boost, Rarity> {
+        const activeBoosts: Map<Boost, Rarity> = new Map()
 
         const profile = this.playerDataService.getProfile( player )
         if ( !profile ) return activeBoosts

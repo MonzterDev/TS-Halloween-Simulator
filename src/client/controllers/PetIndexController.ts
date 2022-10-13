@@ -4,7 +4,7 @@ import { CleanViewport, GenerateViewport } from "@rbxts/viewport-model";
 import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
 import { openGui } from "client/utils/openGui";
-import { EggPetProps, EggShopConfig, EggTypes, PetTypes, RarityColors } from "shared/constants/Pets";
+import { EggPetProps, EGG_SHOP_CONFIG, EGGS, PETS, RARITY_COLORS, Egg, Pet } from "shared/constants/Pets";
 
 @Controller({})
 export class PetIndexController implements OnStart {
@@ -29,7 +29,7 @@ export class PetIndexController implements OnStart {
         this.generateEggs()
     }
 
-    private updatePetIndex ( egg: EggTypes, pet: PetTypes ) {
+    private updatePetIndex ( egg: Egg, pet: Pet ) {
         const eggTemplate = this.container.FindFirstChild( egg )
         const petTemplate = <typeof this.template.Container.Template> eggTemplate?.FindFirstChild( "Container" )?.FindFirstChild( pet )
         CleanViewport( petTemplate.ViewportFrame )
@@ -46,10 +46,10 @@ export class PetIndexController implements OnStart {
             clone.Parent = container
             clone.Name = petName
             clone.Visible = true
-            clone.ViewportFrame.BackgroundColor3 = RarityColors[petConfig.rarity]
+            clone.ViewportFrame.BackgroundColor3 = RARITY_COLORS[petConfig.rarity]
             clone.ViewportFrame.Title.Text = petName
 
-            const isUnlocked = clientStore.getState().data.pet_index.get(container.Parent?.Name as EggTypes)?.get(petName)!
+            const isUnlocked = clientStore.getState().data.pet_index.get(container.Parent?.Name as Egg)?.get(petName)!
 
             const petModel = <Model>ReplicatedStorage.Pets.FindFirstChild( petName )?.Clone()
 
@@ -66,7 +66,7 @@ export class PetIndexController implements OnStart {
     }
 
     private generateEggs () {
-        for (const [eggName, eggConfig] of pairs(EggShopConfig)) {
+        for (const [eggName, eggConfig] of pairs(EGG_SHOP_CONFIG)) {
             const clone = this.template.Clone()
             clone.Parent = this.container
             clone.Visible = true

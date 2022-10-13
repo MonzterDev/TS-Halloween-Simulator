@@ -3,7 +3,7 @@ import { Players } from "@rbxts/services";
 import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
 import { openGui } from "client/utils/openGui";
-import { CODES, CodesConfig } from "shared/constants/Codes";
+import { CODES, CODES_CONFIG } from "shared/constants/Codes";
 
 @Controller({})
 export class CodesController implements OnStart {
@@ -28,7 +28,7 @@ export class CodesController implements OnStart {
     private redeemCode () {
         const code = this.textBox.Text.upper()
         const isCodeValid = CODES.includes( code )
-        const expirationTime = isCodeValid ? CodesConfig[code].expiration : 999
+        const expirationTime = isCodeValid ? CODES_CONFIG[code].expiration : 999
 
         if ( !isCodeValid ) {
             this.redeemButton.Text = "Invalid Code"

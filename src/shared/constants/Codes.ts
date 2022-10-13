@@ -10,7 +10,7 @@ export interface CodeConfigProps {
 
 export type CodeConfig = Record<Code, CodeConfigProps>
 
-export const CodesConfig: CodeConfig = {
+export const CODES_CONFIG: CodeConfig = {
     TEST1: {
         expiration: 1665806400,
         reward: { candy: 100 },

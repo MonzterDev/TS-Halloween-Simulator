@@ -1,15 +1,15 @@
 import { Area } from "./Areas"
 
-export const PileTypes = ["Small", "Medium", "Large"]
-export type PileTypes = typeof PileTypes[number]
+export const PILE_SIZES = ["Small", "Medium", "Large"]
+export type PileSize = typeof PILE_SIZES[number]
 
 export interface PileProperties {
     health: number,
 }
 
-export type PilesConfig = Record<PileTypes, PileProperties>
+export type PilesConfig = Record<PileSize, PileProperties>
 
-export const PilesConfig: PilesConfig = {
+export const PILES_CONFIG: PilesConfig = {
     "Small": {
         health: 10,
     },

@@ -1,14 +1,14 @@
 import { isA } from "shared/util/functions/isA";
 import { AreasUnlocked, CodeData, GiftData, PetAutoDeleteData, PetEggPityData, PetIndexData, PlayerData, QuestData } from "../types/PlayerData";
-import { BoostInventory, Boosts } from "./Boosts";
-import { CodesConfig } from "./Codes";
-import { GiftConfig } from "./Gifts";
-import { EggShopConfig, EggTypes, PetTypes, Rarities } from "./Pets";
-import { QuestConfig } from "./Quests";
+import { BoostInventory, BOOSTS } from "./Boosts";
+import { CODES_CONFIG } from "./Codes";
+import { GIFT_CONFIG } from "./Gifts";
+import { EGG_SHOP_CONFIG, EGGS, PETS, RARITIES, Rarity } from "./Pets";
+import { QUEST_CONFIG } from "./Quests";
 
 const DEFAULT_BOOSTS: BoostInventory = new Map()
-Boosts.forEach( ( boost ) => {
-    const rarityTable: Record<Rarities, number> = {
+BOOSTS.forEach( ( boost ) => {
+    const rarityTable: Record<Rarity, number> = {
         Common: 0,
         Uncommon: 0,
         Rare: 0,
@@ -17,7 +17,7 @@ Boosts.forEach( ( boost ) => {
 } )
 
 const DEFAULT_QUESTS_DATA: QuestData = {}
-for ( const [quest, props] of pairs( QuestConfig ) ) {
+for ( const [quest, props] of pairs( QUEST_CONFIG ) ) {
     DEFAULT_QUESTS_DATA[quest] = {}
 
     let i = 1
@@ -32,27 +32,27 @@ for ( const [quest, props] of pairs( QuestConfig ) ) {
 }
 
 export const DEFAULT_GIFTS_DATA: GiftData = {}
-for ( const [giftTime, reward] of pairs( GiftConfig ) ) {
+for ( const [giftTime, reward] of pairs( GIFT_CONFIG ) ) {
     DEFAULT_GIFTS_DATA[giftTime] = false
 }
 
 export const DEFAULT_PET_AUTO_DELETE_DATA: PetAutoDeleteData = new Map()
-for ( const [egg, props] of pairs( EggShopConfig ) ) {
+for ( const [egg, props] of pairs( EGG_SHOP_CONFIG ) ) {
     DEFAULT_PET_AUTO_DELETE_DATA.set(egg, new Map())
     for ( const [pet, prop] of pairs( props.pets ) ) DEFAULT_PET_AUTO_DELETE_DATA.get(egg)?.set(pet, false)
 }
 
 export const DEFAULT_CODE_DATA: CodeData = new Map()
-for ( const [code, props] of pairs( CodesConfig ) ) DEFAULT_CODE_DATA.set( code, false )
+for ( const [code, props] of pairs( CODES_CONFIG ) ) DEFAULT_CODE_DATA.set( code, false )
 
 export const DEFAULT_PET_INDEX_DATA: PetIndexData = new Map()
-for ( const [egg, eggProps] of pairs( EggShopConfig ) ) {
+for ( const [egg, eggProps] of pairs( EGG_SHOP_CONFIG ) ) {
     DEFAULT_PET_INDEX_DATA.set( egg, new Map() )
     for ( const [pet, petProps] of pairs( eggProps.pets ) ) DEFAULT_PET_INDEX_DATA.get(egg)?.set( pet, false )
 }
 
 export const DEFAULT_PET_EGG_PITY_DATA: PetEggPityData = new Map()
-EggTypes.forEach((egg) => DEFAULT_PET_EGG_PITY_DATA.set(egg, 98))
+EGGS.forEach((egg) => DEFAULT_PET_EGG_PITY_DATA.set(egg, 0))
 
 export const DEFAULT_PLAYER_DATA: PlayerData = {
     candy: 0,

@@ -1,10 +1,10 @@
 import { Action, createReducer } from "@rbxts/rodux";
 import { Gamepasses, PlayerData, Settings } from "shared/types/PlayerData";
 import { DEFAULT_GIFTS_DATA, DEFAULT_PLAYER_DATA } from "shared/constants/PlayerData";
-import { EggTypes, PetInstanceProps, PetTypes, Rarities, UUID } from "shared/constants/Pets";
-import { getSettingAsProp, Setting } from "shared/constants/Settings";
+import { Egg, EGGS, Pet, PetInstanceProps, PETS, RARITIES, Rarity, UUID } from "shared/constants/Pets";
+import { getSettingAsProp, Setting, SETTINGS } from "shared/constants/Settings";
 import { Gamepass, getGamepassAsProp } from "shared/constants/Gamepasses";
-import { Boosts, BOOST_DURATION } from "shared/constants/Boosts";
+import { Boost, BOOSTS, BOOST_DURATION } from "shared/constants/Boosts";
 import { Area } from "shared/constants/Areas";
 import { Quest } from "shared/constants/Quests";
 import { Code } from "shared/constants/Codes";
@@ -33,12 +33,12 @@ interface UpdatePetAction extends Action<"updatePet"> {
     equipped?: boolean
 }
 interface UpdateAutoDeletePetAction extends Action<"updateAutoDeletePet"> {
-    egg: EggTypes
-    pet: PetTypes
+    egg: Egg
+    pet: Pet
 }
 interface IndexPetAction extends Action<"indexPet"> {
-    egg: EggTypes
-    pet: PetTypes
+    egg: Egg
+    pet: Pet
 }
 interface UpdateSettingAction extends Action<"updateSetting"> {
     setting: Setting
@@ -48,25 +48,25 @@ interface UpdateGamepassAction extends Action<"updateGamepass"> {
     gamepass: Gamepass
 }
 interface AddBoostAction extends Action<"addBoost"> {
-    boost: Boosts,
-    rarity: Rarities
+    boost: Boost,
+    rarity: Rarity
 }
 interface RemoveBoostAction extends Action<"removeBoost"> {
-    boost: Boosts,
-    rarity: Rarities
+    boost: Boost,
+    rarity: Rarity
 }
 
 // Active Boosts
 interface UseBoostAction extends Action<"useBoost"> {
-    boost: Boosts,
-    rarity: Rarities
+    boost: Boost,
+    rarity: Rarity
 }
 interface UpdateBoostAction extends Action<"updateBoost"> {
-    boost: Boosts,
+    boost: Boost,
     duration: number
 }
 interface EndBoostAction extends Action<"endBoost"> {
-    boost: Boosts,
+    boost: Boost,
 }
 interface UnlockAreaAction extends Action<"unlockArea"> {
     area: Area,
@@ -107,10 +107,10 @@ interface UpdateGroupChestAction extends Action<"updateGroupChest"> {
 }
 
 interface IncreaseEggPityAction extends Action<"increaseEggPity"> {
-    egg: EggTypes
+    egg: Egg
 }
 interface ResetEggPityAction extends Action<"resetEggPity"> {
-    egg: EggTypes
+    egg: Egg
 }
 
 export type DataState = PlayerData;

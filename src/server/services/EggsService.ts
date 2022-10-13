@@ -1,7 +1,7 @@
 import { Service, OnStart, Dependency } from "@flamework/core";
 import { Workspace } from "@rbxts/services";
 import { Events, Functions } from "server/network";
-import { EggPetProps, EggShopConfig, EggTypes, PetTypes } from "shared/constants/Pets";
+import { EggPetProps, EGG_SHOP_CONFIG, EGGS, PETS, Pet, Egg } from "shared/constants/Pets";
 import { HatchEggResponse } from "shared/network";
 import { PlayerCooldown } from "shared/util/classes/PlayerCooldown";
 import { PetsService } from "./PetsService";
@@ -19,7 +19,7 @@ export class EggsService implements OnStart {
         Events.autoDeletePet.connect((player, egg, pet) => this.autoDeletePet(player, egg, pet))
     }
 
-    private hatchEgg ( player: Player, egg: EggTypes ): HatchEggResponse {
+    private hatchEgg ( player: Player, egg: Egg ): HatchEggResponse {
         const profile = this.playerDataService.getProfile( player )
         if ( !profile ) return
 
@@ -28,7 +28,7 @@ export class EggsService implements OnStart {
 
         let amountOfHatches = 1
 
-        const eggConfig = EggShopConfig[egg]
+        const eggConfig = EGG_SHOP_CONFIG[egg]
 
         const hasTrippleHatchGamepass = profile.data.gamepasses.tripple_hatch
         const hasTrippleHatchEnabled = profile.data.settings.tripple_hatch
@@ -42,7 +42,7 @@ export class EggsService implements OnStart {
 
         this.playerCooldown.giveCooldown( player )
 
-        const pets: PetTypes[] = []
+        const pets: Pet[] = []
         while ( amountOfHatches > 0 ) {
             amountOfHatches -= 1
 
@@ -102,7 +102,7 @@ export class EggsService implements OnStart {
         return rarestPet
     }
 
-    private autoDeletePet (player: Player, egg: EggTypes, pet: PetTypes) {
+    private autoDeletePet (player: Player, egg: Egg, pet: Pet) {
         const profile = this.playerDataService.getProfile( player )
         if ( !profile ) return
 

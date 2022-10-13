@@ -1,6 +1,6 @@
 import { Service, OnStart, OnInit, Dependency } from "@flamework/core";
 import { Events } from "server/network";
-import { Area, AreaWallConfig } from "shared/constants/Areas";
+import { Area, AREA_WALL_CONFIG } from "shared/constants/Areas";
 import { PlayerDataService } from "./PlayerDataService";
 
 @Service({})
@@ -18,11 +18,11 @@ export class AreaWallService implements OnStart {
         const isUnlocked = profile.data.areas_unlocked[area]
         if ( isUnlocked ) return
 
-        const requiredArea = AreaWallConfig[area].requirements
+        const requiredArea = AREA_WALL_CONFIG[area].requirements
         if ( requiredArea && !profile.data.areas_unlocked[requiredArea]) return
 
         const money = profile.data.money
-        const price = AreaWallConfig[area].coin_price
+        const price = AREA_WALL_CONFIG[area].coin_price
         if ( money < price ) return
 
         profile.adjustMoney( price )

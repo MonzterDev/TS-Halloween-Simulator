@@ -1,6 +1,6 @@
 import { Service, OnStart, OnInit, Dependency } from "@flamework/core";
 import { Functions } from "server/network";
-import { BasketShopConfig, BasketUpgradeResponse, BasketUpgrades, getBasketUpgradeAsProp } from "shared/constants/Basket";
+import { BASKET_SHOP_CONFIG, BasketUpgrade, BasketUpgradeResponse, BASKET_UPGRADES, getBasketUpgradeAsProp } from "shared/constants/Basket";
 import { PlayerDataService } from "./PlayerDataService";
 
 
@@ -13,11 +13,11 @@ export class BasketUpgradeService implements OnStart {
     }
 
 
-    private purchaseBasketUpgrade ( player: Player, upgrade: BasketUpgrades ): BasketUpgradeResponse {
+    private purchaseBasketUpgrade ( player: Player, upgrade: BasketUpgrade ): BasketUpgradeResponse {
         const profile = this.playerDataService.getProfile( player )
         if ( !profile ) return false
 
-        const basketConfig = BasketShopConfig[getBasketUpgradeAsProp(upgrade)]
+        const basketConfig = BASKET_SHOP_CONFIG[getBasketUpgradeAsProp(upgrade)]
         const currentLevel = profile.data.basket_upgrades[getBasketUpgradeAsProp(upgrade)]
         if (currentLevel >= 50) return "Max"
         const price = basketConfig[currentLevel + 1]

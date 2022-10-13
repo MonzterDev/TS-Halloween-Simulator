@@ -1,8 +1,8 @@
 import { Service, OnStart, OnInit, Dependency } from "@flamework/core";
 import { Events } from "server/network";
 import { reward } from "server/utils/Rewards";
-import { Boosts } from "shared/constants/Boosts";
-import { BoosterQuestRewardProps, getActiveQuestTier, Quest, QuestConfig } from "shared/constants/Quests";
+import { BOOSTS } from "shared/constants/Boosts";
+import { BoosterQuestRewardProps, getActiveQuestTier, Quest, QUEST_CONFIG } from "shared/constants/Quests";
 import { BoostsService } from "./BoostsService";
 import { PlayerDataService } from "./PlayerDataService";
 
@@ -22,7 +22,7 @@ export class QuestsService implements OnStart {
         if (!tier) tier = getActiveQuestTier(profile.data.quests[quest])
         if (!profile.data.quests[quest][tier]) return // Completed all tiers of that quest
 
-        const questConfig = QuestConfig[quest]
+        const questConfig = QUEST_CONFIG[quest]
         const requiredPoints = questConfig.points_per_tier * tier
 
         profile.adjustQuestPoints( quest, tier, amount )
@@ -36,7 +36,7 @@ export class QuestsService implements OnStart {
         const isCompleted = profile.data.quests[quest][tier].completed
         if (isCompleted) return
 
-        const questConfig = QuestConfig[quest]
+        const questConfig = QUEST_CONFIG[quest]
         const requiredPoints = questConfig.points_per_tier * tier
 
         profile.data.quests[quest][tier].points = 0
@@ -49,7 +49,7 @@ export class QuestsService implements OnStart {
         const profile = this.playerDataService.getProfile( player )
         if ( !profile ) return
 
-        const questConfig = QuestConfig[quest]
+        const questConfig = QUEST_CONFIG[quest]
         const rewards = questConfig.reward[tier]
 
         const isCompleted = profile.data.quests[quest][tier].completed

@@ -8,7 +8,7 @@ export interface AreaWallProps {
 
 export type AreaWallConfig = Record<Area, AreaWallProps>
 
-export const AreaWallConfig: AreaWallConfig = {
+export const AREA_WALL_CONFIG: AreaWallConfig = {
     Spawn: {
         coin_price: 0
     },
@@ -36,7 +36,7 @@ export interface AreaPileProps {
 
 export type AreaPileConfig = Record<Area, AreaPileProps>
 
-export const AreaPileConfig: AreaPileConfig = {
+export const AREA_PILE_CONFIG: AreaPileConfig = {
     Spawn: {
         health_multiplier: 1,
         reward_multiplier: 1,

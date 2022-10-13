@@ -2,8 +2,8 @@ import { Controller, OnStart, OnInit } from "@flamework/core";
 import { Players } from "@rbxts/services";
 import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
-import { Boosts, BOOST_IMAGES } from "shared/constants/Boosts";
-import { Rarities, RarityColors } from "shared/constants/Pets";
+import { Boost, BOOSTS, BOOST_IMAGES } from "shared/constants/Boosts";
+import { RARITIES, Rarity, RARITY_COLORS } from "shared/constants/Pets";
 import { DEFAULT_PLAYER_DATA } from "shared/constants/PlayerData";
 import { timeToString } from "shared/util/functions/timeToString";
 
@@ -30,13 +30,13 @@ export class BoostController implements OnStart {
         task.spawn(() => this.updateBoostTime())
     }
 
-    private generateBoost ( boost: Boosts, rarity: Rarities ) {
+    private generateBoost ( boost: Boost, rarity: Rarity ) {
         this.dataLoaded = true
         const clone = this.template.Clone()
         clone.Parent = this.frame
         clone.Visible = true
         clone.Name = boost
-        clone.BackgroundColor3 = RarityColors[rarity]
+        clone.BackgroundColor3 = RARITY_COLORS[rarity]
         clone.Image = BOOST_IMAGES[boost]
         clone.Duration.Text = tostring(clientStore.getState().data.active_boosts.get(boost)?.duration)
     }
@@ -50,7 +50,7 @@ export class BoostController implements OnStart {
                 const durationLabel = <TextLabel>clone.FindFirstChild( "Duration" )
                 if ( !durationLabel ) return
 
-                const booster = <Boosts>clone.Name
+                const booster = <Boost>clone.Name
                 const activeBoostInstance = clientStore.getState().data.active_boosts.get( booster )
                 if ( !activeBoostInstance ) return
 

@@ -4,8 +4,8 @@ import { CollectionService, HttpService, Players, ServerStorage, Workspace } fro
 import { PileComponent } from "server/components/PileComponent";
 import { Events } from "server/network";
 import { getLuckStat, getPowerStat, getRangeStat, getSizeStat } from "server/utils/Stats";
-import { AreaPileConfig } from "shared/constants/Areas";
-import { PilesConfig } from "shared/constants/Piles";
+import { AREA_PILE_CONFIG } from "shared/constants/Areas";
+import { PILES_CONFIG } from "shared/constants/Piles";
 import { PlayerDataService } from "./PlayerDataService";
 import { QuestsService } from "./QuestsService";
 
@@ -26,10 +26,10 @@ export class PilesService implements OnStart {
 
     private generatePiles () {
         this.areaFolder.GetChildren().forEach( ( folder ) => {
-            const areaConfig = AreaPileConfig[folder.Name]
+            const areaConfig = AREA_PILE_CONFIG[folder.Name]
             folder.GetChildren().forEach( ( spawnPart ) => {
                 if ( !spawnPart.IsA( "BasePart" ) ) return
-                const pileConfig = PilesConfig[spawnPart.Name]
+                const pileConfig = PILES_CONFIG[spawnPart.Name]
                 const health = pileConfig.health * areaConfig.health_multiplier
                 const uuid = HttpService.GenerateGUID( false )
 

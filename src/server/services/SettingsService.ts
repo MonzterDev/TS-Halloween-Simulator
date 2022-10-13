@@ -1,6 +1,6 @@
 import { Service, OnStart, OnInit, Dependency } from "@flamework/core";
 import { Events } from "server/network";
-import { getSettingAsProp, Setting } from "shared/constants/Settings";
+import { getSettingAsProp, Setting, SETTINGS } from "shared/constants/Settings";
 import { PetsService } from "./PetsService";
 import { PlayerDataService } from "./PlayerDataService";
 

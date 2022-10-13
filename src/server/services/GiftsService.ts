@@ -2,8 +2,8 @@ import { Service, OnStart, OnInit, Dependency } from "@flamework/core";
 import { Players } from "@rbxts/services";
 import { Events } from "server/network";
 import { reward } from "server/utils/Rewards";
-import { Boosts } from "shared/constants/Boosts";
-import { GiftConfig, GiftTime } from "shared/constants/Gifts";
+import { BOOSTS } from "shared/constants/Boosts";
+import { GIFT_CONFIG, GiftTime } from "shared/constants/Gifts";
 import { DEFAULT_GIFTS_DATA } from "shared/constants/PlayerData";
 import { BoosterQuestRewardProps } from "shared/constants/Quests";
 import { BoostsService } from "./BoostsService";
@@ -29,7 +29,7 @@ export class GiftsService implements OnStart {
 
         if ( isClaimed || !isUnlocked ) return
 
-        const rewards = GiftConfig[gift]
+        const rewards = GIFT_CONFIG[gift]
         reward( player, rewards )
 
         profile.data.gifts[gift] = true

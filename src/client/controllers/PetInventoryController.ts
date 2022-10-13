@@ -3,7 +3,7 @@ import { Players, ReplicatedStorage } from "@rbxts/services";
 import { CleanViewport, GenerateViewport } from "@rbxts/viewport-model";
 import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
-import { PetConfig, PetInstanceProps, UUID } from "shared/constants/Pets";
+import { PET_CONFIG, PetInstanceProps, UUID } from "shared/constants/Pets";
 import { DEFAULT_PLAYER_DATA } from "shared/constants/PlayerData";
 import { PetsController } from "./PetsController";
 
@@ -96,7 +96,7 @@ export class PetInventoryController implements OnStart {
         if ( !template ) return
         template.Equipped.Visible = equip
         const props = this.getPetPropsFromUUID( uuid )
-        const power = PetConfig[props!.type][props!.rarity]
+        const power = PET_CONFIG[props!.type][props!.rarity]
         template.LayoutOrder = equip ? -1_000_000 - power : -power
         this.updateLabels()
     }
@@ -114,7 +114,7 @@ export class PetInventoryController implements OnStart {
         clone.Visible = true
         clone.Name = uuid
 
-        const power = PetConfig[props.type][props.rarity]
+        const power = PET_CONFIG[props.type][props.rarity]
         clone.Power.Text = tostring( power )
         clone.Equipped.Visible = props.equipped ? props.equipped : false
         clone.Locked.Visible = props.locked ? props.locked : false
@@ -175,7 +175,7 @@ export class PetInventoryController implements OnStart {
         if ( !props ) return
 
         this.info.PetName.Text = props.type
-        const power = PetConfig[props.type][props.rarity]
+        const power = PET_CONFIG[props.type][props.rarity]
         this.info.Power.Text = tostring( power )
         this.info.Equipped.Visible = props.equipped ? props.equipped : false
         this.info.Locked.Visible = props.locked ? props.locked : false

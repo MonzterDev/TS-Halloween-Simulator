@@ -5,7 +5,7 @@ import { Debris, Lighting, Players, ReplicatedStorage, RunService, Workspace } f
 import { CleanViewport, GenerateViewport } from "@rbxts/viewport-model";
 import { Events, Functions } from "client/network";
 import { clientStore } from "client/rodux/rodux";
-import { EggShopConfig, EggTypes, PetTypes } from "shared/constants/Pets";
+import { EGG_SHOP_CONFIG, EGGS, PETS, Pet, Egg } from "shared/constants/Pets";
 import { cleanString } from "shared/util/functions/cleanString";
 
 type PetTemplate = StarterGui["PetEgg"]["InfoGui"]["Background"]["Frame"]["Container"]["Template"]
@@ -33,18 +33,17 @@ export class PetEggController implements OnStart {
         Events.increaseEggPity.connect((egg) => task.defer(() => this.increaseEggPity(egg)))
     }
 
-    private increaseEggPity ( egg: EggTypes ) {
+    private increaseEggPity ( egg: Egg ) {
         const infoGui = <typeof this.infoGui>this.folder.FindFirstChild( egg )?.FindFirstChild( "InfoGui" )
         if ( !infoGui ) return
 
         const pity = clientStore.getState().data.pet_egg_pity.get( egg )!
-        print(pity)
 
         infoGui.Background.Frame.Pity.Bar.Size = UDim2.fromScale( pity / 100, 1 )
         infoGui.Background.Frame.Pity.Title.Text = `Exotic Pity ${pity}/100`
     }
 
-    private resetPity ( egg: EggTypes ) {
+    private resetPity ( egg: Egg ) {
         const infoGui = <typeof this.infoGui>this.folder.FindFirstChild( egg )?.FindFirstChild( "InfoGui" )
         if ( !infoGui ) return
 
@@ -52,15 +51,15 @@ export class PetEggController implements OnStart {
         infoGui.Background.Frame.Pity.Title.Text = `Exotic Pity 0/100`
     }
 
-    private autoDeletePet (egg: EggTypes, pet: PetTypes) {
+    private autoDeletePet (egg: Egg, pet: Pet) {
         const folder = <typeof this.folder>this.folder.FindFirstChild( egg )
         const infoGui = folder.InfoGui
         const template = <PetTemplate> infoGui.Background.Frame.Container.FindFirstChild( pet )
         template.Delete.Visible = clientStore.getState().data.pet_auto_delete.get(egg)?.get(pet)!
     }
 
-    private populatePets ( container: Frame, egg: EggTypes ) {
-        const pets = EggShopConfig[egg]
+    private populatePets ( container: Frame, egg: Egg ) {
+        const pets = EGG_SHOP_CONFIG[egg]
         for ( const [pet, props] of pairs( pets.pets ) ) {
             const petModel = <Model>ReplicatedStorage.Pets.FindFirstChild( pet )?.Clone()
             const template = <PetTemplate>container.FindFirstChild( "Template" )?.Clone()
@@ -75,7 +74,7 @@ export class PetEggController implements OnStart {
         }
     }
 
-    private generateEgg ( egg: EggTypes ) {
+    private generateEgg ( egg: Egg ) {
         const pity = clientStore.getState().data.pet_egg_pity.get( egg )!
 
         const folder = Make( "Folder", {
@@ -106,16 +105,16 @@ export class PetEggController implements OnStart {
         interactClone.Container.Hatch.MouseButton1Click.Connect(() => this.hatch(egg))
     }
 
-    private autoHatch ( egg: EggTypes ) {
+    private autoHatch ( egg: Egg ) {
         while ( true ) {
             this.hatch(egg)
             task.wait(1)
         }
     }
 
-    private hatch ( egg: EggTypes ) {
+    private hatch ( egg: Egg ) {
         const eggModel = <Workspace["Eggs"]["Starter"]>this.eggs.FindFirstChild(egg)
-        const price = EggShopConfig[egg].price
+        const price = EGG_SHOP_CONFIG[egg].price
 
         const money = clientStore.getState().data.money
         const canAfford = money > price
@@ -149,7 +148,7 @@ export class PetEggController implements OnStart {
         } )
     }
 
-    private hatchAnimation ( egg: EggTypes, pet: PetTypes ) {
+    private hatchAnimation ( egg: Egg, pet: Pet ) {
         this.toggleGuis()
         this.animation.Enabled = true
 

@@ -4,7 +4,7 @@ import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
 import { openGui } from "client/utils/openGui";
 import { DEFAULT_PLAYER_DATA } from "shared/constants/PlayerData";
-import { getSettingAsProp, OFF_BUTTON, ON_BUTTON, Setting } from "shared/constants/Settings";
+import { getSettingAsProp, OFF_BUTTON, ON_BUTTON, Setting, SETTINGS } from "shared/constants/Settings";
 import { PetsController } from "./PetsController";
 
 
@@ -26,10 +26,10 @@ export class SettingsController implements OnStart {
     private template = this.container.Template
 
     onStart () {
-        Setting.forEach( ( setting ) => this.generateTemplate( setting ) )
+        SETTINGS.forEach( ( setting ) => this.generateTemplate( setting ) )
         clientStore.changed.connect( ( newS, oldS ) => {
             if ( DEFAULT_PLAYER_DATA.settings !== oldS.data.settings ) return
-            Setting.forEach( ( setting ) => this.updateSetting( setting, newS.data.settings[getSettingAsProp(setting)]) )
+            SETTINGS.forEach( ( setting ) => this.updateSetting( setting, newS.data.settings[getSettingAsProp(setting)]) )
         } )
 
         this.openButton.MouseButton1Click.Connect( () => openGui(this.gui) )
