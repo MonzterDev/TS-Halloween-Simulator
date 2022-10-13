@@ -11,6 +11,7 @@ export interface PlayerData {
 	money: number;
 	basket_upgrades: BasketUpgrades
 	pet_inventory: PetInventory
+	pet_index: PetIndexData
 	pet_auto_delete: PetAutoDeleteData
 	active_boosts: ActiveBoosts
 	boost_inventory: BoostInventory
@@ -65,3 +66,5 @@ export type GiftData = Record<GiftTime, boolean>
 export type PetAutoDeleteData = Map<EggTypes, Map<Partial<PetTypes>, boolean>>
 
 export type CodeData = Map<Code, boolean>
+
+export type PetIndexData = Map<EggTypes, Map<PetTypes, boolean>>

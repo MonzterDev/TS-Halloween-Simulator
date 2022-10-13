@@ -61,18 +61,6 @@ interface StarterGui extends BasePlayerGui {
 			};
 		};
 	};
-	Buttons: ScreenGui & {
-		Frame: Frame & {
-			Inventory: TextButton;
-			UIGridLayout: UIGridLayout;
-			Settings: TextButton;
-			Codes: TextButton;
-			Map: TextButton;
-			Sell: TextButton;
-			UIAspectRatioConstraint: UIAspectRatioConstraint;
-			Quests: TextButton;
-		};
-	};
 	PetEgg: Folder & {
 		InteractGui: BillboardGui & {
 			Auto: ProximityPrompt;
@@ -135,73 +123,6 @@ interface StarterGui extends BasePlayerGui {
 			};
 		};
 	};
-	BasketUpgrade: ScreenGui & {
-		Frame: Frame & {
-			Exit: TextButton;
-			Title: TextLabel;
-			Upgrades: Frame & {
-				Template: ImageButton & {
-					Level: TextLabel;
-					Upgrade: TextLabel;
-					Bar: ImageLabel & {
-						Progress: ImageLabel;
-					};
-				};
-				UIGridLayout: UIGridLayout;
-			};
-			Background: ImageLabel;
-			UIAspectRatioConstraint: UIAspectRatioConstraint;
-			Info: Frame & {
-				Price: TextLabel;
-				Buy: TextButton;
-				Description: TextLabel;
-				Upgrade: TextLabel;
-			};
-		};
-	};
-	AreaWalls: Folder & {
-		AreaDisplay: BillboardGui & {
-			Price: TextLabel & {
-				UIStroke: UIStroke;
-			};
-			Icon: ImageLabel;
-			Area: TextLabel;
-		};
-		Purchase: ScreenGui & {
-			Frame: Frame & {
-				Exit: TextButton;
-				Buy: TextButton;
-				Title: TextLabel;
-				Icon: ImageLabel;
-				Price: TextLabel;
-				Background: ImageLabel;
-				UIAspectRatioConstraint: UIAspectRatioConstraint;
-				Area: TextLabel;
-			};
-		};
-	};
-	ActiveBoosts: ScreenGui & {
-		Frame: Frame & {
-			Template: ImageLabel & {
-				Duration: TextLabel;
-			};
-			UIGridLayout: UIGridLayout;
-		};
-	};
-	Map: ScreenGui & {
-		Frame: Frame & {
-			Exit: TextButton;
-			Background: ImageLabel;
-			Title: TextLabel;
-			Container: ScrollingFrame & {
-				Template: TextButton & {
-					Background: ImageLabel;
-					Area: TextLabel;
-				};
-				UIGridLayout: UIGridLayout;
-			};
-		};
-	};
 	Currency: ScreenGui & {
 		Frame: Frame & {
 			CandyHolder: ImageLabel & {
@@ -259,6 +180,111 @@ interface StarterGui extends BasePlayerGui {
 			Background: ImageLabel;
 			UIAspectRatioConstraint: UIAspectRatioConstraint;
 			Subtext: TextLabel;
+		};
+	};
+	PetIndex: ScreenGui & {
+		Frame: Frame & {
+			Exit: TextButton;
+			Title: TextLabel;
+			Background: ImageLabel;
+			UIAspectRatioConstraint: UIAspectRatioConstraint;
+			Container: ScrollingFrame & {
+				Template: Frame & {
+					Egg: ViewportFrame & {
+						Amount: TextLabel;
+					};
+					Container: Frame & {
+						Template: TextLabel & {
+							ViewportFrame: ViewportFrame & {
+								Title: TextLabel;
+								Locked: TextLabel;
+							};
+						};
+						UIGridLayout: UIGridLayout;
+					};
+				};
+				UIGridLayout: UIGridLayout;
+			};
+		};
+	};
+	Map: ScreenGui & {
+		Frame: Frame & {
+			Exit: TextButton;
+			Background: ImageLabel;
+			Title: TextLabel;
+			Container: ScrollingFrame & {
+				Template: TextButton & {
+					Background: ImageLabel;
+					Area: TextLabel;
+				};
+				UIGridLayout: UIGridLayout;
+			};
+		};
+	};
+	ActiveBoosts: ScreenGui & {
+		Frame: Frame & {
+			Template: ImageLabel & {
+				Duration: TextLabel;
+			};
+			UIGridLayout: UIGridLayout;
+		};
+	};
+	BasketUpgrade: ScreenGui & {
+		Frame: Frame & {
+			Exit: TextButton;
+			Title: TextLabel;
+			Upgrades: Frame & {
+				Template: ImageButton & {
+					Level: TextLabel;
+					Upgrade: TextLabel;
+					Bar: ImageLabel & {
+						Progress: ImageLabel;
+					};
+				};
+				UIGridLayout: UIGridLayout;
+			};
+			Background: ImageLabel;
+			UIAspectRatioConstraint: UIAspectRatioConstraint;
+			Info: Frame & {
+				Price: TextLabel;
+				Buy: TextButton;
+				Description: TextLabel;
+				Upgrade: TextLabel;
+			};
+		};
+	};
+	AreaWalls: Folder & {
+		AreaDisplay: BillboardGui & {
+			Price: TextLabel & {
+				UIStroke: UIStroke;
+			};
+			Icon: ImageLabel;
+			Area: TextLabel;
+		};
+		Purchase: ScreenGui & {
+			Frame: Frame & {
+				Exit: TextButton;
+				Buy: TextButton;
+				Title: TextLabel;
+				Icon: ImageLabel;
+				Price: TextLabel;
+				Background: ImageLabel;
+				UIAspectRatioConstraint: UIAspectRatioConstraint;
+				Area: TextLabel;
+			};
+		};
+	};
+	Buttons: ScreenGui & {
+		Frame: Frame & {
+			Map: TextButton;
+			UIAspectRatioConstraint: UIAspectRatioConstraint;
+			UIGridLayout: UIGridLayout;
+			Settings: TextButton;
+			Codes: TextButton;
+			PetIndex: TextButton;
+			Sell: TextButton;
+			Quests: TextButton;
+			Inventory: TextButton;
 		};
 	};
 	Gifts: ScreenGui & {

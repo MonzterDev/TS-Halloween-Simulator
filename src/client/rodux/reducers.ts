@@ -36,6 +36,10 @@ interface UpdateAutoDeletePetAction extends Action<"updateAutoDeletePet"> {
     egg: EggTypes
     pet: PetTypes
 }
+interface IndexPetAction extends Action<"indexPet"> {
+    egg: EggTypes
+    pet: PetTypes
+}
 interface UpdateSettingAction extends Action<"updateSetting"> {
     setting: Setting
     value: boolean
@@ -98,7 +102,7 @@ interface UpdateCodeAction extends Action<"updateCode"> {
 }
 
 export type DataState = PlayerData;
-export type DataActions = UpdateDataAction | UpdateCurrencyAction | UpdateUpgradeAction | AddPetAction | RemovePetAction | UpdatePetAction | UpdateSettingAction | UpdateGamepassAction | AddBoostAction | RemoveBoostAction | UseBoostAction | UpdateBoostAction | EndBoostAction | UnlockAreaAction |UpdateQuestPointsAction | CompleteQuestAction | ClaimQuestAction | UpdateGiftPlayDurationAction | UpdateGiftResetTimeAction | ResetGiftsAction | ClaimGiftAction | UpdateAutoDeletePetAction | UpdateCodeAction;
+export type DataActions = UpdateDataAction | UpdateCurrencyAction | UpdateUpgradeAction | AddPetAction | RemovePetAction | UpdatePetAction | UpdateSettingAction | UpdateGamepassAction | AddBoostAction | RemoveBoostAction | UseBoostAction | UpdateBoostAction | EndBoostAction | UnlockAreaAction |UpdateQuestPointsAction | CompleteQuestAction | ClaimQuestAction | UpdateGiftPlayDurationAction | UpdateGiftResetTimeAction | ResetGiftsAction | ClaimGiftAction | UpdateAutoDeletePetAction | UpdateCodeAction | IndexPetAction;
 
 export const dataReducer = createReducer<DataState, DataActions>(DEFAULT_PLAYER_DATA, {
     updatePlayerData: ( state, action ) => action.data,
@@ -192,6 +196,10 @@ export const dataReducer = createReducer<DataState, DataActions>(DEFAULT_PLAYER_
     },
     updateCode: ( state, action ) => {
         state.codes.set(action.code, true)
+        return state
+    },
+    indexPet: ( state, action ) => {
+        state.pet_index.get(action.egg)?.set(action.pet, true)
         return state
     },
 } );

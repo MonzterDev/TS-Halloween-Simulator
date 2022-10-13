@@ -1,5 +1,5 @@
 import { isA } from "shared/util/functions/isA";
-import { AreasUnlocked, CodeData, GiftData, PetAutoDeleteData, PlayerData, QuestData } from "../types/PlayerData";
+import { AreasUnlocked, CodeData, GiftData, PetAutoDeleteData, PetIndexData, PlayerData, QuestData } from "../types/PlayerData";
 import { BoostInventory, Boosts } from "./Boosts";
 import { CodesConfig } from "./Codes";
 import { GiftConfig } from "./Gifts";
@@ -43,7 +43,13 @@ for ( const [egg, props] of pairs( EggShopConfig ) ) {
 }
 
 export const DEFAULT_CODE_DATA: CodeData = new Map()
-for ( const [code, props] of pairs( CodesConfig ) ) DEFAULT_CODE_DATA.set(code, false)
+for ( const [code, props] of pairs( CodesConfig ) ) DEFAULT_CODE_DATA.set( code, false )
+
+export const DEFAULT_PET_INDEX_DATA: PetIndexData = new Map()
+for ( const [egg, eggProps] of pairs( EggShopConfig ) ) {
+    DEFAULT_PET_INDEX_DATA.set( egg, new Map() )
+    for ( const [pet, petProps] of pairs( eggProps.pets ) ) DEFAULT_PET_INDEX_DATA.get(egg)?.set( pet, false )
+}
 
 export const DEFAULT_PLAYER_DATA: PlayerData = {
     candy: 0,
@@ -62,6 +68,7 @@ export const DEFAULT_PLAYER_DATA: PlayerData = {
         // ]
     ),
     pet_auto_delete: DEFAULT_PET_AUTO_DELETE_DATA,
+    pet_index: DEFAULT_PET_INDEX_DATA,
     active_boosts: new Map(
         // [
         //     ["Luck", {rarity: "Common", duration: 10}],

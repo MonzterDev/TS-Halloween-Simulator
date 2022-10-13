@@ -29,6 +29,7 @@ interface ServerEvents {
     claimQuest: ( quest: Quest, tier: number ) => void
     claimGift: ( gift: GiftTime ) => void
     redeemCode: ( code: Code ) => void
+    addToPetIndex: ( egg: EggTypes, pet: PetTypes ) => void
 }
 
 interface ServerFunctions {
@@ -54,6 +55,7 @@ interface ClientEvents {
     equipPet: (player: Player, uuid: UUID, pet: PetTypes) => void
     unequipPet: ( player: Player, uuid: UUID ) => void
     autoDeletePet: ( egg: EggTypes, pet: PetTypes ) => void
+    addToPetIndex: ( egg: EggTypes, pet: PetTypes ) => void
 
     toggleSetting: ( setting: Setting, value: boolean ) => void
     purchaseSuccess: ( product: Gamepass | DevProduct ) => void

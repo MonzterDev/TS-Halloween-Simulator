@@ -28,6 +28,7 @@ Events.equipPet.connect( (player, uuid) => {
 Events.lockPet.connect( (uuid) => clientStore.dispatch( { type: "updatePet", uuid: uuid, locked: true }))
 Events.unlockPet.connect( ( uuid ) => clientStore.dispatch( { type: "updatePet", uuid: uuid, locked: false } ) )
 Events.autoDeletePet.connect((egg, pet) => clientStore.dispatch({type: "updateAutoDeletePet", egg: egg, pet: pet}))
+Events.addToPetIndex.connect((egg, pet) => clientStore.dispatch({type: "indexPet", egg: egg, pet: pet}))
 
 Events.toggleSetting.connect( ( setting, value ) => clientStore.dispatch( { type: "updateSetting", setting: setting, value: value } ) )
 

@@ -1,7 +1,9 @@
 import { Service, OnStart, OnInit, Dependency } from "@flamework/core";
+import { Profile } from "@rbxts/profileservice/globals";
 import { HttpService, Players } from "@rbxts/services";
 import { Events, Functions } from "server/network";
 import { DEFAULT_MAX_PET_EQUIPPED_AMOUNT, DEFAULT_MAX_PET_STORAGE_AMOUNT, EggTypes, PetConfig, PetInstanceProps, PetTypes, Rarities, UUID } from "shared/constants/Pets";
+import { PlayerData } from "shared/types/PlayerData";
 import { PlayerDataService } from "./PlayerDataService";
 
 
@@ -59,13 +61,28 @@ export class PetsService implements OnStart {
         return pets
     }
 
+    private indexPet ( player: Player, petType: PetTypes ) {
+        const profile = this.playerDataService.getProfile( player )
+        if ( !profile ) return
+
+        for ( const [egg, petsUnlocked] of pairs( profile.data.pet_index ) ) {
+            const isPetIndexed = petsUnlocked.get( petType )
+            if ( isPetIndexed === undefined || isPetIndexed ) continue
+
+            petsUnlocked.set( petType, true )
+            Events.addToPetIndex.fire( player, egg, petType )
+            return
+        }
+    }
+
     public rewardPet ( player: Player, petType: PetTypes, rarity: Rarities ) {
         const profile = this.playerDataService.getProfile( player )
         if ( !profile ) return
         const uuid = HttpService.GenerateGUID(false)
         const props: PetInstanceProps = { rarity: rarity, type: petType}
         profile.data.pet_inventory.set(uuid, props)
-        Events.givePet.fire(player, uuid, props)
+        Events.givePet.fire( player, uuid, props )
+        this.indexPet(player, petType)
     }
 
     private deletePet ( player: Player, uuid: UUID ) {
