@@ -5,10 +5,10 @@ import { PlayerDataService } from "./PlayerDataService";
 
 
 @Service({})
-export class BasketUpgradeService implements OnInit {
+export class BasketUpgradeService implements OnStart {
     private playerDataService = Dependency(PlayerDataService)
 
-    onInit () {
+    onStart () {
         Functions.purchaseBasketUpgrade.setCallback((player, upgrade) => this.purchaseBasketUpgrade(player, upgrade))
     }
 

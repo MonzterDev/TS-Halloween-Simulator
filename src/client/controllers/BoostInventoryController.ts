@@ -7,7 +7,7 @@ import { PetConfig, PetInstanceProps, Rarities, RarityColors, UUID } from "share
 import { timeToString } from "shared/util/functions/timeToString";
 
 @Controller({})
-export class PetInventoryController implements OnInit {
+export class PetInventoryController implements OnStart {
     private player = Players.LocalPlayer
     private playerGui = <PlayerGui>this.player.WaitForChild( "PlayerGui" )
 
@@ -33,7 +33,7 @@ export class PetInventoryController implements OnInit {
         else this.connection.disconnect()
     })
 
-    onInit () {
+    onStart () {
         this.generateBoosts()
 
         this.useButton.MouseButton1Click.Connect( () => this.useBoost() )

@@ -5,10 +5,10 @@ import { DevProduct, DevProductID, Gamepass, GamepassID, getDevProductFromID, ge
 import { PlayerDataService } from "./PlayerDataService";
 
 @Service({})
-export class MonetizationService implements OnInit {
+export class MonetizationService implements OnStart {
     private playerDataService = Dependency(PlayerDataService)
 
-    onInit() {
+    onStart() {
         MarketplaceService.ProcessReceipt = ( receiptInfo ) => this.purchaseProduct( receiptInfo )
         MarketplaceService.PromptGamePassPurchaseFinished.Connect((player, id, wasPurchased) => this.purchaseGamepass(player, <GamepassID>tostring(id), wasPurchased))
     }

@@ -5,7 +5,7 @@ import { Debris, Lighting, Players, ReplicatedStorage, RunService, Workspace } f
 import { CleanViewport, GenerateViewport } from "@rbxts/viewport-model";
 import { Events, Functions } from "client/network";
 import { clientStore } from "client/rodux/rodux";
-import { EggShopConfig, EggTypes, PetConfig, PetInstanceProps, PetTypes, UUID } from "shared/constants/Pets";
+import { EggShopConfig, EggTypes, PetTypes } from "shared/constants/Pets";
 import { toTitleCase } from "shared/util/functions/toTileCase";
 
 type PetTemplate = StarterGui["PetEgg"]["InfoGui"]["Background"]["Frame"]["Container"]["Template"]
@@ -13,7 +13,7 @@ type PetTemplate = StarterGui["PetEgg"]["InfoGui"]["Background"]["Frame"]["Conta
 const MAX_DISTANCE_FROM_EGG = 25
 
 @Controller({})
-export class PetEggController implements OnInit {
+export class PetEggController implements OnStart {
 
     private eggs = Workspace.Eggs
 
@@ -26,7 +26,7 @@ export class PetEggController implements OnInit {
 
     private animation = this.folder.Animation
 
-    onInit () {
+    onStart () {
         this.generateEgg( "Starter" )
         Events.autoDeletePet.connect((egg, pet) => task.defer(() => this.autoDeletePet(egg, pet)))
     }

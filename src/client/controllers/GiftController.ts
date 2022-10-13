@@ -6,7 +6,7 @@ import { openGui } from "client/utils/openGui";
 import { timeToString } from "shared/util/functions/timeToString";
 
 @Controller({})
-export class GiftController implements OnInit {
+export class GiftController implements OnStart {
     private player = Players.LocalPlayer
     private playerGui = <PlayerGui>this.player.WaitForChild( "PlayerGui" )
 
@@ -22,7 +22,7 @@ export class GiftController implements OnInit {
     private exitButton = this.frame.Exit
     private openButton = this.buttonGui.Button
 
-    onInit() {
+    onStart() {
         this.openButton.MouseButton1Click.Connect( () => openGui( this.gui ) )
         this.exitButton.MouseButton1Click.Connect( () => this.gui.Enabled = false )
 

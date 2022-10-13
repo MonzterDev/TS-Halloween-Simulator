@@ -5,13 +5,13 @@ import { clientStore } from "client/rodux/rodux";
 import { Area } from "shared/constants/Areas";
 
 @Controller({})
-export class AreaController implements OnInit {
+export class AreaController implements OnStart {
     private player = Players.LocalPlayer
 
     public areaChanged = new Signal<( area: Area ) => void>();
     public currentArea: Area = "Spawn"
 
-    onInit () {
+    onStart () {
         this.areaListener()
         this.player.RespawnLocation = Workspace.Areas.Spawn.Spawn
         this.player.CharacterAdded.Connect( ( character ) => {

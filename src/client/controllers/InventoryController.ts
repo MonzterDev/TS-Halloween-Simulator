@@ -5,7 +5,7 @@ import { openGui } from "client/utils/openGui";
 type Mode = "Pets" | "Boosts"
 
 @Controller({})
-export class InventoryController implements OnInit {
+export class InventoryController implements OnStart {
     private player = Players.LocalPlayer
     private playerGui = <PlayerGui>this.player.WaitForChild( "PlayerGui" )
 
@@ -24,7 +24,7 @@ export class InventoryController implements OnInit {
 
     private mode: Mode = "Pets"
 
-    onInit () {
+    onStart () {
         this.openButton.MouseButton1Click.Connect( () => {
             openGui(this.gui)
             this.displayGui( this.gui.Enabled )

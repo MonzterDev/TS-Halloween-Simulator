@@ -10,7 +10,7 @@ import { BasketUpgradeConfig } from "shared/constants/Basket";
 import { FormatCompact, FormatStandard } from "@rbxts/format-number";
 
 @Controller({})
-export class CurrencyController implements OnInit {
+export class CurrencyController implements OnStart {
     private sellController = Dependency(SellController)
     private basketUpgradeController = Dependency( BasketUpgradeController )
 
@@ -30,7 +30,7 @@ export class CurrencyController implements OnInit {
     private upgradeButton = this.full.Upgrade
     private sellButton = this.full.Sell
 
-    onInit () {
+    onStart () {
         this.updateAmount("candy", clientStore.getState().data.candy)
         this.updateAmount("money", clientStore.getState().data.money)
         this.updateAmount( "candy_corn", clientStore.getState().data.candy_corn )

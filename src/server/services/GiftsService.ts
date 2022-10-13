@@ -10,11 +10,11 @@ import { BoostsService } from "./BoostsService";
 import { PlayerDataService } from "./PlayerDataService";
 
 @Service({})
-export class GiftsService implements OnInit {
+export class GiftsService implements OnStart {
     private playerDataService = Dependency(PlayerDataService)
     private boostsService = Dependency(BoostsService)
 
-    onInit() {
+    onStart() {
         task.spawn( () => this.trackPlaytime() )
         Events.claimGift.connect((player, gift) => this.claimGift(player, gift))
     }

@@ -7,11 +7,11 @@ import { BoostsService } from "./BoostsService";
 import { PlayerDataService } from "./PlayerDataService";
 
 @Service({})
-export class QuestsService implements OnInit {
+export class QuestsService implements OnStart {
     private playerDataService = Dependency(PlayerDataService)
     private boostsService = Dependency(BoostsService)
 
-    onInit () {
+    onStart () {
         Events.claimQuest.connect((player, quest, tier) => this.claimQuest(player, quest, tier))
     }
 

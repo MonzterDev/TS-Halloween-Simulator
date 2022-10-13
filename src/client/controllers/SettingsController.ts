@@ -5,12 +5,11 @@ import { clientStore } from "client/rodux/rodux";
 import { openGui } from "client/utils/openGui";
 import { DEFAULT_PLAYER_DATA } from "shared/constants/PlayerData";
 import { getSettingAsProp, OFF_BUTTON, ON_BUTTON, Setting } from "shared/constants/Settings";
-import { Settings } from "shared/types/PlayerData";
 import { PetsController } from "./PetsController";
 
 
 @Controller({})
-export class SettingsController implements OnInit {
+export class SettingsController implements OnStart {
     private petsController = Dependency(PetsController)
     private player = Players.LocalPlayer
     private playerGui = <PlayerGui>this.player.WaitForChild( "PlayerGui" )
@@ -26,7 +25,7 @@ export class SettingsController implements OnInit {
 
     private template = this.container.Template
 
-    onInit () {
+    onStart () {
         Setting.forEach( ( setting ) => this.generateTemplate( setting ) )
         clientStore.changed.connect( ( newS, oldS ) => {
             if ( DEFAULT_PLAYER_DATA.settings !== oldS.data.settings ) return

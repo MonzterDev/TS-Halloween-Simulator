@@ -4,7 +4,7 @@ import { Events } from "client/network";
 import { DevProduct, Gamepass, getGamepassIDFromGamepass } from "shared/constants/Gamepasses";
 
 @Controller({})
-export class MonetizationController implements OnInit {
+export class MonetizationController implements OnStart {
     private player = Players.LocalPlayer
     private playerGui = <PlayerGui>this.player.WaitForChild( "PlayerGui" )
 
@@ -12,7 +12,7 @@ export class MonetizationController implements OnInit {
     private frame = this.gui.Frame
     private message = this.frame.Message
 
-    onInit () {
+    onStart () {
         Events.purchaseSuccess.connect((product) =>  this.notifyPlayer(product))
     }
 

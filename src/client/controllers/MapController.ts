@@ -11,7 +11,7 @@ const UNLOCKED_COLOR = Color3.fromRGB(255, 255, 255)
 const CURRENT_COLOR = Color3.fromRGB(243, 255, 0)
 
 @Controller({})
-export class MapController implements OnInit {
+export class MapController implements OnStart {
     private areaController = Dependency(AreaController)
 
     private player = Players.LocalPlayer
@@ -35,7 +35,7 @@ export class MapController implements OnInit {
         this.connection.disconnect()
     })
 
-    onInit () {
+    onStart () {
         this.generateMap()
         this.updateCurrentArea( this.areaController.currentArea )
 

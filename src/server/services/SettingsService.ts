@@ -5,11 +5,11 @@ import { PetsService } from "./PetsService";
 import { PlayerDataService } from "./PlayerDataService";
 
 @Service({})
-export class SettingsService implements OnInit {
+export class SettingsService implements OnStart {
     private playerDataService = Dependency( PlayerDataService )
     private petsService = Dependency(PetsService)
 
-    onInit() {
+    onStart() {
         Events.toggleSetting.connect((player, setting) => this.updateSetting(player, setting))
     }
 

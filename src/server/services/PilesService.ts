@@ -10,7 +10,7 @@ import { PlayerDataService } from "./PlayerDataService";
 import { QuestsService } from "./QuestsService";
 
 @Service({})
-export class PilesService implements OnInit {
+export class PilesService implements OnStart {
     private components = Dependency( Components )
     private playerDataService = Dependency( PlayerDataService )
     private questsService = Dependency( QuestsService )
@@ -19,7 +19,7 @@ export class PilesService implements OnInit {
     private pileModels = ServerStorage.Piles
 
 
-    onInit () {
+    onStart () {
         this.generatePiles()
         task.spawn(() => this.startLoop())
     }

@@ -14,7 +14,7 @@ const areasMaxLevel: Record<Area, number> = {
 }
 
 @Controller({})
-export class BasketUpgradeController implements OnInit {
+export class BasketUpgradeController implements OnStart {
     private areaController = Dependency(AreaController)
 
     private player = Players.LocalPlayer
@@ -32,7 +32,7 @@ export class BasketUpgradeController implements OnInit {
     private area: Area = "Spawn"
     private selectedUpgrade: BasketUpgrades = "Range"
 
-    onInit () {
+    onStart () {
         this.generateShopParts()
         this.purchase.MouseButton1Click.Connect( () => this.requestUpgrade() )
         this.exit.MouseButton1Click.Connect( () => {

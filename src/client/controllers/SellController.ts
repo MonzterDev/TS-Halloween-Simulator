@@ -4,7 +4,7 @@ import { Events } from "client/network";
 import { AreaController } from "./AreaController";
 
 @Controller({})
-export class SellController implements OnInit {
+export class SellController implements OnStart {
     private areaController = Dependency(AreaController)
 
     private player = Players.LocalPlayer
@@ -15,7 +15,7 @@ export class SellController implements OnInit {
 
     private ownsSellGamepass = false
 
-    onInit() {
+    onStart() {
         this.button.MouseButton1Click.Connect(() => this.clickSellButton())
     }
 

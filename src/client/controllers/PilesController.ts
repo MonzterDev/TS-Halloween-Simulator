@@ -11,11 +11,11 @@ type HealthDisplay = BillboardGui & {
 
 
 @Controller({})
-export class PilesController implements OnInit {
+export class PilesController implements OnStart {
     private healthDisplay = ReplicatedStorage.HealthDisplay
     private piles = Workspace.Piles
 
-    onInit () {
+    onStart () {
         Events.updatePileHealth.connect((uuid) => this.updateHeatlth(uuid))
     }
 

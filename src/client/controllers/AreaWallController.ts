@@ -8,7 +8,7 @@ import { openGui } from "client/utils/openGui";
 import { Area, AreaWallConfig } from "shared/constants/Areas";
 
 @Controller({})
-export class BoostController implements OnInit {
+export class BoostController implements OnStart {
 
     private areasFolder = Workspace.Areas
 
@@ -32,7 +32,7 @@ export class BoostController implements OnInit {
         this.connection.disconnect()
     })
 
-    onInit () {
+    onStart () {
         this.prugeWalls()
         this.generateWalls()
 

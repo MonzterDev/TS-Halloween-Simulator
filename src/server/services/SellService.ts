@@ -5,10 +5,10 @@ import { rewardMoney } from "server/utils/Rewards";
 import { PlayerDataService } from "./PlayerDataService";
 
 @Service({})
-export class SellService implements OnInit {
+export class SellService implements OnStart {
     private playerDataService = Dependency(PlayerDataService)
 
-    onInit () {
+    onStart () {
         this.setupParts()
         Events.sell.connect( ( player ) => {
             const profile = this.playerDataService.getProfile( player )

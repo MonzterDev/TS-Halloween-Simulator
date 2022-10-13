@@ -22,7 +22,7 @@ interface pet {
 }
 
 @Controller({})
-export class PetsController implements OnInit {
+export class PetsController implements OnStart {
     private player = Players.LocalPlayer
     private petsFolder = Workspace.Pets
     private petModels = ReplicatedStorage.Pets
@@ -37,7 +37,7 @@ export class PetsController implements OnInit {
         else this.connection.disconnect()
     })
 
-    onInit () {
+    onStart () {
         clientStore.getState().data.pet_inventory.forEach( ( props, uuid ) => {
             if (props.equipped) this.equipPet( this.player, uuid, props.type )
         } )

@@ -11,7 +11,7 @@ import { toTitleCase } from "shared/util/functions/toTileCase";
 type Mode = "Active" | "Unclaimed" | "Completed"
 
 @Controller({})
-export class QuestsController implements OnInit {
+export class QuestsController implements OnStart {
     private player = Players.LocalPlayer
     private playerGui = <PlayerGui>this.player.WaitForChild( "PlayerGui" )
 
@@ -31,7 +31,7 @@ export class QuestsController implements OnInit {
 
     private mode: Mode = "Active"
 
-    onInit () {
+    onStart () {
         Events.updateQuestPoints.connect((quest, tier, points) => task.defer(() => this.updateQuestPoints(quest, tier, points)))
         Events.completeQuest.connect((quest, tier) => task.defer(() => this.changeMode(this.mode)))
         Events.claimQuest.connect((quest, tier) => task.defer(() => this.changeMode(this.mode)))

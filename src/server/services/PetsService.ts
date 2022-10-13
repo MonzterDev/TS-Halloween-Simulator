@@ -6,10 +6,10 @@ import { PlayerDataService } from "./PlayerDataService";
 
 
 @Service({})
-export class PetsService implements OnInit {
+export class PetsService implements OnStart {
     private playerDataService = Dependency(PlayerDataService)
 
-    onInit () {
+    onStart () {
         Events.deletePets.connect( ( player, uuid ) => this.deletePets( player, uuid ) )
         Events.deletePet.connect( ( player, uuid ) => this.deletePet( player, uuid ) )
         Events.equipPet.connect( ( player, uuid ) => this.equipPet( player, uuid ) )

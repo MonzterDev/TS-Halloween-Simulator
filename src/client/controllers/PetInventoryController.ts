@@ -18,7 +18,7 @@ type Template = ImageButton & {
 type Warning = "Too Many Pets"
 
 @Controller({})
-export class PetInventoryController implements OnInit {
+export class PetInventoryController implements OnStart {
     private petsController = Dependency(PetsController)
     private petsFolder = ReplicatedStorage.Pets
     private player = Players.LocalPlayer
@@ -49,7 +49,7 @@ export class PetInventoryController implements OnInit {
         else this.connection.disconnect()
     })
 
-    onInit () {
+    onStart () {
         clientStore.getState().data.pet_inventory.forEach( ( props, uuid ) => this.generatePet( uuid, props ) )
 
         Events.updateGamepass.connect( ( gamepass ) => this.updateLabels() )

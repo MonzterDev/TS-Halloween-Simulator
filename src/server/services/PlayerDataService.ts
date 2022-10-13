@@ -1,4 +1,4 @@
-import { OnInit, Service } from "@flamework/core";
+import { OnStart, Service } from "@flamework/core";
 import Make from "@rbxts/make";
 import ProfileService from "@rbxts/profileservice";
 import { Profile } from "@rbxts/profileservice/globals";
@@ -14,13 +14,13 @@ const DATASTORE_NAME = "PlayerData";
 const KEY_TEMPLATE = "%d_Data";
 
 @Service()
-export class PlayerDataService implements OnInit {
+export class PlayerDataService implements OnStart {
 	private profileStore = ProfileService.GetProfileStore( DATASTORE_NAME, DEFAULT_PLAYER_DATA );
 	private profiles = new Map<Player, Profile<PlayerData>>();
 
 	public profileLoaded = new Signal<( player: Player, profile: Profile<PlayerData> ) => void>();
 
-	onInit () {
+	onStart () {
 		forEveryPlayer(
 			player => this.createProfile( player ),
 			player => this.removeProfile( player ),

@@ -8,7 +8,7 @@ import { DEFAULT_PLAYER_DATA } from "shared/constants/PlayerData";
 import { timeToString } from "shared/util/functions/timeToString";
 
 @Controller({})
-export class BoostController implements OnInit {
+export class BoostController implements OnStart {
     private player = Players.LocalPlayer
     private playerGui = <PlayerGui>this.player.WaitForChild( "PlayerGui" )
 
@@ -23,7 +23,7 @@ export class BoostController implements OnInit {
         else this.connection.disconnect()
     })
 
-    onInit () {
+    onStart () {
         clientStore.getState().data.active_boosts.forEach( ( props, boost ) => this.generateBoost( boost, props.rarity ) )
 
         Events.useBoost.connect( ( boost, rarity ) => task.defer(() => this.generateBoost( boost, rarity )) )

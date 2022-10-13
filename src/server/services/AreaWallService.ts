@@ -4,10 +4,10 @@ import { Area, AreaWallConfig } from "shared/constants/Areas";
 import { PlayerDataService } from "./PlayerDataService";
 
 @Service({})
-export class AreaWallService implements OnInit {
+export class AreaWallService implements OnStart {
     private playerDataService = Dependency(PlayerDataService)
 
-    onInit () {
+    onStart () {
         Events.unlockArea.connect((player, area) => this.requestUnlockWall(player, area))
     }
 

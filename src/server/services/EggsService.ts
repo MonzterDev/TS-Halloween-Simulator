@@ -1,4 +1,4 @@
-import { Service, OnInit, Dependency } from "@flamework/core";
+import { Service, OnStart, Dependency } from "@flamework/core";
 import { Workspace } from "@rbxts/services";
 import { Events, Functions } from "server/network";
 import { EggPetProps, EggShopConfig, EggTypes, PetTypes } from "shared/constants/Pets";
@@ -8,13 +8,13 @@ import { PetsService } from "./PetsService";
 import { PlayerDataService } from "./PlayerDataService";
 
 @Service({})
-export class EggsService implements OnInit {
+export class EggsService implements OnStart {
     private playerDataService = Dependency(PlayerDataService)
     private petsService = Dependency( PetsService )
 
     private playerCooldown = new PlayerCooldown(3)
 
-    onInit () {
+    onStart () {
         Functions.hatchEgg.setCallback( ( player, egg ) => this.hatchEgg( player, egg ) )
         Events.autoDeletePet.connect((player, egg, pet) => this.autoDeletePet(player, egg, pet))
     }

@@ -7,10 +7,10 @@ import { PlayerDataService } from "./PlayerDataService";
 
 
 @Service({})
-export class BoostsService implements OnInit {
+export class BoostsService implements OnStart {
     private playerDataService = Dependency(PlayerDataService)
 
-    onInit () {
+    onStart () {
         Events.useBoost.connect( ( player, boost, rarity ) => this.useBoost( player, boost, rarity ) )
         task.spawn(() => this.updateBoosts())
     }
