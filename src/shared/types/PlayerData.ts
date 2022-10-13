@@ -13,6 +13,7 @@ export interface PlayerData {
 	pet_inventory: PetInventory
 	pet_index: PetIndexData
 	pet_auto_delete: PetAutoDeleteData
+	pet_egg_pity: PetEggPityData
 	active_boosts: ActiveBoosts
 	boost_inventory: BoostInventory
 	gamepasses: Gamepasses
@@ -74,3 +75,4 @@ export type PetAutoDeleteData = Map<EggTypes, Map<Partial<PetTypes>, boolean>>
 export type CodeData = Map<Code, boolean>
 
 export type PetIndexData = Map<EggTypes, Map<PetTypes, boolean>>
+export type PetEggPityData = Map<EggTypes, number>

@@ -54,7 +54,19 @@ export class EggsService implements OnStart {
 
             profile.adjustMoney( -eggConfig.price )
 
-            const pet = this.choosePet( eggConfig.pets )
+            const pity = profile.data.pet_egg_pity.get( egg )
+
+            let pet = this.choosePet( eggConfig.pets )
+
+            if ( pity! >= 100 ) {
+                pet = this.chooseRarestPet( eggConfig.pets )
+                profile.data.pet_egg_pity.set( egg, 0 )
+                Events.resetEggPity.fire(player, egg)
+            }
+
+            profile.data.pet_egg_pity.set( egg, profile.data.pet_egg_pity.get( egg )! + 1 )
+            Events.increaseEggPity.fire(player, egg)
+
             pets.push(pet!)
             const rarity = eggConfig.pets[pet!]?.rarity
 
@@ -75,6 +87,19 @@ export class EggsService implements OnStart {
             counter += props.chance
             if (chance <= counter) return pet
         }
+    }
+
+    private chooseRarestPet ( pets: EggPetProps ) {
+        let rarestPet
+        let chance = 100
+        for ( const [pet, props] of pairs( pets ) ) {
+            if (props.chance < chance) {
+                rarestPet = pet
+                chance = props.chance
+            }
+        }
+
+        return rarestPet
     }
 
     private autoDeletePet (player: Player, egg: EggTypes, pet: PetTypes) {

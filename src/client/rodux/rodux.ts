@@ -52,4 +52,7 @@ Events.resetGifts.connect( () => clientStore.dispatch( { type: "resetGifts" } ) 
 Events.redeemCode.connect( ( code ) => clientStore.dispatch( { type: "updateCode", code: code } ) )
 
 Events.claimGroupChest.connect( () => clientStore.dispatch( { type: "updateGroupChest", claimed: true } ) )
-Events.resetGroupChest.connect( (time) => clientStore.dispatch( { type: "updateGroupChest", reset_time: time } ) )
+Events.resetGroupChest.connect( ( time ) => clientStore.dispatch( { type: "updateGroupChest", reset_time: time } ) )
+
+Events.resetEggPity.connect( (egg) => clientStore.dispatch( { type: "resetEggPity", egg: egg } ) )
+Events.increaseEggPity.connect( (egg) => clientStore.dispatch( { type: "increaseEggPity", egg: egg } ) )

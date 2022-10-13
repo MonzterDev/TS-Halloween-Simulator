@@ -1,9 +1,9 @@
 import { isA } from "shared/util/functions/isA";
-import { AreasUnlocked, CodeData, GiftData, PetAutoDeleteData, PetIndexData, PlayerData, QuestData } from "../types/PlayerData";
+import { AreasUnlocked, CodeData, GiftData, PetAutoDeleteData, PetEggPityData, PetIndexData, PlayerData, QuestData } from "../types/PlayerData";
 import { BoostInventory, Boosts } from "./Boosts";
 import { CodesConfig } from "./Codes";
 import { GiftConfig } from "./Gifts";
-import { EggShopConfig, PetTypes, Rarities } from "./Pets";
+import { EggShopConfig, EggTypes, PetTypes, Rarities } from "./Pets";
 import { QuestConfig } from "./Quests";
 
 const DEFAULT_BOOSTS: BoostInventory = new Map()
@@ -51,6 +51,9 @@ for ( const [egg, eggProps] of pairs( EggShopConfig ) ) {
     for ( const [pet, petProps] of pairs( eggProps.pets ) ) DEFAULT_PET_INDEX_DATA.get(egg)?.set( pet, false )
 }
 
+export const DEFAULT_PET_EGG_PITY_DATA: PetEggPityData = new Map()
+EggTypes.forEach((egg) => DEFAULT_PET_EGG_PITY_DATA.set(egg, 98))
+
 export const DEFAULT_PLAYER_DATA: PlayerData = {
     candy: 0,
     candy_corn: 0,
@@ -69,6 +72,7 @@ export const DEFAULT_PLAYER_DATA: PlayerData = {
     ),
     pet_auto_delete: DEFAULT_PET_AUTO_DELETE_DATA,
     pet_index: DEFAULT_PET_INDEX_DATA,
+    pet_egg_pity: DEFAULT_PET_EGG_PITY_DATA,
     active_boosts: new Map(
         // [
         //     ["Luck", {rarity: "Common", duration: 10}],

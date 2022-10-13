@@ -92,9 +92,8 @@ interface StarterGui extends BasePlayerGui {
 			Background: Frame & {
 				Frame: Frame & {
 					Pity: ImageLabel & {
-						BarFiller: ImageLabel;
-						BarEmpty: ImageLabel;
 						Title: TextLabel;
+						Bar: ImageLabel;
 					};
 					Title: TextLabel;
 					Container: Frame & {

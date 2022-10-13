@@ -28,7 +28,28 @@ export class PetEggController implements OnStart {
 
     onStart () {
         this.generateEgg( "Starter" )
-        Events.autoDeletePet.connect((egg, pet) => task.defer(() => this.autoDeletePet(egg, pet)))
+        Events.autoDeletePet.connect( ( egg, pet ) => task.defer( () => this.autoDeletePet( egg, pet ) ) )
+        Events.resetEggPity.connect( ( egg ) => this.resetPity( egg ) )
+        Events.increaseEggPity.connect((egg) => task.defer(() => this.increaseEggPity(egg)))
+    }
+
+    private increaseEggPity ( egg: EggTypes ) {
+        const infoGui = <typeof this.infoGui>this.folder.FindFirstChild( egg )?.FindFirstChild( "InfoGui" )
+        if ( !infoGui ) return
+
+        const pity = clientStore.getState().data.pet_egg_pity.get( egg )!
+        print(pity)
+
+        infoGui.Background.Frame.Pity.Bar.Size = UDim2.fromScale( pity / 100, 1 )
+        infoGui.Background.Frame.Pity.Title.Text = `Exotic Pity ${pity}/100`
+    }
+
+    private resetPity ( egg: EggTypes ) {
+        const infoGui = <typeof this.infoGui>this.folder.FindFirstChild( egg )?.FindFirstChild( "InfoGui" )
+        if ( !infoGui ) return
+
+        infoGui.Background.Frame.Pity.Bar.Size = UDim2.fromScale( 0, 1 )
+        infoGui.Background.Frame.Pity.Title.Text = `Exotic Pity 0/100`
     }
 
     private autoDeletePet (egg: EggTypes, pet: PetTypes) {
@@ -55,6 +76,8 @@ export class PetEggController implements OnStart {
     }
 
     private generateEgg ( egg: EggTypes ) {
+        const pity = clientStore.getState().data.pet_egg_pity.get( egg )!
+
         const folder = Make( "Folder", {
             Name: egg,
             Parent: this.folder
@@ -65,6 +88,8 @@ export class PetEggController implements OnStart {
         infoClone.Parent = folder
         infoClone.Adornee = eggModel.Info
         infoClone.Background.Frame.Title.Text = `${egg.upper()} EGG`
+        infoClone.Background.Frame.Pity.Title.Text = `Exotic Pity ${pity}/100`
+        infoClone.Background.Frame.Pity.Bar.Size = UDim2.fromScale( pity / 100, 1 )
         this.populatePets( infoClone.Background.Frame.Container, egg )
 
         const interactClone = this.interact.Clone()

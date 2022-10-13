@@ -106,8 +106,15 @@ interface UpdateGroupChestAction extends Action<"updateGroupChest"> {
     reset_time?: number
 }
 
+interface IncreaseEggPityAction extends Action<"increaseEggPity"> {
+    egg: EggTypes
+}
+interface ResetEggPityAction extends Action<"resetEggPity"> {
+    egg: EggTypes
+}
+
 export type DataState = PlayerData;
-export type DataActions = UpdateDataAction | UpdateCurrencyAction | UpdateUpgradeAction | AddPetAction | RemovePetAction | UpdatePetAction | UpdateSettingAction | UpdateGamepassAction | AddBoostAction | RemoveBoostAction | UseBoostAction | UpdateBoostAction | EndBoostAction | UnlockAreaAction |UpdateQuestPointsAction | CompleteQuestAction | ClaimQuestAction | UpdateGiftPlayDurationAction | UpdateGiftResetTimeAction | ResetGiftsAction | ClaimGiftAction | UpdateAutoDeletePetAction | UpdateCodeAction | IndexPetAction | UpdateGroupChestAction;
+export type DataActions = UpdateDataAction | UpdateCurrencyAction | UpdateUpgradeAction | AddPetAction | RemovePetAction | UpdatePetAction | UpdateSettingAction | UpdateGamepassAction | AddBoostAction | RemoveBoostAction | UseBoostAction | UpdateBoostAction | EndBoostAction | UnlockAreaAction |UpdateQuestPointsAction | CompleteQuestAction | ClaimQuestAction | UpdateGiftPlayDurationAction | UpdateGiftResetTimeAction | ResetGiftsAction | ClaimGiftAction | UpdateAutoDeletePetAction | UpdateCodeAction | IndexPetAction | UpdateGroupChestAction | IncreaseEggPityAction | ResetEggPityAction;
 
 export const dataReducer = createReducer<DataState, DataActions>(DEFAULT_PLAYER_DATA, {
     updatePlayerData: ( state, action ) => action.data,
@@ -210,6 +217,14 @@ export const dataReducer = createReducer<DataState, DataActions>(DEFAULT_PLAYER_
     updateGroupChest: ( state, action ) => {
         if (action.claimed) state.group_chest.claimed = action.claimed
         if (action.reset_time) state.group_chest.reset_time = action.reset_time
+        return state
+    },
+    increaseEggPity: ( state, action ) => {
+        state.pet_egg_pity.set(action.egg, state.pet_egg_pity.get(action.egg)! + 1)
+        return state
+    },
+    resetEggPity: ( state, action ) => {
+        state.pet_egg_pity.set(action.egg, 0)
         return state
     },
 } );

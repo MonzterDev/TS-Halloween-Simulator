@@ -77,7 +77,10 @@ interface ClientEvents {
     redeemCode: ( code: Code ) => void
 
     claimGroupChest: ( ) => void
-    resetGroupChest: (time: number ) => void
+    resetGroupChest: ( time: number ) => void
+
+    resetEggPity: (egg: EggTypes ) => void
+    increaseEggPity: (egg: EggTypes ) => void
 }
 
 
