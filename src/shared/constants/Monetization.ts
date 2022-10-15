@@ -1,9 +1,19 @@
-import { Dependency } from "@flamework/core"
 import { Gamepasses, PlayerData } from "shared/types/PlayerData"
 
-export const GAMEPASSES = ["Equip More Pets", "Equip More Pets2", "Remove Hatch Cooldown"] as const
+export const GAMEPASSES = [
+    "2x Money", "2x Candy",
+    "Equip 2 More Pets", "Equip 5 More Pets",
+    "100 Pet Storage", "500 Pet Storage",
+    "Remove Hatch Cooldown", "Tripple Hatch", "Lucky Eggs"
+
+] as const
 export type Gamepass = typeof GAMEPASSES[number]
-export const GAMEPASS_IDS = ["88116412", "88116438", "88116485"] as const
+export const GAMEPASS_IDS = [
+    "94737491", "94737363",
+    "88116412", "88116438",
+    "94738610", "94738652",
+    "88116485", "94738209", "94738011"
+] as const
 export type GamepassID = typeof GAMEPASS_IDS[number]
 
 export interface GamepassConfigProps {
@@ -13,20 +23,53 @@ export interface GamepassConfigProps {
 }
 
 export const GAMEPASS_CONFIG: Record<GamepassID, GamepassConfigProps> = {
+    94737491: {
+        displayName: "2x Money",
+        imageId: "rbxassetid://129474314",
+        description: "Earn 2x more Money when Selling!",
+    },
+    94737363: {
+        displayName: "2x Candy",
+        imageId: "rbxassetid://129474314",
+        description: "Earn 2x more Candy when Selling!",
+    },
+
     88116412: {
-        displayName: "Equip More Pets",
+        displayName: "Equip 2 More Pets",
         imageId: "rbxassetid://129474314",
         description: "Equip +1 more pet!",
     },
     88116438: {
-        displayName: "Equip More Pets2",
+        displayName: "Equip 5 More Pets",
         imageId: "rbxassetid://129474314",
         description: "Equip +2 more pets!",
     },
+
+    94738610: {
+        displayName: "100 Pet Storage",
+        imageId: "rbxassetid://129474314",
+        description: "Store an additional 100 Pets!",
+    },
+    94738652: {
+        displayName: "500 Pet Storage",
+        imageId: "rbxassetid://129474314",
+        description: "Store an additional 500 Pets!",
+    },
+
     88116485: {
         displayName: "Remove Hatch Cooldown",
         imageId: "rbxassetid://129474314",
-        description: "Hatch eggs much faster!",
+        description: "Hatch eggs quicker!",
+    },
+    94738209: {
+        displayName: "Tripple Hatch",
+        imageId: "rbxassetid://129474314",
+        description: "Hatch 3 Eggs at once!",
+    },
+    94738011: {
+        displayName: "Lucky Eggs",
+        imageId: "rbxassetid://129474314",
+        description: "Improved odds of finding rare pets!",
     },
 }
 
@@ -44,10 +87,19 @@ export function getGamepassAsProp ( gamepass: Gamepass ) {
     return <keyof Gamepasses> gamepass.gsub(" ", "_")[0].lower()
 }
 
-export const COIN_PRODUCTS = ["Coins", "More Coins", "Many Coins", "Lots Coins", "TONS Coins"]
-export const DEV_PRODUCTS = [ "Luck", ...COIN_PRODUCTS] as const
+export const COIN_PRODUCTS = [
+    "More Coins", "Many Coins", "Lots Coins", "TONS Coins"
+]
+export const DEV_PRODUCTS = [
+    "Luck Booster", "Power Booster",
+    ...COIN_PRODUCTS
+] as const
 export type DevProduct = typeof DEV_PRODUCTS[number]
-export const DEV_PRODUCT_IDS = ["1317443894", "1", "1325865355", "1325865356", "1325865357", "1325865358", "999"] as const
+export const DEV_PRODUCT_IDS = [
+    "1325865359", "1325882600",
+    "1317443894", "1325865355", "1325865356", "1325865357", "1325865358",
+
+] as const
 export type DevProductID = typeof DEV_PRODUCT_IDS[number]
 
 export interface DevProductConfigProps {
@@ -58,12 +110,22 @@ export interface DevProductConfigProps {
 }
 
 export const DEV_PRODUCT_CONFIG: Partial<Record<DevProductID, DevProductConfigProps>> = {
+    1325865359: {
+        displayName: "Luck Booster",
+        imageId: "rbxassetid://129474314",
+        type: "Boost"
+    },
+    1325882600: {
+        displayName: "Power Booster",
+        imageId: "rbxassetid://129474314",
+        type: "Boost"
+    },
+
     1317443894: {
         displayName: "Coins",
         imageId: "rbxassetid://129474314",
         type: "Currency"
     },
-
     1325865355: {
         displayName: "More Coins",
         imageId: "rbxassetid://129474314",
@@ -83,12 +145,6 @@ export const DEV_PRODUCT_CONFIG: Partial<Record<DevProductID, DevProductConfigPr
         displayName: "TONS Coins",
         imageId: "rbxassetid://129474314",
         type: "Currency"
-    },
-
-    999: {
-        displayName: "Luck",
-        imageId: "rbxassetid://129474314",
-        type: "Boost"
     },
 }
 

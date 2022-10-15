@@ -185,19 +185,4 @@ export class PetsController implements OnStart {
         } )
         return pets
     }
-
-    public getMaxPetStorage () {
-        let total = DEFAULT_MAX_PET_STORAGE_AMOUNT
-        // if (clientStore.getState().data.gamepasses.equip_more_pets) total += 2
-        // if ( clientStore.getState().data.gamepasses.equip_more_pets2 ) total += 5
-        return total
-    }
-
-    public getMaxPetEquipped () {
-        let total = DEFAULT_MAX_PET_EQUIPPED_AMOUNT
-        if (clientStore.getState().data.gamepasses.equip_more_pets) total += 2
-        if ( clientStore.getState().data.gamepasses.equip_more_pets2 ) total += 5
-        return total
-    }
-
 }

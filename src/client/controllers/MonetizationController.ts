@@ -4,7 +4,7 @@ import { MarketplaceService, Players } from "@rbxts/services";
 import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
 import { openGui } from "client/utils/openGui";
-import { calculateCoinReward, DevProduct, DEV_PRODUCTS, DEV_PRODUCT_CONFIG, Gamepass, GAMEPASS_CONFIG, getGamepassIDFromGamepass } from "shared/constants/Monetization";
+import { calculateCoinReward, DevProduct, DEV_PRODUCTS, DEV_PRODUCT_CONFIG, Gamepass, GAMEPASSES, GAMEPASS_CONFIG, getGamepassIDFromGamepass } from "shared/constants/Monetization";
 import { BasketUpgradeController } from "./BasketUpgradeController";
 
 type Mode = "Passes" | "Currency" | "Boosts"
@@ -62,6 +62,7 @@ export class MonetizationController implements OnStart {
             template.Name = passId
             template.Parent = this.gamepasses
             template.Visible = true
+            template.LayoutOrder = GAMEPASSES.indexOf(passProps.displayName)
 
             const price = MarketplaceService.GetProductInfo( tonumber( passId )!, Enum.InfoType.GamePass ).PriceInRobux
 
@@ -81,6 +82,7 @@ export class MonetizationController implements OnStart {
             template.Name = productId
             template.Parent = this.boosts
             template.Visible = true
+            template.LayoutOrder = DEV_PRODUCTS.indexOf(passProps.displayName)
 
             const price = MarketplaceService.GetProductInfo( tonumber( productId )!, Enum.InfoType.Product ).PriceInRobux
 

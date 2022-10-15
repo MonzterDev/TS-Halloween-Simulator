@@ -3,6 +3,7 @@ import { BoostsService } from "server/services/BoostsService";
 import { PlayerDataService } from "server/services/PlayerDataService";
 import { Boost, BOOSTS } from "shared/constants/Boosts";
 import { BoosterQuestRewardProps, Reward, Reward2 } from "shared/constants/Quests";
+import { getCandyMultipler, getMoneyMultipler } from "./Stats";
 
 
 export function rewardMoney ( player: Player, amount: number, useMultiplier: boolean ) {
@@ -10,7 +11,23 @@ export function rewardMoney ( player: Player, amount: number, useMultiplier: boo
     const profile = playerDataService.getProfile( player )
     if ( !profile ) return
 
+    const multiplier = getMoneyMultipler(player)
+
+    if (useMultiplier) amount *= multiplier
+
     profile.adjustMoney(amount)
+}
+
+export function rewardCandy ( player: Player, amount: number, useMultiplier: boolean ) {
+    const playerDataService = Dependency(PlayerDataService)
+    const profile = playerDataService.getProfile( player )
+    if ( !profile ) return
+
+    const multiplier = getCandyMultipler(player)
+
+    if (useMultiplier) amount *= multiplier
+
+    profile.adjustCandy(amount)
 }
 
 export function reward ( player: Player, rewards: Partial<Reward> | Partial<Reward2> ) {

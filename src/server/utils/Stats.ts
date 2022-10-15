@@ -76,3 +76,27 @@ export function getLuckStat ( player: Player ): number {
 
     return amount
 }
+
+export function getMoneyMultipler ( player: Player ): number {
+    const playerDataService = Dependency( PlayerDataService )
+
+    let amount = 1
+    const profile = playerDataService.getProfile( player )
+    if ( !profile ) return amount
+
+    if (profile.data.gamepasses.get("2x Money")) amount += 1
+
+    return amount
+}
+
+export function getCandyMultipler ( player: Player ): number {
+    const playerDataService = Dependency( PlayerDataService )
+
+    let amount = 1
+    const profile = playerDataService.getProfile( player )
+    if ( !profile ) return amount
+
+    if (profile.data.gamepasses.get("2x Candy")) amount += 1
+
+    return amount
+}

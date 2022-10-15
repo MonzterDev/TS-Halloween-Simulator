@@ -2,6 +2,7 @@ import { Area } from "shared/constants/Areas";
 import { ActiveBoosts, BoostInventory } from "shared/constants/Boosts";
 import { Code } from "shared/constants/Codes";
 import { GiftTime } from "shared/constants/Gifts";
+import { Gamepass } from "shared/constants/Monetization";
 import { Egg, EGGS, Pet, PetInventory, PETS } from "shared/constants/Pets";
 import { Quest } from "shared/constants/Quests";
 
@@ -16,7 +17,7 @@ export interface PlayerData {
 	pet_egg_pity: PetEggPityData
 	active_boosts: ActiveBoosts
 	boost_inventory: BoostInventory
-	gamepasses: Gamepasses
+	gamepasses: GamepassesData
 	settings: Settings
 	analytics: Analytics
 	areas_unlocked: AreasUnlocked
@@ -44,7 +45,7 @@ export interface Gamepasses {
 	equip_more_pets: boolean
 	equip_more_pets2: boolean
 	remove_hatch_cooldown: boolean
-	tripple_hatch: boolean,
+	tripple_hatch: boolean
 }
 
 export interface Settings {
@@ -52,6 +53,7 @@ export interface Settings {
 	hide_others_pets: boolean
 	hide_currency_popup: boolean
 	tripple_hatch: boolean
+	skip_hatch_animation: boolean
 }
 
 export interface Analytics {
@@ -76,3 +78,5 @@ export type CodeData = Map<Code, boolean>
 
 export type PetIndexData = Map<Egg, Map<Pet, boolean>>
 export type PetEggPityData = Map<Egg, number>
+
+export type GamepassesData = Map<Gamepass, boolean>

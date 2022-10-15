@@ -5,7 +5,7 @@ import { Debris, Lighting, Players, ReplicatedStorage, RunService, Workspace } f
 import { CleanViewport, GenerateViewport } from "@rbxts/viewport-model";
 import { Events, Functions } from "client/network";
 import { clientStore } from "client/rodux/rodux";
-import { EGG_SHOP_CONFIG, EGGS, PETS, Pet, Egg } from "shared/constants/Pets";
+import { EGG_SHOP_CONFIG, EGGS, PETS, Pet, Egg, getMaxPetsStored } from "shared/constants/Pets";
 import { cleanString } from "shared/util/functions/cleanString";
 
 type PetTemplate = StarterGui["PetEgg"]["InfoGui"]["Background"]["Frame"]["Container"]["Template"]
@@ -25,6 +25,8 @@ export class PetEggController implements OnStart {
     private interact = this.folder.InteractGui
 
     private animation = this.folder.Animation
+
+    private isAutoHatching = false
 
     onStart () {
         this.generateEgg( "Starter" )
@@ -106,7 +108,8 @@ export class PetEggController implements OnStart {
     }
 
     private autoHatch ( egg: Egg ) {
-        while ( true ) {
+        this.isAutoHatching = true
+        while ( this.isAutoHatching ) {
             this.hatch(egg)
             task.wait(1)
         }
@@ -114,18 +117,34 @@ export class PetEggController implements OnStart {
 
     private hatch ( egg: Egg ) {
         const eggModel = <Workspace["Eggs"]["Starter"]>this.eggs.FindFirstChild(egg)
-        const price = EGG_SHOP_CONFIG[egg].price
 
+        const isTrippleHatch = clientStore.getState().data.gamepasses.get( "Tripple Hatch" ) && clientStore.getState().data.settings.tripple_hatch
+        const amountOfHatches = isTrippleHatch ? 3 : 1
+
+        const price = EGG_SHOP_CONFIG[egg].price * amountOfHatches
         const money = clientStore.getState().data.money
         const canAfford = money > price
-        if ( !canAfford ) return
+        if ( !canAfford ) {
+            print( "Cannot afford" ) // TODO Make GUI Notification
+            this.isAutoHatching = false
+            return
+        }
+
+        const storedPets = clientStore.getState().data.pet_inventory.size()
+        let maxStorage = getMaxPetsStored(clientStore.getState().data)
+        const hasStorage = storedPets + amountOfHatches <= maxStorage
+        if ( !hasStorage ) {
+            print( "No storage" ) // TODO Make GUI Notification
+            this.isAutoHatching = false
+            return
+        }
 
         const character = this.player.Character
         const humanoidRootPart = <BasePart>character?.FindFirstChild( "HumanoidRootPart" )
         if ( !character || !humanoidRootPart ) return
 
         const distanceBetween = ( humanoidRootPart.Position.sub( eggModel.Position ) ).Magnitude
-        if ( distanceBetween > MAX_DISTANCE_FROM_EGG ) return
+        if ( distanceBetween >= MAX_DISTANCE_FROM_EGG ) return
 
         Functions.hatchEgg( egg ).andThen( ( pets ) => {
             if ( !pets ) return
@@ -142,7 +161,9 @@ export class PetEggController implements OnStart {
             gui.Enabled = false
         } )
 
-        task.delay( 3, () => {
+        const skipAnimation = clientStore.getState().data.settings.skip_hatch_animation
+
+        task.delay( skipAnimation ? 1 : 3 , () => {
             enabledGuis.forEach( ( gui ) => gui.Enabled = true )
             Lighting.Blur.Enabled = false
         } )
@@ -158,6 +179,18 @@ export class PetEggController implements OnStart {
         template.Pet.Text = cleanString(pet)
         template.Parent = this.animation.Frame
         template.Visible = true
+
+        const skipAnimation = clientStore.getState().data.settings.skip_hatch_animation
+        if ( skipAnimation ) {
+            CleanViewport( template )
+            template.Pet.Visible = true
+            GenerateViewport( template, petModel, CFrame.Angles( 0, math.rad( -90 ), 0 ) )
+            template.Delete.Visible = clientStore.getState().data.pet_auto_delete.get(egg)?.get(pet)!
+            task.wait(1)
+            template.Destroy()
+            return
+        }
+
         GenerateViewport( template, eggModel )
 
         const tween = BoatTween.Create( eggModel.PrimaryPart!, {

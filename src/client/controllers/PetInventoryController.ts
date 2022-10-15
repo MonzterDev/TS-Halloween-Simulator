@@ -3,7 +3,7 @@ import { Players, ReplicatedStorage } from "@rbxts/services";
 import { CleanViewport, GenerateViewport } from "@rbxts/viewport-model";
 import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
-import { PET_CONFIG, PetInstanceProps, UUID } from "shared/constants/Pets";
+import { PET_CONFIG, PetInstanceProps, UUID, getMaxPetsEquipped, getMaxPetsStored } from "shared/constants/Pets";
 import { DEFAULT_PLAYER_DATA } from "shared/constants/PlayerData";
 import { PetsController } from "./PetsController";
 
@@ -81,9 +81,9 @@ export class PetInventoryController implements OnStart {
     private updateLabels () {
         task.spawn( () => {
             task.wait(.1)
-            const maxStored = this.petsController.getMaxPetStorage()
+            const maxStored = getMaxPetsStored(clientStore.getState().data)
             const currentStored = clientStore.getState().data.pet_inventory.size()
-            const maxEquipped = this.petsController.getMaxPetEquipped()
+            const maxEquipped = getMaxPetsEquipped(clientStore.getState().data)
             const currentEquipped = this.petsController.getEquippedPets().size()
             this.stored.Text = `${currentStored}/${maxStored} Stored`
             this.equipped.Text = `${currentEquipped}/${maxEquipped} Equipped`
@@ -202,7 +202,7 @@ export class PetInventoryController implements OnStart {
 
     private equipButton () {
         const equipped = this.getPetPropsFromUUID( this.selectedPet! )?.equipped
-        if ( !equipped && this.petsController.getEquippedPets().size() === this.petsController.getMaxPetEquipped() ) {
+        if ( !equipped && this.petsController.getEquippedPets().size() === getMaxPetsEquipped(clientStore.getState().data) ) {
             this.warn("Too Many Pets")
             return
         }

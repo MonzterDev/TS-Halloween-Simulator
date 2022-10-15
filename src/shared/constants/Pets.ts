@@ -1,3 +1,5 @@
+import { PlayerData } from "shared/types/PlayerData"
+
 export const DEFAULT_MAX_PET_STORAGE_AMOUNT = 50
 export const DEFAULT_MAX_PET_EQUIPPED_AMOUNT = 3
 
@@ -65,4 +67,18 @@ export const PET_CONFIG: Record<Pet, PetProps> = {
         Uncommon: 3,
         Rare: 4,
     },
+}
+
+export function getMaxPetsEquipped (data: PlayerData) {
+    let total = DEFAULT_MAX_PET_EQUIPPED_AMOUNT
+    if (data.gamepasses.get("Equip 2 More Pets")) total += 2
+    if ( data.gamepasses.get("Equip 5 More Pets") ) total += 5
+    return total
+}
+
+export function getMaxPetsStored (data: PlayerData) {
+    let total = DEFAULT_MAX_PET_STORAGE_AMOUNT
+    if (data.gamepasses.get("100 Pet Storage")) total += 100
+    if ( data.gamepasses.get("500 Pet Storage") ) total += 500
+    return total
 }

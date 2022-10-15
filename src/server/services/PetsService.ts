@@ -2,7 +2,7 @@ import { Service, OnStart, OnInit, Dependency } from "@flamework/core";
 import { Profile } from "@rbxts/profileservice/globals";
 import { HttpService, Players } from "@rbxts/services";
 import { Events, Functions } from "server/network";
-import { DEFAULT_MAX_PET_EQUIPPED_AMOUNT, DEFAULT_MAX_PET_STORAGE_AMOUNT, EGGS, PET_CONFIG, PetInstanceProps, PETS, RARITIES, UUID, Pet, Rarity } from "shared/constants/Pets";
+import { DEFAULT_MAX_PET_EQUIPPED_AMOUNT, DEFAULT_MAX_PET_STORAGE_AMOUNT, EGGS, PET_CONFIG, PetInstanceProps, PETS, RARITIES, UUID, Pet, Rarity, getMaxPetsEquipped } from "shared/constants/Pets";
 import { PlayerData } from "shared/types/PlayerData";
 import { PlayerDataService } from "./PlayerDataService";
 
@@ -35,7 +35,7 @@ export class PetsService implements OnStart {
             return a.power > b.power
         } )
 
-        const maxEquipped = this.getMaxPetEquipped(player)
+        const maxEquipped = getMaxPetsEquipped(profile.data)
         const topPets: { uuid: string, power: number }[] = []
         for ( let x = 0; x < maxEquipped; x++ ) topPets.insert(x, allPets[x])
 
@@ -105,7 +105,7 @@ export class PetsService implements OnStart {
         if ( !profile ) return
         const pet = profile.data.pet_inventory.get( uuid )
         if ( !pet || pet.equipped ) return
-        if (this.getEquippedPets(player).size() === this.getMaxPetEquipped(player)) return
+        if (this.getEquippedPets(player).size() === getMaxPetsEquipped(profile.data)) return
 
         pet.equipped = true
         Events.equipPet.fire(this.getPlayersToNotify(player), player, uuid, pet.type)
@@ -193,15 +193,4 @@ export class PetsService implements OnStart {
         // if ( profile.data.gamepasses.equip_more_pets2 ) total += 5
         return total
     }
-
-    public getMaxPetEquipped ( player: Player ) {
-        const profile = this.playerDataService.getProfile( player )
-        if ( !profile ) return DEFAULT_MAX_PET_EQUIPPED_AMOUNT
-
-        let total = DEFAULT_MAX_PET_EQUIPPED_AMOUNT
-        if ( profile.data.gamepasses.equip_more_pets ) total += 2
-        if ( profile.data.gamepasses.equip_more_pets2 ) total += 5
-        return total
-    }
-
 }

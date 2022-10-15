@@ -1,12 +1,15 @@
 import { Service, OnStart, OnInit, Dependency } from "@flamework/core";
 import { Debris, MarketplaceService, Players } from "@rbxts/services";
 import { Events } from "server/network";
+import { Boost, BOOSTS } from "shared/constants/Boosts";
 import { calculateCoinReward, COIN_PRODUCTS, DevProduct, DevProductID, Gamepass, GamepassID, getDevProductFromID, getDevProductIDFromDevProduct, getGamepassAsProp, getGamepassFromID } from "shared/constants/Monetization";
+import { BoostsService } from "./BoostsService";
 import { PlayerDataService } from "./PlayerDataService";
 
 @Service({})
 export class MonetizationService implements OnStart {
     private playerDataService = Dependency(PlayerDataService)
+    private boostsService = Dependency(BoostsService)
 
     onStart() {
         MarketplaceService.ProcessReceipt = ( receiptInfo ) => this.purchaseProduct( receiptInfo )
@@ -24,17 +27,9 @@ export class MonetizationService implements OnStart {
         if ( !profile ) return
 
         profile.data.analytics.gamepasses_purchased += 1
-        profile.data.gamepasses[getGamepassAsProp( product )] = true
+        profile.data.gamepasses.set(product, true)
         Events.purchaseSuccess.fire(player, product)
         Events.updateGamepass.fire(player, product)
-        switch (product) {
-            // case "Equip More Pets":
-            //     profile.data.pet_info.max_equipped += 2
-            //     break
-            // case "Equip More Pets2":
-            //     profile.data.pet_info.max_equipped += 5
-            //     break
-        }
     }
 
 
@@ -47,10 +42,10 @@ export class MonetizationService implements OnStart {
         const productId = <DevProductID>tostring( receiptInfo.ProductId )
 
         const product = getDevProductFromID( productId )?.displayName
-        return this.handleReward( player,  product!)
+        return this.productReward( player,  product!)
     }
 
-    private handleReward ( player: Player, product: DevProduct ) {
+    private productReward ( player: Player, product: DevProduct ) {
         const profile = this.playerDataService.getProfile( player )
         if ( !profile ) return Enum.ProductPurchaseDecision.NotProcessedYet
 
@@ -59,6 +54,9 @@ export class MonetizationService implements OnStart {
         if ( COIN_PRODUCTS.includes(product) ) {
             const amount = calculateCoinReward( product, profile.data )
             profile.adjustMoney( amount )
+            return Enum.ProductPurchaseDecision.PurchaseGranted
+        } else if ( BOOSTS.includes( <Boost>product.gsub(" Booster", "")[0] ) ) {
+            this.boostsService.rewardBoost( player, <Boost>product.gsub(" Booster", "")[0], "Rare" )
             return Enum.ProductPurchaseDecision.PurchaseGranted
         }
 

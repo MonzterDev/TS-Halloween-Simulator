@@ -146,7 +146,7 @@ export const dataReducer = createReducer<DataState, DataActions>(DEFAULT_PLAYER_
         return state
     },
     updateGamepass: ( state, action ) => {
-        state.gamepasses[<keyof Gamepasses>getGamepassAsProp(action.gamepass)] = true
+        state.gamepasses.set(action.gamepass, true)
         return state
     },
     addBoost: ( state, action ) => {

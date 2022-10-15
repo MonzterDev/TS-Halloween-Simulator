@@ -1,11 +1,13 @@
 import { Service, OnStart, Dependency } from "@flamework/core";
 import { Workspace } from "@rbxts/services";
 import { Events, Functions } from "server/network";
-import { EggPetProps, EGG_SHOP_CONFIG, EGGS, PETS, Pet, Egg } from "shared/constants/Pets";
+import { EggPetProps, EGG_SHOP_CONFIG, Pet, Egg, getMaxPetsStored } from "shared/constants/Pets";
 import { HatchEggResponse } from "shared/network";
 import { PlayerCooldown } from "shared/util/classes/PlayerCooldown";
 import { PetsService } from "./PetsService";
 import { PlayerDataService } from "./PlayerDataService";
+
+// TODO: Implement Lucky Eggs
 
 @Service({})
 export class EggsService implements OnStart {
@@ -23,14 +25,15 @@ export class EggsService implements OnStart {
         const profile = this.playerDataService.getProfile( player )
         if ( !profile ) return
 
-        const hasRemoveHatchCooldownGamepass = profile.data.gamepasses.remove_hatch_cooldown
+        const hasRemoveHatchCooldownGamepass = profile.data.gamepasses.get( "Remove Hatch Cooldown" )
         if ( !this.playerCooldown.cooldownIsFinished( player ) && !hasRemoveHatchCooldownGamepass ) return
+
 
         let amountOfHatches = 1
 
         const eggConfig = EGG_SHOP_CONFIG[egg]
 
-        const hasTrippleHatchGamepass = profile.data.gamepasses.tripple_hatch
+        const hasTrippleHatchGamepass = profile.data.gamepasses.get("Tripple Hatch")
         const hasTrippleHatchEnabled = profile.data.settings.tripple_hatch
 
         const money = profile.data.money
@@ -39,6 +42,11 @@ export class EggsService implements OnStart {
         if ( hasTrippleHatchGamepass && hasTrippleHatchEnabled ) {
             if ( money >= price * 3 ) amountOfHatches = 3
         }
+
+        const storedPets = profile.data.pet_inventory.size()
+        let maxStorage = getMaxPetsStored(profile.data)
+        const hasStorage = storedPets + amountOfHatches <= maxStorage
+        if (!hasStorage) return
 
         this.playerCooldown.giveCooldown( player )
 

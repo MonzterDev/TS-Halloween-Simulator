@@ -1,8 +1,9 @@
 import { isA } from "shared/util/functions/isA";
-import { AreasUnlocked, CodeData, GiftData, PetAutoDeleteData, PetEggPityData, PetIndexData, PlayerData, QuestData } from "../types/PlayerData";
+import { AreasUnlocked, CodeData, GamepassesData, GiftData, PetAutoDeleteData, PetEggPityData, PetIndexData, PlayerData, QuestData } from "../types/PlayerData";
 import { BoostInventory, BOOSTS } from "./Boosts";
 import { CODES_CONFIG } from "./Codes";
 import { GIFT_CONFIG } from "./Gifts";
+import { GAMEPASSES } from "./Monetization";
 import { EGG_SHOP_CONFIG, EGGS, PETS, RARITIES, Rarity } from "./Pets";
 import { QUEST_CONFIG } from "./Quests";
 
@@ -54,6 +55,10 @@ for ( const [egg, eggProps] of pairs( EGG_SHOP_CONFIG ) ) {
 export const DEFAULT_PET_EGG_PITY_DATA: PetEggPityData = new Map()
 EGGS.forEach((egg) => DEFAULT_PET_EGG_PITY_DATA.set(egg, 0))
 
+export const DEFAULT_GAMEPASSES_DATA: GamepassesData = new Map()
+GAMEPASSES.forEach((gamepass) => DEFAULT_GAMEPASSES_DATA.set(gamepass, false))
+
+
 export const DEFAULT_PLAYER_DATA: PlayerData = {
     candy: 0,
     candy_corn: 0,
@@ -80,17 +85,13 @@ export const DEFAULT_PLAYER_DATA: PlayerData = {
         // ]
     ),
     boost_inventory: DEFAULT_BOOSTS,
-    gamepasses: {
-        equip_more_pets: false,
-        equip_more_pets2: false,
-        remove_hatch_cooldown: false,
-        tripple_hatch: false,
-    },
+    gamepasses: DEFAULT_GAMEPASSES_DATA,
     settings: {
         music: true,
         hide_others_pets: false,
         hide_currency_popup: false,
-        tripple_hatch: false
+        tripple_hatch: false,
+        skip_hatch_animation: false
     },
     analytics: {
         dev_products_purchased: 0,

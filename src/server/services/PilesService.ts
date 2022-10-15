@@ -3,6 +3,7 @@ import { Service, OnStart, OnInit, OnRender, OnTick, Dependency } from "@flamewo
 import { CollectionService, HttpService, Players, ServerStorage, Workspace } from "@rbxts/services";
 import { PileComponent } from "server/components/PileComponent";
 import { Events } from "server/network";
+import { rewardCandy } from "server/utils/Rewards";
 import { getLuckStat, getPowerStat, getRangeStat, getSizeStat } from "server/utils/Stats";
 import { AREA_PILE_CONFIG } from "shared/constants/Areas";
 import { PILES_CONFIG } from "shared/constants/Piles";
@@ -94,7 +95,7 @@ export class PilesService implements OnStart {
         if ( wasLucky ) bonusReward = math.round( damage / ( math.random( 20, 100 ) / 100 ) )
         reward += bonusReward
 
-        profile.adjustCandy( reward )
+        rewardCandy(player, reward, true)
         this.questsService.addPoint(player, "Candy Collector", 0, reward)
         if (wasLucky) Events.luckyReward.fire(player, bonusReward)
     }

@@ -9,3 +9,5 @@ export const OFF_BUTTON = "rbxassetid://10708452021"
 export function getSettingAsProp ( setting: Setting ) {
     return <keyof Settings>setting.lower().gsub(" ", "_")[0]
 }
+
+// Use these as Player Data instead of the old ones
