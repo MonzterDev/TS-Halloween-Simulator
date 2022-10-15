@@ -4,7 +4,7 @@ import Signal from "@rbxts/signal";
 import { Events, Functions } from "client/network";
 import { clientStore } from "client/rodux/rodux";
 import { Area } from "shared/constants/Areas";
-import { BASKET_SHOP_CONFIG, BASKET_UPGRADES, getBasketUpgradeAsProp, getBasketUpgradePrice, BASKET_UPGRADE_DESCRIPTION, BasketUpgrade } from "shared/constants/Basket";
+import { BASKET_SHOP_CONFIG, BASKET_UPGRADES, getBasketUpgradePrice, BASKET_UPGRADE_DESCRIPTION, BasketUpgrade } from "shared/constants/Basket";
 import { abbreviator } from "shared/util/functions/abbreviate";
 import { getClosestUpgradePart } from "shared/util/functions/getClosestPart";
 import { AreaController } from "./AreaController";
@@ -116,7 +116,7 @@ export class BasketUpgradeController implements OnStart {
             if (result === "Max") print("Max")
             if (result === "No Money") print("No Money")
             if ( result === "Success" ) {
-                clientStore.dispatch({type: "updateUpgrade", upgrade: getBasketUpgradeAsProp(this.selectedUpgrade), amount: this.getLevel(this.selectedUpgrade) + 1})
+                clientStore.dispatch({type: "updateUpgrade", upgrade: this.selectedUpgrade, amount: this.getLevel(this.selectedUpgrade) + 1})
                 this.displayInfo( this.selectedUpgrade )
                 this.cleanup()
                 this.generateUpgrades()
@@ -126,6 +126,6 @@ export class BasketUpgradeController implements OnStart {
     }
 
     private getLevel ( upgrade: BasketUpgrade ): number {
-        return clientStore.getState().data.basket_upgrades[getBasketUpgradeAsProp(upgrade)]
+        return clientStore.getState().data.basket_upgrades[upgrade]
     }
 }

@@ -1,6 +1,6 @@
 export type BasketUpgradeResponse = "Max" | "No Money" | "Success" | false
 
-export const BASKET_UPGRADES = ["Size", "Range", "Power", "Luck"] as const
+export const BASKET_UPGRADES = ["Size", "Range", "Power", "Luck"]
 export type BasketUpgrade = typeof BASKET_UPGRADES[number]
 export const BASKET_UPGRADE_DESCRIPTION: Record<BasketUpgrade, string> = {
     "Size": "Hold more Candy!",
@@ -11,16 +11,10 @@ export const BASKET_UPGRADE_DESCRIPTION: Record<BasketUpgrade, string> = {
 
 type Props = Record<number, number>
 
-interface BasketUpgradesConfig {
-    size: Props,
-    range: Props,
-    power: Props,
-    luck: Props,
-}
-
+type BasketUpgradesConfig = Record<BasketUpgrade, Props>
 
 export const BASKET_SHOP_CONFIG: BasketUpgradesConfig = {
-    size: {
+    "Size": {
         1: 50,
         2: 75,
         3: 100,
@@ -33,7 +27,7 @@ export const BASKET_SHOP_CONFIG: BasketUpgradesConfig = {
         10: 400,
         11: 500,
     },
-    range: {
+    "Range": {
         1: 50,
         2: 75,
         3: 100,
@@ -45,7 +39,7 @@ export const BASKET_SHOP_CONFIG: BasketUpgradesConfig = {
         9: 350,
         10: 400,
     },
-    power: {
+    "Power": {
         1: 50,
         2: 75,
         3: 100,
@@ -57,7 +51,7 @@ export const BASKET_SHOP_CONFIG: BasketUpgradesConfig = {
         9: 350,
         10: 400,
     },
-    luck: {
+    "Luck": {
         1: 50,
         2: 75,
         3: 100,
@@ -72,12 +66,12 @@ export const BASKET_SHOP_CONFIG: BasketUpgradesConfig = {
 }
 
 export const BASKET_UPGRADE_CONFIG: BasketUpgradesConfig = {
-    size: {
+    "Size": {
         0: 10,
         1: 25,
         2: 50
     },
-    range: {
+    "Range": {
         0: 10,
         1: 10.1,
         2: 10.2,
@@ -90,12 +84,12 @@ export const BASKET_UPGRADE_CONFIG: BasketUpgradesConfig = {
         9: 10.9,
         10: 11,
     },
-    power: {
+    "Power": {
         0: 1,
         1: 2,
         2: 5
     },
-    luck: {
+    "Luck": {
         0: 1,
         1: 1.1,
         2: 1.2
@@ -103,9 +97,5 @@ export const BASKET_UPGRADE_CONFIG: BasketUpgradesConfig = {
 }
 
 export function getBasketUpgradePrice ( upgrade: BasketUpgrade, level: number ) {
-    return BASKET_SHOP_CONFIG[getBasketUpgradeAsProp(upgrade)][level]
-}
-
-export function getBasketUpgradeAsProp ( upgrade: BasketUpgrade ) {
-    return <keyof BasketUpgradesConfig> upgrade.lower()
+    return BASKET_SHOP_CONFIG[upgrade][level]
 }

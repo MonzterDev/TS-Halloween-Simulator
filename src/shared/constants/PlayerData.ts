@@ -1,10 +1,11 @@
-import { isA } from "shared/util/functions/isA";
-import { AreasUnlocked, CodeData, GamepassesData, GiftData, PetAutoDeleteData, PetEggPityData, PetIndexData, PlayerData, QuestData, SettingsData } from "../types/PlayerData";
+import { AreasUnlockedData, BasketUpgradesData, CodeData, GamepassesData, GiftData, PetAutoDeleteData, PetEggPityData, PetIndexData, PlayerData, QuestData, SettingsData } from "../types/PlayerData";
+import { AREAS } from "./Areas";
+import { BASKET_UPGRADES } from "./Basket";
 import { BoostInventory, BOOSTS } from "./Boosts";
 import { CODES_CONFIG } from "./Codes";
 import { GIFT_CONFIG } from "./Gifts";
 import { GAMEPASSES } from "./Monetization";
-import { EGG_SHOP_CONFIG, EGGS, PETS, RARITIES, Rarity } from "./Pets";
+import { EGG_SHOP_CONFIG, EGGS, Rarity } from "./Pets";
 import { QUEST_CONFIG } from "./Quests";
 import { SETTINGS } from "./Settings";
 
@@ -61,19 +62,21 @@ GAMEPASSES.forEach( ( gamepass ) => DEFAULT_GAMEPASSES_DATA.set( gamepass, false
 
 export const DEFAULT_SETTINGS_DATA: SettingsData = new Map()
 SETTINGS.forEach( ( setting ) => DEFAULT_SETTINGS_DATA.set( setting, false ) )
-DEFAULT_SETTINGS_DATA.set("Music", true)
+DEFAULT_SETTINGS_DATA.set( "Music", true )
+
+export const DEFAULT_MAP_DATA: AreasUnlockedData = {}
+AREAS.forEach( ( area ) => DEFAULT_MAP_DATA[area] = false )
+DEFAULT_MAP_DATA["Spawn"] = true
+
+export const DEFAULT_BASKET_UPGRADE_DATA: BasketUpgradesData = {}
+BASKET_UPGRADES.forEach( ( upgrade ) => DEFAULT_BASKET_UPGRADE_DATA[upgrade] = 0 )
 
 
 export const DEFAULT_PLAYER_DATA: PlayerData = {
     candy: 0,
     candy_corn: 0,
     money: 10000,
-    basket_upgrades: {
-        size: 0,
-        range: 0,
-        power: 0,
-        luck: 0
-    },
+    basket_upgrades: DEFAULT_BASKET_UPGRADE_DATA,
     pet_inventory: new Map(
         // [
         //     ["UDAWD", { type: "Dog", rarity: "Rare", equipped: true }],
@@ -96,12 +99,7 @@ export const DEFAULT_PLAYER_DATA: PlayerData = {
         dev_products_purchased: 0,
         gamepasses_purchased: 0
     },
-    areas_unlocked: {
-        Spawn: true,
-        Camp: false,
-        Crystal_Valley: false,
-        Swamp: false
-    },
+    areas_unlocked: DEFAULT_MAP_DATA,
     quests: DEFAULT_QUESTS_DATA,
     gift_time_played: 0,
     gift_reset_time: os.time() + 86400,
@@ -112,52 +110,3 @@ export const DEFAULT_PLAYER_DATA: PlayerData = {
         reset_time: os.time() + 86400
     }
 }
-
-// Mock test data
-//
-// export const DEFAULT_PLAYER_DATA: PlayerData = {
-//     candy: 0,
-//     candy_corn: 0,
-//     money: 10000,
-//     basket_upgrades: {
-//         size: 0,
-//         range: 0,
-//         power: 0,
-//         luck: 0
-//     },
-//     pet_inventory: new Map(
-//         [
-//             ["UDAWD", { type: "Dog", rarity: "Rare", equipped: true }],
-//             ["Awd", { type: "Cat", rarity: "Uncommon", equipped: false, locked: true }],
-//         ]
-//     ),
-//     active_boosts: new Map(
-//         [
-//             ["Luck", {rarity: "Common", duration: 10}],
-//             ["Power", {rarity: "Rare", duration: 60}],
-//         ]
-//     ),
-//     boost_inventory: DEFAULT_BOOSTS,
-//     gamepasses: {
-//         equip_more_pets: false,
-//         equip_more_pets2: false,
-//         remove_hatch_cooldown: false,
-//         tripple_hatch: false,
-//     },
-//     settings: {
-//         music: true,
-//         hide_others_pets: false,
-//         hide_currency_popup: false,
-//         tripple_hatch: false
-//     },
-//     analytics: {
-//         dev_products_purchased: 0,
-//         gamepasses_purchased: 0
-//     },
-//     areas_unlocked: {
-//         Spawn: true,
-//         Camp: true,
-//         Crystal_Valley: false,
-//         Swamp: false
-//     }
-// }

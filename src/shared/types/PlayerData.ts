@@ -1,4 +1,5 @@
 import { Area } from "shared/constants/Areas";
+import { BasketUpgrade } from "shared/constants/Basket";
 import { ActiveBoosts, BoostInventory } from "shared/constants/Boosts";
 import { Code } from "shared/constants/Codes";
 import { GiftTime } from "shared/constants/Gifts";
@@ -11,7 +12,7 @@ export interface PlayerData {
 	candy: number;
 	candy_corn: number;
 	money: number;
-	basket_upgrades: BasketUpgrades
+	basket_upgrades: BasketUpgradesData
 	pet_inventory: PetInventory
 	pet_index: PetIndexData
 	pet_auto_delete: PetAutoDeleteData
@@ -21,7 +22,7 @@ export interface PlayerData {
 	gamepasses: GamepassesData
 	settings: SettingsData
 	analytics: Analytics
-	areas_unlocked: AreasUnlocked
+	areas_unlocked: AreasUnlockedData
 	quests: QuestData
 	gift_time_played: number
 	gift_reset_time: number
@@ -35,12 +36,7 @@ export interface GroupChestProps {
 	reset_time: number,
 }
 
-export interface BasketUpgrades {
-	size: number
-	range: number
-	power: number
-	luck: number
-}
+export type BasketUpgradesData = Record<BasketUpgrade, number>
 
 export interface Gamepasses {
 	equip_more_pets: boolean
@@ -54,7 +50,7 @@ export interface Analytics {
 	dev_products_purchased: number
 }
 
-export type AreasUnlocked = Record<Area, boolean>
+export type AreasUnlockedData = Record<Area, boolean>
 
 export type QuestDataLevels = Record<number, {
 	points: number
