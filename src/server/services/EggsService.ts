@@ -34,7 +34,7 @@ export class EggsService implements OnStart {
         const eggConfig = EGG_SHOP_CONFIG[egg]
 
         const hasTrippleHatchGamepass = profile.data.gamepasses.get("Tripple Hatch")
-        const hasTrippleHatchEnabled = profile.data.settings.tripple_hatch
+        const hasTrippleHatchEnabled = profile.data.settings.get("Tripple Hatch")
 
         const money = profile.data.money
         const price = eggConfig.price

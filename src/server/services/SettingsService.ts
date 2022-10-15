@@ -1,6 +1,6 @@
 import { Service, OnStart, OnInit, Dependency } from "@flamework/core";
 import { Events } from "server/network";
-import { getSettingAsProp, Setting, SETTINGS } from "shared/constants/Settings";
+import { Setting, SETTINGS } from "shared/constants/Settings";
 import { PetsService } from "./PetsService";
 import { PlayerDataService } from "./PlayerDataService";
 
@@ -17,8 +17,8 @@ export class SettingsService implements OnStart {
         const profile = this.playerDataService.getProfile( player )
         if ( !profile ) return
 
-        const value = profile.data.settings[getSettingAsProp( setting )]
-        profile.data.settings[getSettingAsProp( setting )] = !value
+        const value = profile.data.settings.get(setting)
+        profile.data.settings.set(setting, !value)
         Events.toggleSetting.fire( player, setting, !value )
         this.performAction(player, setting, !value)
     }

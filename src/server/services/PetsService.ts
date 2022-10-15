@@ -179,7 +179,7 @@ export class PetsService implements OnStart {
             if (sendingPlayer === player) return
             const profile = this.playerDataService.getProfile( player )
             if ( !profile ) return
-            if (!profile.data.settings.hide_others_pets) players.push(player)
+            if (!profile.data.settings.get("Hide Others Pets")) players.push(player)
         } )
         return players
     }

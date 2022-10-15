@@ -118,7 +118,7 @@ export class PetEggController implements OnStart {
     private hatch ( egg: Egg ) {
         const eggModel = <Workspace["Eggs"]["Starter"]>this.eggs.FindFirstChild(egg)
 
-        const isTrippleHatch = clientStore.getState().data.gamepasses.get( "Tripple Hatch" ) && clientStore.getState().data.settings.tripple_hatch
+        const isTrippleHatch = clientStore.getState().data.gamepasses.get( "Tripple Hatch" ) && clientStore.getState().data.settings.get("Tripple Hatch")
         const amountOfHatches = isTrippleHatch ? 3 : 1
 
         const price = EGG_SHOP_CONFIG[egg].price * amountOfHatches
@@ -161,7 +161,7 @@ export class PetEggController implements OnStart {
             gui.Enabled = false
         } )
 
-        const skipAnimation = clientStore.getState().data.settings.skip_hatch_animation
+        const skipAnimation = clientStore.getState().data.settings.get("Skip Hatch Animation")
 
         task.delay( skipAnimation ? 1 : 3 , () => {
             enabledGuis.forEach( ( gui ) => gui.Enabled = true )
@@ -180,7 +180,7 @@ export class PetEggController implements OnStart {
         template.Parent = this.animation.Frame
         template.Visible = true
 
-        const skipAnimation = clientStore.getState().data.settings.skip_hatch_animation
+        const skipAnimation = clientStore.getState().data.settings.get("Skip Hatch Animation")
         if ( skipAnimation ) {
             CleanViewport( template )
             template.Pet.Visible = true

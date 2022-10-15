@@ -1,8 +1,8 @@
 import { Action, createReducer } from "@rbxts/rodux";
-import { Gamepasses, PlayerData, Settings } from "shared/types/PlayerData";
+import { Gamepasses, PlayerData } from "shared/types/PlayerData";
 import { DEFAULT_GIFTS_DATA, DEFAULT_PLAYER_DATA } from "shared/constants/PlayerData";
 import { Egg, EGGS, Pet, PetInstanceProps, PETS, RARITIES, Rarity, UUID } from "shared/constants/Pets";
-import { getSettingAsProp, Setting, SETTINGS } from "shared/constants/Settings";
+import { Setting, SETTINGS } from "shared/constants/Settings";
 import { Gamepass, getGamepassAsProp } from "shared/constants/Monetization";
 import { Boost, BOOSTS, BOOST_DURATION } from "shared/constants/Boosts";
 import { Area } from "shared/constants/Areas";
@@ -142,7 +142,7 @@ export const dataReducer = createReducer<DataState, DataActions>(DEFAULT_PLAYER_
         return state
     },
     updateSetting: ( state, action ) => {
-        state.settings[<keyof Settings>getSettingAsProp(action.setting)] = action.value
+        state.settings.set(action.setting, action.value)
         return state
     },
     updateGamepass: ( state, action ) => {

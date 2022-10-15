@@ -5,6 +5,7 @@ import { GiftTime } from "shared/constants/Gifts";
 import { Gamepass } from "shared/constants/Monetization";
 import { Egg, EGGS, Pet, PetInventory, PETS } from "shared/constants/Pets";
 import { Quest } from "shared/constants/Quests";
+import { Setting } from "shared/constants/Settings";
 
 export interface PlayerData {
 	candy: number;
@@ -18,7 +19,7 @@ export interface PlayerData {
 	active_boosts: ActiveBoosts
 	boost_inventory: BoostInventory
 	gamepasses: GamepassesData
-	settings: Settings
+	settings: SettingsData
 	analytics: Analytics
 	areas_unlocked: AreasUnlocked
 	quests: QuestData
@@ -48,14 +49,6 @@ export interface Gamepasses {
 	tripple_hatch: boolean
 }
 
-export interface Settings {
-	music: boolean
-	hide_others_pets: boolean
-	hide_currency_popup: boolean
-	tripple_hatch: boolean
-	skip_hatch_animation: boolean
-}
-
 export interface Analytics {
 	gamepasses_purchased: number
 	dev_products_purchased: number
@@ -80,3 +73,4 @@ export type PetIndexData = Map<Egg, Map<Pet, boolean>>
 export type PetEggPityData = Map<Egg, number>
 
 export type GamepassesData = Map<Gamepass, boolean>
+export type SettingsData = Map<Setting, boolean>

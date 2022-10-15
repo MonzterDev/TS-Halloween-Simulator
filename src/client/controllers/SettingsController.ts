@@ -4,7 +4,7 @@ import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
 import { openGui } from "client/utils/openGui";
 import { DEFAULT_PLAYER_DATA } from "shared/constants/PlayerData";
-import { getSettingAsProp, OFF_BUTTON, ON_BUTTON, Setting, SETTINGS } from "shared/constants/Settings";
+import { OFF_BUTTON, ON_BUTTON, Setting, SETTINGS } from "shared/constants/Settings";
 import { PetsController } from "./PetsController";
 
 
@@ -29,7 +29,7 @@ export class SettingsController implements OnStart {
         SETTINGS.forEach( ( setting ) => this.generateTemplate( setting ) )
         clientStore.changed.connect( ( newS, oldS ) => {
             if ( DEFAULT_PLAYER_DATA.settings !== oldS.data.settings ) return
-            SETTINGS.forEach( ( setting ) => this.updateSetting( setting, newS.data.settings[getSettingAsProp(setting)]) )
+            SETTINGS.forEach( ( setting ) => this.updateSetting( setting, newS.data.settings.get(setting)!) )
         } )
 
         this.openButton.MouseButton1Click.Connect( () => openGui(this.gui) )
@@ -51,12 +51,12 @@ export class SettingsController implements OnStart {
         clone.Name = setting
         clone.Setting.Text = setting
 
-        clone.Toggle.Image = clientStore.getState().data.settings[getSettingAsProp(setting)] ? ON_BUTTON : OFF_BUTTON
+        clone.Toggle.Image = clientStore.getState().data.settings.get(setting) ? ON_BUTTON : OFF_BUTTON
         clone.MouseButton1Click.Connect( () => Events.toggleSetting.fire( setting ))
     }
 
     private performUpdate ( setting: Setting ) {
-        const value = clientStore.getState().data.settings[getSettingAsProp(setting)]
+        const value = clientStore.getState().data.settings.get(setting)
         switch (setting) {
             case "Hide Others Pets":
                 if ( !value ) this.petsController.clearActivePets()

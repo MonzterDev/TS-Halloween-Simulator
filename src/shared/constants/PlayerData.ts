@@ -1,11 +1,12 @@
 import { isA } from "shared/util/functions/isA";
-import { AreasUnlocked, CodeData, GamepassesData, GiftData, PetAutoDeleteData, PetEggPityData, PetIndexData, PlayerData, QuestData } from "../types/PlayerData";
+import { AreasUnlocked, CodeData, GamepassesData, GiftData, PetAutoDeleteData, PetEggPityData, PetIndexData, PlayerData, QuestData, SettingsData } from "../types/PlayerData";
 import { BoostInventory, BOOSTS } from "./Boosts";
 import { CODES_CONFIG } from "./Codes";
 import { GIFT_CONFIG } from "./Gifts";
 import { GAMEPASSES } from "./Monetization";
 import { EGG_SHOP_CONFIG, EGGS, PETS, RARITIES, Rarity } from "./Pets";
 import { QUEST_CONFIG } from "./Quests";
+import { SETTINGS } from "./Settings";
 
 const DEFAULT_BOOSTS: BoostInventory = new Map()
 BOOSTS.forEach( ( boost ) => {
@@ -56,7 +57,11 @@ export const DEFAULT_PET_EGG_PITY_DATA: PetEggPityData = new Map()
 EGGS.forEach((egg) => DEFAULT_PET_EGG_PITY_DATA.set(egg, 0))
 
 export const DEFAULT_GAMEPASSES_DATA: GamepassesData = new Map()
-GAMEPASSES.forEach((gamepass) => DEFAULT_GAMEPASSES_DATA.set(gamepass, false))
+GAMEPASSES.forEach( ( gamepass ) => DEFAULT_GAMEPASSES_DATA.set( gamepass, false ) )
+
+export const DEFAULT_SETTINGS_DATA: SettingsData = new Map()
+SETTINGS.forEach( ( setting ) => DEFAULT_SETTINGS_DATA.set( setting, false ) )
+DEFAULT_SETTINGS_DATA.set("Music", true)
 
 
 export const DEFAULT_PLAYER_DATA: PlayerData = {
@@ -86,13 +91,7 @@ export const DEFAULT_PLAYER_DATA: PlayerData = {
     ),
     boost_inventory: DEFAULT_BOOSTS,
     gamepasses: DEFAULT_GAMEPASSES_DATA,
-    settings: {
-        music: true,
-        hide_others_pets: false,
-        hide_currency_popup: false,
-        tripple_hatch: false,
-        skip_hatch_animation: false
-    },
+    settings: DEFAULT_SETTINGS_DATA,
     analytics: {
         dev_products_purchased: 0,
         gamepasses_purchased: 0

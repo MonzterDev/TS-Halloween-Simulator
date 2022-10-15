@@ -64,7 +64,7 @@ export class CurrencyController implements OnStart {
     }
 
     private animateAmount ( bonus?: boolean ) {
-        if (clientStore.getState().data.settings.hide_currency_popup) return
+        if (clientStore.getState().data.settings.get("Hide Currency Popup")) return
         const clone = this.popupTemplate.Clone()
         clone.Parent = this.popup
         clone.Visible = true
