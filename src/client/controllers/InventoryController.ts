@@ -1,6 +1,6 @@
 import { Controller, OnStart, OnInit, Dependency } from "@flamework/core";
 import { Players, ReplicatedStorage } from "@rbxts/services";
-import { openGui } from "client/utils/openGui";
+import { openGui, resetScrollingFrame } from "client/utils/openGui";
 
 type Mode = "Pets" | "Boosts"
 
@@ -37,7 +37,7 @@ export class InventoryController implements OnStart {
     private displayGui ( open: boolean ) {
         this.gui.Enabled = open
         if (this.mode === "Pets") this.petInventoryGui.Enabled = open
-        else if (this.mode === "Boosts") this.boostInventoryGui.Enabled = open
+        else if ( this.mode === "Boosts" ) this.boostInventoryGui.Enabled = open
     }
 
     private changeMode ( mode: Mode ) {
@@ -48,5 +48,7 @@ export class InventoryController implements OnStart {
         this.boostInventoryGui.Enabled = mode === "Boosts"
         this.boostInventoryGui.Frame.Info.Visible = false
         this.petInventoryGui.Frame.Info.Visible = false
+        resetScrollingFrame(this.petInventoryGui.Frame.Container)
+        resetScrollingFrame(this.boostInventoryGui.Frame.Container)
     }
 }

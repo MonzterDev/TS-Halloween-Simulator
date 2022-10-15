@@ -3,7 +3,7 @@ import { FormatCompact } from "@rbxts/format-number";
 import { Players } from "@rbxts/services";
 import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
-import { openGui } from "client/utils/openGui";
+import { openGui, resetScrollingFrame } from "client/utils/openGui";
 import { Boost, BOOSTS } from "shared/constants/Boosts";
 import { BoosterQuestRewardProps, getActiveQuestTier, Quest, QUEST_CONFIG, QuestRewardProps, Reward2 } from "shared/constants/Quests";
 import { cleanString } from "shared/util/functions/cleanString";
@@ -70,7 +70,8 @@ export class QuestsController implements OnStart {
 
         if (mode === "Active") this.generateActiveQuests()
         else if (mode === "Unclaimed") this.generateUnclaimedQuests()
-        else if (mode === "Completed") this.generateClaimedQuests()
+        else if ( mode === "Completed" ) this.generateClaimedQuests()
+        resetScrollingFrame(this.container)
     }
 
     private cleanup () {

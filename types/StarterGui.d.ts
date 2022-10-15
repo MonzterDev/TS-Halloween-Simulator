@@ -61,6 +61,18 @@ interface StarterGui extends BasePlayerGui {
 			};
 		};
 	};
+	AreaPurchase: ScreenGui & {
+		Frame: Frame & {
+			Exit: TextButton;
+			Buy: TextButton;
+			Title: TextLabel;
+			Icon: ImageLabel;
+			Price: TextLabel;
+			Background: ImageLabel;
+			UIAspectRatioConstraint: UIAspectRatioConstraint;
+			Area: TextLabel;
+		};
+	};
 	PetEgg: Folder & {
 		InteractGui: BillboardGui & {
 			Auto: ProximityPrompt;
@@ -260,18 +272,6 @@ interface StarterGui extends BasePlayerGui {
 			Icon: ImageLabel;
 			Area: TextLabel;
 		};
-		Purchase: ScreenGui & {
-			Frame: Frame & {
-				Exit: TextButton;
-				Buy: TextButton;
-				Title: TextLabel;
-				Icon: ImageLabel;
-				Price: TextLabel;
-				Background: ImageLabel;
-				UIAspectRatioConstraint: UIAspectRatioConstraint;
-				Area: TextLabel;
-			};
-		};
 	};
 	MonetizationShop: ScreenGui & {
 		Frame: Frame & {
@@ -338,12 +338,11 @@ interface StarterGui extends BasePlayerGui {
 	Notifications: ScreenGui & {
 		Container: Frame & {
 			UIGridLayout: UIGridLayout;
+			UIAspectRatioConstraint: UIAspectRatioConstraint;
 			Template: Frame & {
 				Message: TextLabel;
-				UIStroke: UIStroke;
 				UICorner: UICorner;
 			};
-			UIAspectRatioConstraint: UIAspectRatioConstraint;
 		};
 	};
 	Gifts: ScreenGui & {

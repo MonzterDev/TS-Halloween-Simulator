@@ -5,6 +5,7 @@ import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
 import { hideGuis } from "client/utils/hideGuis";
 import { Area, AREA_WALL_CONFIG } from "shared/constants/Areas";
+import { cleanString } from "shared/util/functions/cleanString";
 import { NotificationsController } from "./NotificationsController";
 
 @Controller({})
@@ -17,12 +18,12 @@ export class BoostController implements OnStart {
     private playerGui = <PlayerGui>this.player.WaitForChild( "PlayerGui" )
 
     private folder = <StarterGui["AreaWalls"]>this.playerGui.WaitForChild( "AreaWalls" )
+    private purchaseGui = <StarterGui["AreaPurchase"]>this.playerGui.WaitForChild( "AreaPurchase" )
 
     private guiTemplate = this.folder.AreaDisplay
-    private pruchaseGui = this.folder.Purchase
 
-    private buyButton = this.pruchaseGui.Frame.Buy
-    private exitButton = this.pruchaseGui.Frame.Exit
+    private buyButton = this.purchaseGui.Frame.Buy
+    private exitButton = this.purchaseGui.Frame.Exit
 
     private selectedArea: Area | undefined
 
@@ -39,9 +40,9 @@ export class BoostController implements OnStart {
 
         Events.unlockArea.connect( ( area ) => {
             this.unlockWall( area )
-            this.pruchaseGui.Enabled = false
+            this.purchaseGui.Enabled = false
         } )
-        this.exitButton.MouseButton1Click.Connect( () => this.pruchaseGui.Enabled = false )
+        this.exitButton.MouseButton1Click.Connect( () => this.purchaseGui.Enabled = false )
         this.buyButton.MouseButton1Click.Connect(() => this.requestUnlockWall())
     }
 
@@ -79,10 +80,10 @@ export class BoostController implements OnStart {
                 if ( !player || player !== this.player ) return
                 this.selectedArea = area
 
-                this.pruchaseGui.Frame.Area.Text = area.gsub( "_", " " )[0]
-                this.pruchaseGui.Frame.Price.Text = FormatCompact( AREA_WALL_CONFIG[area].coin_price )
-                this.pruchaseGui.Enabled = true
-                hideGuis(this.pruchaseGui)
+                this.purchaseGui.Frame.Area.Text = cleanString(area)
+                this.purchaseGui.Frame.Price.Text = FormatCompact( AREA_WALL_CONFIG[area].coin_price )
+                this.purchaseGui.Enabled = true
+                hideGuis(this.purchaseGui)
             })
         } )
     }

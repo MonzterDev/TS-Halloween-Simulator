@@ -9,7 +9,7 @@ export const NOTIFICATIONS = [
     "You already redeemed this code!",
 
     "+AMOUNT RARITY TYPE Booster!",
-    "You purchase GAMEPASS, enjoy!",
+    "You purchased GAMEPASS, enjoy!",
 
     "Quest Completed: QUEST!",
     "You have a new Gift to claim!",
@@ -55,7 +55,7 @@ export const NOTIFICATION_CONFIG: NotificationConfig = {
     "+AMOUNT RARITY TYPE Booster!": {
         type: "Reward"
     },
-    "You purchase GAMEPASS, enjoy!": {
+    "You purchased GAMEPASS, enjoy!": {
         type: "Reward"
     },
 

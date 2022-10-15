@@ -34,7 +34,7 @@ export class MonetizationController implements OnStart {
     private mode: Mode = "Passes"
 
     onStart () {
-        Events.purchaseSuccess.connect( ( product ) => this.notificationsController.createNotification("You purchase GAMEPASS, enjoy!", {gamepassOrProduct: product} ) )
+        Events.purchaseSuccess.connect( ( product ) => this.notificationsController.createNotification("You purchased GAMEPASS, enjoy!", {gamepassOrProduct: product} ) )
         this.openButton.MouseButton1Click.Connect( () => openGui( this.gui ) )
         this.exit.MouseButton1Click.Connect( () => this.gui.Enabled = false )
         this.buttons.Gamepasses.MouseButton1Click.Connect(() => this.switchMode( "Passes" ))
