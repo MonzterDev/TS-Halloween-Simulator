@@ -4,7 +4,7 @@ import { BasketUpgrade, BasketUpgradeResponse, BASKET_UPGRADES } from "./constan
 import { Boost, BOOSTS } from "./constants/Boosts";
 import { Code } from "./constants/Codes";
 import { Currency } from "./constants/Currencies";
-import { DevProduct, Gamepass } from "./constants/Gamepasses";
+import { DevProduct, Gamepass } from "./constants/Monetization";
 import { GiftTime } from "./constants/Gifts";
 import { Egg, EGGS, Pet, PetInstanceProps, PETS, RARITIES, Rarity, UUID } from "./constants/Pets";
 import { Quest } from "./constants/Quests";

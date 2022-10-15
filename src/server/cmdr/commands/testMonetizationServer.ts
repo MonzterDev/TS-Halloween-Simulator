@@ -1,6 +1,6 @@
 import { CommandContext } from "@rbxts/cmdr";
 import { MarketplaceService } from "@rbxts/services";
-import { DevProduct, Gamepass, getDevProductIDFromDevProduct, getGamepassIDFromGamepass } from "shared/constants/Gamepasses";
+import { DevProduct, Gamepass, getDevProductIDFromDevProduct, getGamepassIDFromGamepass } from "shared/constants/Monetization";
 
 export = function ( context: CommandContext, devProduct: DevProduct | Gamepass, player: Player = context.Executor ) {
     const isGamepass = getGamepassIDFromGamepass(<Gamepass>devProduct)

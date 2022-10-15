@@ -273,9 +273,58 @@ interface StarterGui extends BasePlayerGui {
 			};
 		};
 	};
+	MonetizationShop: ScreenGui & {
+		Frame: Frame & {
+			Exit: TextButton;
+			Currency: ScrollingFrame & {
+				Template: TextButton & {
+					Price: TextLabel;
+					Background: ImageLabel;
+					Icon: ImageLabel;
+					Amount: TextLabel;
+				};
+				UIGridLayout: UIGridLayout;
+			};
+			Title: TextLabel;
+			Buttons: Frame & {
+				Gamepasses: TextButton & {
+					Background: ImageLabel;
+				};
+				UIGridLayout: UIGridLayout;
+				Boosts: TextButton & {
+					Background: ImageLabel;
+				};
+				Currency: TextButton & {
+					Background: ImageLabel;
+				};
+			};
+			Gamepasses: ScrollingFrame & {
+				Template: TextButton & {
+					Title: TextLabel;
+					Price: TextLabel;
+					Background: ImageLabel;
+					Icon: ImageLabel;
+					Description: TextLabel;
+				};
+				UIGridLayout: UIGridLayout;
+			};
+			Background: ImageLabel;
+			UIAspectRatioConstraint: UIAspectRatioConstraint;
+			Boosts: ScrollingFrame & {
+				Template: TextButton & {
+					Price: TextLabel;
+					Background: ImageLabel;
+					Icon: ImageLabel;
+					Description: TextLabel;
+				};
+				UIGridLayout: UIGridLayout;
+			};
+		};
+	};
 	Buttons: ScreenGui & {
 		Frame: Frame & {
 			Map: TextButton;
+			MonetizationShop: TextButton;
 			UIAspectRatioConstraint: UIAspectRatioConstraint;
 			UIGridLayout: UIGridLayout;
 			Settings: TextButton;

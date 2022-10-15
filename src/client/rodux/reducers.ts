@@ -3,7 +3,7 @@ import { Gamepasses, PlayerData, Settings } from "shared/types/PlayerData";
 import { DEFAULT_GIFTS_DATA, DEFAULT_PLAYER_DATA } from "shared/constants/PlayerData";
 import { Egg, EGGS, Pet, PetInstanceProps, PETS, RARITIES, Rarity, UUID } from "shared/constants/Pets";
 import { getSettingAsProp, Setting, SETTINGS } from "shared/constants/Settings";
-import { Gamepass, getGamepassAsProp } from "shared/constants/Gamepasses";
+import { Gamepass, getGamepassAsProp } from "shared/constants/Monetization";
 import { Boost, BOOSTS, BOOST_DURATION } from "shared/constants/Boosts";
 import { Area } from "shared/constants/Areas";
 import { Quest } from "shared/constants/Quests";

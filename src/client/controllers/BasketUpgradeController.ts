@@ -1,5 +1,6 @@
 import { Controller, OnStart, OnInit, Dependency } from "@flamework/core";
 import { Players, Workspace } from "@rbxts/services";
+import Signal from "@rbxts/signal";
 import { Events, Functions } from "client/network";
 import { clientStore } from "client/rodux/rodux";
 import { Area } from "shared/constants/Areas";
@@ -31,6 +32,8 @@ export class BasketUpgradeController implements OnStart {
 
     private area: Area = "Spawn"
     private selectedUpgrade: BasketUpgrade = "Range"
+
+    public upgradePurchaseEvent = new Signal<() => void>()
 
     onStart () {
         this.generateShopParts()
@@ -117,6 +120,7 @@ export class BasketUpgradeController implements OnStart {
                 this.displayInfo( this.selectedUpgrade )
                 this.cleanup()
                 this.generateUpgrades()
+                this.upgradePurchaseEvent.Fire()
             }
         })
     }
