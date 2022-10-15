@@ -168,7 +168,7 @@ const COIN_PACKAGES: Partial<Record<DevProduct, number>> = {
 }
 
 export function calculateCoinReward (coinPackage: DevProduct, profileData: PlayerData ) {
-    const totalUpgrades = profileData.basket_upgrades.luck + profileData.basket_upgrades.power + profileData.basket_upgrades.range + profileData.basket_upgrades.size
+    const totalUpgrades = profileData.basket_upgrades.Luck + profileData.basket_upgrades.Power + profileData.basket_upgrades.Range + profileData.basket_upgrades.Size
     const percentIncrease = (totalUpgrades / 2) // TODO: Find balanced price for this
 
     const amount = COIN_PACKAGES[coinPackage]! + (COIN_PACKAGES[coinPackage]! * percentIncrease)

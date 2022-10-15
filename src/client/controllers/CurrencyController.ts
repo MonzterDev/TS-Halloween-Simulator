@@ -43,7 +43,7 @@ export class CurrencyController implements OnStart {
     private updateAmount ( currency: Currency, amount: number ) {
         const displayAmount = FormatStandard( amount )
         if ( currency === "candy" ) {
-            const storage = BASKET_UPGRADE_CONFIG.size[clientStore.getState().data.basket_upgrades.size]
+            const storage = BASKET_UPGRADE_CONFIG.Size[clientStore.getState().data.basket_upgrades.Size]
             this.candyAmount.Text = `${FormatStandard(amount)}/${storage}`
             if ( amount > 0 ) this.animateAmount()
             if (amount >= storage) this.fullNotification()

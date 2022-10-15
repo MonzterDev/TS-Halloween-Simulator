@@ -25,12 +25,13 @@ export class SettingsController implements OnStart {
 
     private template = this.container.Template
 
+    private connection = clientStore.changed.connect( ( newState ) => {
+        newState.data.settings.forEach( ( value, setting ) => this.updateSetting( setting, value ) )
+        this.connection.disconnect()
+    })
+
     onStart () {
         SETTINGS.forEach( ( setting ) => this.generateTemplate( setting ) )
-        clientStore.changed.connect( ( newS, oldS ) => {
-            if ( DEFAULT_PLAYER_DATA.settings !== oldS.data.settings ) return
-            SETTINGS.forEach( ( setting ) => this.updateSetting( setting, newS.data.settings.get(setting)!) )
-        } )
 
         this.openButton.MouseButton1Click.Connect( () => openGui(this.gui) )
         this.exit.MouseButton1Click.Connect(() => this.gui.Enabled = false)
@@ -56,7 +57,7 @@ export class SettingsController implements OnStart {
     }
 
     private performUpdate ( setting: Setting ) {
-        const value = clientStore.getState().data.settings.get(setting)
+        const value = clientStore.getState().data.settings.get( setting )
         switch (setting) {
             case "Hide Others Pets":
                 if ( !value ) this.petsController.clearActivePets()

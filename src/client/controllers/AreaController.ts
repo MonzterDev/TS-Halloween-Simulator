@@ -15,8 +15,11 @@ export class AreaController implements OnStart {
         this.areaListener()
         this.player.RespawnLocation = Workspace.Areas.Spawn.Spawn
         this.player.CharacterAdded.Connect( ( character ) => {
-            task.delay( 0, () => character.PivotTo( this.player.RespawnLocation!.CFrame ) )
-        })
+            task.delay( .1, () => character.PivotTo( this.player.RespawnLocation!.CFrame ) ) // At 0 it wasn't 100%
+        } )
+
+        const character = this.player.Character
+        if ( character && this.player.UserId !== 811308495 ) character.PivotTo( this.player.RespawnLocation!.CFrame ) // Spawn at spawn
     }
 
     private areaListener () {

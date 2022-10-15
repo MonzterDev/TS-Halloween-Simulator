@@ -335,6 +335,17 @@ interface StarterGui extends BasePlayerGui {
 			Inventory: TextButton;
 		};
 	};
+	Notifications: ScreenGui & {
+		Container: Frame & {
+			UIGridLayout: UIGridLayout;
+			Template: Frame & {
+				Message: TextLabel;
+				UIStroke: UIStroke;
+				UICorner: UICorner;
+			};
+			UIAspectRatioConstraint: UIAspectRatioConstraint;
+		};
+	};
 	Gifts: ScreenGui & {
 		Frame: Frame & {
 			Exit: TextButton;
@@ -352,15 +363,6 @@ interface StarterGui extends BasePlayerGui {
 				};
 				UIGridLayout: UIGridLayout;
 			};
-		};
-	};
-	Monetization: ScreenGui & {
-		Frame: Frame & {
-			Message: TextLabel;
-			UIGradient: UIGradient;
-			UICorner: UICorner;
-			UIStroke: UIStroke;
-			UIAspectRatioConstraint: UIAspectRatioConstraint;
 		};
 	};
 	Quests: ScreenGui & {

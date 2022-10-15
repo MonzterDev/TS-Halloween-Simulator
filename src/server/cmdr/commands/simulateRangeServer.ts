@@ -14,7 +14,8 @@ export = function ( context: CommandContext, range: number ) {
     const profile = playerDataService.getProfile( context.Executor )
     if ( !profile ) return
 
-    if ( !range ) range = BASKET_UPGRADE_CONFIG.range[profile.data.basket_upgrades.range] * 2
+    const rangeLevel = profile.data.basket_upgrades.Range
+    if ( !range ) range = BASKET_UPGRADE_CONFIG.Range[rangeLevel] * 2
 
     let part = humanoidRootPart.FindFirstChild("Radius")
     if ( part ) {

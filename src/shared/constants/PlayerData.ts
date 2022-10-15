@@ -1,3 +1,4 @@
+import { isA } from "shared/util/functions/isA";
 import { AreasUnlockedData, BasketUpgradesData, CodeData, GamepassesData, GiftData, PetAutoDeleteData, PetEggPityData, PetIndexData, PlayerData, QuestData, SettingsData } from "../types/PlayerData";
 import { AREAS } from "./Areas";
 import { BASKET_UPGRADES } from "./Basket";
@@ -68,15 +69,17 @@ export const DEFAULT_MAP_DATA: AreasUnlockedData = {}
 AREAS.forEach( ( area ) => DEFAULT_MAP_DATA[area] = false )
 DEFAULT_MAP_DATA["Spawn"] = true
 
-export const DEFAULT_BASKET_UPGRADE_DATA: BasketUpgradesData = {}
-BASKET_UPGRADES.forEach( ( upgrade ) => DEFAULT_BASKET_UPGRADE_DATA[upgrade] = 0 )
+export const DEFAULT_BASKET_UPGRADE_DATA: BasketUpgradesData | {} = {}
+BASKET_UPGRADES.forEach( ( upgrade ) => {
+    if (isA<BasketUpgradesData>(DEFAULT_BASKET_UPGRADE_DATA)) DEFAULT_BASKET_UPGRADE_DATA[upgrade] = 0
+} )
 
 
 export const DEFAULT_PLAYER_DATA: PlayerData = {
     candy: 0,
     candy_corn: 0,
     money: 10000,
-    basket_upgrades: DEFAULT_BASKET_UPGRADE_DATA,
+    basket_upgrades: <BasketUpgradesData> DEFAULT_BASKET_UPGRADE_DATA,
     pet_inventory: new Map(
         // [
         //     ["UDAWD", { type: "Dog", rarity: "Rare", equipped: true }],

@@ -64,7 +64,7 @@ export class PetsController implements OnStart {
                 this.unequipPet(player, pets[i].uuid)
                 i--
             }
-        })
+        } )
     }
 
     private animatePets () {
@@ -93,7 +93,7 @@ export class PetsController implements OnStart {
 
         const playerPets = this.pets.get( player.UserId )
         if ( !playerPets ) return
-        playerPets.forEach((pet) => this.spawnPet(player, pet.uuid, pet.type))
+        playerPets.forEach( ( pet ) => this.spawnPet( player, pet.uuid, pet.type ) )
     }
 
     private unequipPet ( player: Player, uuid: UUID ) {

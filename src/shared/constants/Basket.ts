@@ -1,6 +1,6 @@
 export type BasketUpgradeResponse = "Max" | "No Money" | "Success" | false
 
-export const BASKET_UPGRADES = ["Size", "Range", "Power", "Luck"]
+export const BASKET_UPGRADES = ["Size", "Range", "Power", "Luck"] as const
 export type BasketUpgrade = typeof BASKET_UPGRADES[number]
 export const BASKET_UPGRADE_DESCRIPTION: Record<BasketUpgrade, string> = {
     "Size": "Hold more Candy!",
