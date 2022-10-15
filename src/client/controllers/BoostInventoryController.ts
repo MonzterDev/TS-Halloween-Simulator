@@ -5,9 +5,12 @@ import { clientStore } from "client/rodux/rodux";
 import { Boost, BOOSTS, BOOSTS_CONFIG, BOOST_DESCRIPTIONS, BOOST_IMAGES } from "shared/constants/Boosts";
 import { PET_CONFIG, PetInstanceProps, RARITIES, RARITY_COLORS, UUID, Rarity } from "shared/constants/Pets";
 import { timeToString } from "shared/util/functions/timeToString";
+import { NotificationsController } from "./NotificationsController";
 
 @Controller({})
 export class PetInventoryController implements OnStart {
+    private notificationsController = Dependency( NotificationsController )
+
     private player = Players.LocalPlayer
     private playerGui = <PlayerGui>this.player.WaitForChild( "PlayerGui" )
 
@@ -56,7 +59,9 @@ export class PetInventoryController implements OnStart {
         const template = this.getTemplate( boost, rarity )
         if ( !template ) return
 
-        template.Amount.Text = tostring(clientStore.getState().data.boost_inventory.get( boost )![rarity])
+        const amount = clientStore.getState().data.boost_inventory.get( boost )![rarity]
+        template.Amount.Text = tostring( amount )
+        if (amount > 0) this.notificationsController.createNotification("+AMOUNT RARITY TYPE Booster!", {amount: amount, rarity: rarity, type: boost})
     }
 
     private generateBoosts () {

@@ -8,6 +8,7 @@ import { BASKET_SHOP_CONFIG, BASKET_UPGRADES, getBasketUpgradePrice, BASKET_UPGR
 import { abbreviator } from "shared/util/functions/abbreviate";
 import { getClosestUpgradePart } from "shared/util/functions/getClosestPart";
 import { AreaController } from "./AreaController";
+import { NotificationsController } from "./NotificationsController";
 
 const areasMaxLevel: Record<Area, number> = {
     "Spawn": 10,
@@ -16,6 +17,7 @@ const areasMaxLevel: Record<Area, number> = {
 
 @Controller({})
 export class BasketUpgradeController implements OnStart {
+    private notificationsController = Dependency(NotificationsController)
     private areaController = Dependency(AreaController)
 
     private player = Players.LocalPlayer
@@ -113,9 +115,9 @@ export class BasketUpgradeController implements OnStart {
     private requestUpgrade () {
         Functions.purchaseBasketUpgrade.invoke( this.selectedUpgrade ).andThen( ( result ) => {
             if ( !result ) return
-            if (result === "Max") print("Max")
-            if (result === "No Money") print("No Money")
-            if ( result === "Success" ) {
+            else if (result === "Max") this.notificationsController.createNotification("You have fully upgraded this!")
+            else if (result === "No Money") this.notificationsController.createNotification("You don't have enough money!")
+            else if ( result === "Success" ) {
                 clientStore.dispatch({type: "updateUpgrade", upgrade: this.selectedUpgrade, amount: this.getLevel(this.selectedUpgrade) + 1})
                 this.displayInfo( this.selectedUpgrade )
                 this.cleanup()

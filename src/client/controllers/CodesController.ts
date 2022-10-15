@@ -1,12 +1,15 @@
-import { Controller, OnStart, OnInit } from "@flamework/core";
+import { Controller, OnStart, OnInit, Dependency } from "@flamework/core";
 import { Players } from "@rbxts/services";
 import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
 import { openGui } from "client/utils/openGui";
 import { CODES, CODES_CONFIG } from "shared/constants/Codes";
+import { NotificationsController } from "./NotificationsController";
 
 @Controller({})
 export class CodesController implements OnStart {
+    private notifcationsController = Dependency(NotificationsController)
+
     private player = Players.LocalPlayer
     private playerGui = <PlayerGui>this.player.WaitForChild( "PlayerGui" )
 
@@ -31,34 +34,14 @@ export class CodesController implements OnStart {
         const expirationTime = isCodeValid ? CODES_CONFIG[code].expiration : 999
 
         if ( !isCodeValid ) {
-            this.redeemButton.Text = "Invalid Code"
-            this.redeemButton.BackgroundColor3 = Color3.fromRGB( 255, 0, 0 )
-            task.delay( 2, () => {
-                this.redeemButton.Text = "REDEEM"
-                this.redeemButton.BackgroundColor3 = Color3.fromRGB( 43, 255, 0 )
-            } )
+            this.notifcationsController.createNotification("That code is invalid!")
         } else if (os.time() >= expirationTime) {
-            this.redeemButton.Text = "Expired Code"
-            this.redeemButton.BackgroundColor3 = Color3.fromRGB( 255, 0, 0 )
-            task.delay( 2, () => {
-                this.redeemButton.Text = "REDEEM"
-                this.redeemButton.BackgroundColor3 = Color3.fromRGB( 43, 255, 0 )
-            } )
+            this.notifcationsController.createNotification("That code is expired!")
         } else if ( clientStore.getState().data.codes.get(code) ) {
-            this.redeemButton.Text = "Already Redeemed"
-            this.redeemButton.BackgroundColor3 = Color3.fromRGB( 255, 0, 0 )
-            task.delay( 2, () => {
-                this.redeemButton.Text = "REDEEM"
-                this.redeemButton.BackgroundColor3 = Color3.fromRGB( 43, 255, 0 )
-            } )
+            this.notifcationsController.createNotification("You already redeemed this code!")
         } else {
             Events.redeemCode.fire( code )
-            this.redeemButton.Text = "Success"
-            this.redeemButton.BackgroundColor3 = Color3.fromRGB( 43, 255, 0 )
-            task.delay( 2, () => {
-                this.redeemButton.Text = "REDEEM"
-                this.redeemButton.BackgroundColor3 = Color3.fromRGB( 43, 255, 0 )
-            } )
+            this.notifcationsController.createNotification("Code redeemed successfully!")
         }
 
     }

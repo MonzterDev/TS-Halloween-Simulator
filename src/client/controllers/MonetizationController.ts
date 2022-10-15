@@ -6,11 +6,13 @@ import { clientStore } from "client/rodux/rodux";
 import { openGui } from "client/utils/openGui";
 import { calculateCoinReward, DevProduct, DEV_PRODUCTS, DEV_PRODUCT_CONFIG, Gamepass, GAMEPASSES, GAMEPASS_CONFIG, getGamepassIDFromGamepass } from "shared/constants/Monetization";
 import { BasketUpgradeController } from "./BasketUpgradeController";
+import { NotificationsController } from "./NotificationsController";
 
 type Mode = "Passes" | "Currency" | "Boosts"
 
 @Controller({})
 export class MonetizationController implements OnStart {
+    private notificationsController = Dependency(NotificationsController)
     private basketUpgradeController = Dependency(BasketUpgradeController)
 
     private player = Players.LocalPlayer
@@ -18,10 +20,6 @@ export class MonetizationController implements OnStart {
 
     private buttonGui = <StarterGui["Buttons"]>this.playerGui.WaitForChild( "Buttons" )
     private openButton = this.buttonGui.Frame.MonetizationShop
-
-    private monetizationGui = <StarterGui["Monetization"]>this.playerGui.WaitForChild( "Monetization" )
-    private monetizationFrame = this.monetizationGui.Frame
-    private monetizationMessage = this.monetizationFrame.Message
 
     private gui = <StarterGui["MonetizationShop"]>this.playerGui.WaitForChild( "MonetizationShop" )
     private frame = this.gui.Frame
@@ -36,7 +34,7 @@ export class MonetizationController implements OnStart {
     private mode: Mode = "Passes"
 
     onStart () {
-        Events.purchaseSuccess.connect( ( product ) => this.notifyPlayer( product ) )
+        Events.purchaseSuccess.connect( ( product ) => this.notificationsController.createNotification("You purchase GAMEPASS, enjoy!", {gamepassOrProduct: product} ) )
         this.openButton.MouseButton1Click.Connect( () => openGui( this.gui ) )
         this.exit.MouseButton1Click.Connect( () => this.gui.Enabled = false )
         this.buttons.Gamepasses.MouseButton1Click.Connect(() => this.switchMode( "Passes" ))
@@ -123,14 +121,6 @@ export class MonetizationController implements OnStart {
             template.Amount.Text = FormatStandard(calculateCoinReward(passProps.displayName, clientStore.getState().data))
             template.MouseButton1Click.Connect(() => MarketplaceService.PromptProductPurchase( this.player, tonumber( productId )! ))
         }
-    }
-
-    private notifyPlayer ( product: Gamepass | DevProduct ) {
-        const isGamepass = getGamepassIDFromGamepass( <Gamepass>product )
-
-        this.monetizationMessage.Text = `You purchased ${product}, enjoy!`
-        this.monetizationGui.Enabled = true
-        task.delay(7, () => this.monetizationGui.Enabled = false)
     }
 
 }

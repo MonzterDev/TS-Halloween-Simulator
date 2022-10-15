@@ -1,12 +1,15 @@
-import { Controller, OnStart, OnInit } from "@flamework/core";
+import { Controller, OnStart, OnInit, Dependency } from "@flamework/core";
 import { Players } from "@rbxts/services";
 import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
 import { openGui } from "client/utils/openGui";
 import { timeToString } from "shared/util/functions/timeToString";
+import { NotificationsController } from "./NotificationsController";
 
 @Controller({})
 export class GiftController implements OnStart {
+    private notificationsController = Dependency(NotificationsController)
+
     private player = Players.LocalPlayer
     private playerGui = <PlayerGui>this.player.WaitForChild( "PlayerGui" )
 
@@ -62,11 +65,16 @@ export class GiftController implements OnStart {
             const isUnlocked = secondsUntilUnlocked <= 0
 
             const template = <typeof this.template>child
-            if ( !template || !template.Time.Visible) return
+            if ( !template || !template.Time.Visible ) return
 
             template.ProgressBar.Bar.Size = UDim2.fromScale( secondsPlayed / timeInSeconds, 1 )
             template.Time.Text = timeToString( secondsUntilUnlocked )
             template.Time.Visible = !isUnlocked
+
+            if (isUnlocked && !template.GetAttribute( "notified" ) ) {
+                template.SetAttribute( "notified", true )
+                this.notificationsController.createNotification("You have a new Gift to claim!")
+            }
         })
     }
 

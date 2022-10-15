@@ -4,7 +4,7 @@ import { CleanViewport, GenerateViewport } from "@rbxts/viewport-model";
 import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
 import { PET_CONFIG, PetInstanceProps, UUID, getMaxPetsEquipped, getMaxPetsStored } from "shared/constants/Pets";
-import { DEFAULT_PLAYER_DATA } from "shared/constants/PlayerData";
+import { NotificationsController } from "./NotificationsController";
 import { PetsController } from "./PetsController";
 
 type Mode = "Default" | "Trash"
@@ -15,11 +15,12 @@ type Template = ImageButton & {
     Equipped: ImageLabel;
     Power: TextLabel;
 };
-type Warning = "Too Many Pets"
 
 @Controller({})
 export class PetInventoryController implements OnStart {
-    private petsController = Dependency(PetsController)
+    private petsController = Dependency( PetsController )
+    private notificationsController = Dependency( NotificationsController )
+
     private petsFolder = ReplicatedStorage.Pets
     private player = Players.LocalPlayer
     private playerGui = <PlayerGui>this.player.WaitForChild( "PlayerGui" )
@@ -91,10 +92,13 @@ export class PetInventoryController implements OnStart {
     }
 
     private equipPet ( player: Player, uuid: UUID, equip: boolean ) {
-        if (player !== this.player) return
+        if ( player !== this.player ) return
+
         const template = <Template>this.container.FindFirstChild( uuid )
         if ( !template ) return
+
         template.Equipped.Visible = equip
+
         const props = this.getPetPropsFromUUID( uuid )
         const power = PET_CONFIG[props!.type][props!.rarity]
         template.LayoutOrder = equip ? -1_000_000 - power : -power
@@ -104,6 +108,7 @@ export class PetInventoryController implements OnStart {
     private lockPet (uuid: UUID, lock: boolean ) {
         const template = <Template>this.container.FindFirstChild( uuid )
         if ( !template ) return
+
         template.Locked.Visible = lock
     }
 
@@ -140,12 +145,14 @@ export class PetInventoryController implements OnStart {
                 this.confirmation.Visible = true
                 break
         }
+
         this.container.GetChildren().forEach( ( child ) => {
             if ( child.IsA( "ImageButton" ) && child.Visible ) {
                 const label = <ImageLabel>child.FindFirstChild( "IsSelected" )
                 label.Visible = false
             }
         } )
+
         this.selectedPets.clear()
     }
 
@@ -157,11 +164,14 @@ export class PetInventoryController implements OnStart {
                 break
             case "Trash":
                 const props = this.getPetPropsFromUUID( uuid )
-                if (props?.locked) return
+                if ( props?.locked ) return
+
                 const template = <Template>this.container.FindFirstChild( uuid )
                 template.IsSelected.Visible = !template.IsSelected.Visible
+
                 if ( template.IsSelected.Visible ) this.selectedPets.push( uuid )
                 else this.selectedPets.remove(this.selectedPets.indexOf(uuid))
+
                 break
         }
     }
@@ -192,18 +202,10 @@ export class PetInventoryController implements OnStart {
         this.info.Buttons.Delete.Visible = !props.locked
     }
 
-    private warn ( message: Warning ) {
-        let text = ""
-        if ( message === "Too Many Pets" ) text = "You cannot equip more pets!"
-        this.warning.Text = text
-        this.warning.Visible = true
-        task.delay(3, () => this.warning.Visible = false)
-    }
-
     private equipButton () {
         const equipped = this.getPetPropsFromUUID( this.selectedPet! )?.equipped
         if ( !equipped && this.petsController.getEquippedPets().size() === getMaxPetsEquipped(clientStore.getState().data) ) {
-            this.warn("Too Many Pets")
+            this.notificationsController.createNotification("You cannot equip more Pets!")
             return
         }
         if (equipped) Events.unequipPet.fire(this.selectedPet!)

@@ -1,10 +1,9 @@
-import { Controller, OnStart, OnInit } from "@flamework/core";
+import { Controller, OnStart, OnInit, Dependency } from "@flamework/core";
 import { Players } from "@rbxts/services";
 import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
-import { Boost, BOOSTS, BOOST_IMAGES } from "shared/constants/Boosts";
-import { RARITIES, Rarity, RARITY_COLORS } from "shared/constants/Pets";
-import { DEFAULT_PLAYER_DATA } from "shared/constants/PlayerData";
+import { Boost, BOOST_IMAGES } from "shared/constants/Boosts";
+import { Rarity, RARITY_COLORS } from "shared/constants/Pets";
 import { timeToString } from "shared/util/functions/timeToString";
 
 @Controller({})

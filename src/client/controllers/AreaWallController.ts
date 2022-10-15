@@ -1,14 +1,15 @@
-import { Controller, OnStart, OnInit } from "@flamework/core";
+import { Controller, OnStart, OnInit, Dependency } from "@flamework/core";
 import { FormatCompact } from "@rbxts/format-number";
 import { Players, Workspace } from "@rbxts/services";
 import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
 import { hideGuis } from "client/utils/hideGuis";
-import { openGui } from "client/utils/openGui";
 import { Area, AREA_WALL_CONFIG } from "shared/constants/Areas";
+import { NotificationsController } from "./NotificationsController";
 
 @Controller({})
 export class BoostController implements OnStart {
+    private notificationsController = Dependency(NotificationsController)
 
     private areasFolder = Workspace.Areas
 
@@ -91,7 +92,10 @@ export class BoostController implements OnStart {
 
         const money = clientStore.getState().data.money
         const price = AREA_WALL_CONFIG[this.selectedArea].coin_price
-        if ( money < price ) return
+        if ( money < price ) {
+            this.notificationsController.createNotification("You don't have enough money!")
+            return
+        }
 
         Events.unlockArea.fire(this.selectedArea)
     }

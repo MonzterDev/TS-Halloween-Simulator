@@ -7,6 +7,7 @@ import { Events, Functions } from "client/network";
 import { clientStore } from "client/rodux/rodux";
 import { EGG_SHOP_CONFIG, EGGS, PETS, Pet, Egg, getMaxPetsStored } from "shared/constants/Pets";
 import { cleanString } from "shared/util/functions/cleanString";
+import { NotificationsController } from "./NotificationsController";
 
 type PetTemplate = StarterGui["PetEgg"]["InfoGui"]["Background"]["Frame"]["Container"]["Template"]
 
@@ -14,6 +15,7 @@ const MAX_DISTANCE_FROM_EGG = 25
 
 @Controller({})
 export class PetEggController implements OnStart {
+    private notificationsController = Dependency(NotificationsController)
 
     private eggs = Workspace.Eggs
 
@@ -125,7 +127,7 @@ export class PetEggController implements OnStart {
         const money = clientStore.getState().data.money
         const canAfford = money > price
         if ( !canAfford ) {
-            print( "Cannot afford" ) // TODO Make GUI Notification
+            this.notificationsController.createNotification("You don't have enough money!")
             this.isAutoHatching = false
             return
         }
@@ -134,7 +136,7 @@ export class PetEggController implements OnStart {
         let maxStorage = getMaxPetsStored(clientStore.getState().data)
         const hasStorage = storedPets + amountOfHatches <= maxStorage
         if ( !hasStorage ) {
-            print( "No storage" ) // TODO Make GUI Notification
+            this.notificationsController.createNotification("Your Pet Storage is Full!")
             this.isAutoHatching = false
             return
         }

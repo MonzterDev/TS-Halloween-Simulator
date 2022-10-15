@@ -1,4 +1,4 @@
-import { Controller, OnStart, OnInit } from "@flamework/core";
+import { Controller, OnStart, OnInit, Dependency } from "@flamework/core";
 import { FormatCompact } from "@rbxts/format-number";
 import { Players } from "@rbxts/services";
 import { Events } from "client/network";
@@ -7,11 +7,14 @@ import { openGui } from "client/utils/openGui";
 import { Boost, BOOSTS } from "shared/constants/Boosts";
 import { BoosterQuestRewardProps, getActiveQuestTier, Quest, QUEST_CONFIG, QuestRewardProps, Reward2 } from "shared/constants/Quests";
 import { cleanString } from "shared/util/functions/cleanString";
+import { NotificationsController } from "./NotificationsController";
 
 type Mode = "Active" | "Unclaimed" | "Completed"
 
 @Controller({})
 export class QuestsController implements OnStart {
+    private notificationsController = Dependency(NotificationsController)
+
     private player = Players.LocalPlayer
     private playerGui = <PlayerGui>this.player.WaitForChild( "PlayerGui" )
 
@@ -33,7 +36,10 @@ export class QuestsController implements OnStart {
 
     onStart () {
         Events.updateQuestPoints.connect((quest, tier, points) => task.defer(() => this.updateQuestPoints(quest, tier, points)))
-        Events.completeQuest.connect((quest, tier) => task.defer(() => this.changeMode(this.mode)))
+        Events.completeQuest.connect( ( quest, tier ) => task.defer( () => {
+            this.notificationsController.createNotification("Quest Completed: QUEST!", {quest: quest, tier: tier})
+            this.changeMode( this.mode )
+        } ) )
         Events.claimQuest.connect((quest, tier) => task.defer(() => this.changeMode(this.mode)))
         this.buttons.ActiveQuests.MouseButton1Click.Connect(() => this.changeMode("Active"))
         this.buttons.Unclaimed.MouseButton1Click.Connect(() => this.changeMode("Unclaimed"))
