@@ -1,4 +1,5 @@
 import { Service, OnStart, OnInit, Dependency } from "@flamework/core";
+import { GameAnalytics } from "@rbxts/gameanalytics";
 import { Debris, MarketplaceService, Players } from "@rbxts/services";
 import { Events } from "server/network";
 import { Boost, BOOSTS } from "shared/constants/Boosts";
@@ -49,11 +50,13 @@ export class MonetizationService implements OnStart {
         const profile = this.playerDataService.getProfile( player )
         if ( !profile ) return Enum.ProductPurchaseDecision.NotProcessedYet
 
+        GameAnalytics.addBusinessEvent(player.UserId, {amount: 1, itemType: "DevProduct", itemId: product, cartType: "Shop"})
         profile.data.analytics.dev_products_purchased += 1
         Events.purchaseSuccess.fire( player, product )
         if ( COIN_PRODUCTS.includes(product) ) {
             const amount = calculateCoinReward( product, profile.data )
             profile.adjustMoney( amount )
+            GameAnalytics.addResourceEvent(player.UserId, {flowType: "Source", currency: "Money", amount: amount, itemType: "DevProduct", itemId: product})
             return Enum.ProductPurchaseDecision.PurchaseGranted
         } else if ( BOOSTS.includes( <Boost>product.gsub(" Booster", "")[0] ) ) {
             this.boostsService.rewardBoost( player, <Boost>product.gsub(" Booster", "")[0], "Rare" )

@@ -40,7 +40,6 @@ export class NotificationsController {
     }
 
     public createNotification ( notification: Notification, props?: NotificationProps ) {
-        print(notification, props)
         const notificationConfig = NOTIFICATION_CONFIG[notification]
         const template = this.template.Clone()
         template.Parent = this.container

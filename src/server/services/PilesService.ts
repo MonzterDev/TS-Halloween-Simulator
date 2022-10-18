@@ -1,5 +1,6 @@
 import { Components } from "@flamework/components";
 import { Service, OnStart, OnInit, OnRender, OnTick, Dependency } from "@flamework/core";
+import { GameAnalytics } from "@rbxts/gameanalytics";
 import { CollectionService, HttpService, Players, ServerStorage, Workspace } from "@rbxts/services";
 import { PileComponent } from "server/components/PileComponent";
 import { Events } from "server/network";
@@ -95,6 +96,7 @@ export class PilesService implements OnStart {
         if ( wasLucky ) bonusReward = math.round( damage / ( math.random( 20, 100 ) / 100 ) )
         reward += bonusReward
 
+        GameAnalytics.addResourceEvent(player.UserId, {flowType: "Source", currency: "Candy", amount: reward, itemType: "PILE", itemId: "PILE"})
         rewardCandy(player, reward, true)
         this.questsService.addPoint(player, "Candy Collector", 0, reward)
         if (wasLucky) Events.luckyReward.fire(player, bonusReward)

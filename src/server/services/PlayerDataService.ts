@@ -75,7 +75,7 @@ export class PlayerDataService implements OnStart {
 
 		this.createLeaderstats(player, profile.Data)
 		this.profiles.set( player, profile );
-		this.profileLoaded.Fire(player, profile)
+		this.profileLoaded.Fire( player, profile )
 	}
 
 	private removeProfile ( player: Player ) {

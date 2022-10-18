@@ -1,4 +1,5 @@
 import { Service, OnStart, OnInit, Dependency } from "@flamework/core";
+import { GameAnalytics } from "@rbxts/gameanalytics";
 import { Players, Workspace } from "@rbxts/services";
 import { Events } from "server/network";
 import { rewardMoney } from "server/utils/Rewards";
@@ -39,9 +40,10 @@ export class SellService implements OnStart {
         if ( !profile ) return
 
         const candy = profile.data.candy
-        rewardMoney( player, candy, true )
+        rewardMoney( player, candy, true)
+        GameAnalytics.addResourceEvent( player.UserId, { flowType: "Source", currency: "Money", amount: candy, itemType: "Sell", itemId: "Candy" } )
         profile.setCandy( 0 )
-        this.questsService.addPoint(player, "Salesman")
+        this.questsService.addPoint( player, "Salesman" )
     }
 
 }

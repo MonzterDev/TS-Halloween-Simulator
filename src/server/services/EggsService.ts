@@ -1,4 +1,5 @@
 import { Service, OnStart, Dependency } from "@flamework/core";
+import { GameAnalytics } from "@rbxts/gameanalytics";
 import { Workspace } from "@rbxts/services";
 import { Events, Functions } from "server/network";
 import { EggPetProps, EGG_SHOP_CONFIG, Pet, Egg, getMaxPetsStored } from "shared/constants/Pets";
@@ -82,6 +83,7 @@ export class EggsService implements OnStart {
             if (!shouldDelete) this.petsService.rewardPet( player, pet!, rarity! )
             task.wait()
         }
+        GameAnalytics.addDesignEvent(player.UserId, {eventId: `Hatch:${egg}`})
         return pets
     }
 

@@ -67,7 +67,9 @@ export class GiftController implements OnStart {
             const template = <typeof this.template>child
             if ( !template || !template.Time.Visible ) return
 
-            template.ProgressBar.Bar.Size = UDim2.fromScale( secondsPlayed / timeInSeconds, 1 )
+            const percentCompleted = secondsPlayed / timeInSeconds <= 1 ? secondsPlayed / timeInSeconds : 1
+
+            template.ProgressBar.Bar.Size = UDim2.fromScale( percentCompleted, 1 )
             template.Time.Text = timeToString( secondsUntilUnlocked )
             template.Time.Visible = !isUnlocked
 

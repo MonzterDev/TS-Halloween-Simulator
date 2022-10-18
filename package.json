@@ -32,10 +32,12 @@
     "@rbxts/boat-tween": "^1.0.1",
     "@rbxts/cmdr": "^1.8.4-ts.2",
     "@rbxts/format-number": "^3.0.4-b3",
+    "@rbxts/gameanalytics": "^2.2.2-ts.1",
     "@rbxts/make": "^1.0.6",
     "@rbxts/profileservice": "^1.4.1",
     "@rbxts/rodux": "^3.0.0-ts.3",
     "@rbxts/services": "^1.5.1",
+    "@rbxts/sheetvalues": "^2.0.3-ts.1",
     "@rbxts/signal": "^1.1.1",
     "@rbxts/viewport-model": "^1.0.0",
     "io-serve": "^1.1.2"

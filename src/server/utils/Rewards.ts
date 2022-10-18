@@ -1,4 +1,5 @@
 import { Dependency } from "@flamework/core";
+import { GameAnalytics } from "@rbxts/gameanalytics";
 import { BoostsService } from "server/services/BoostsService";
 import { PlayerDataService } from "server/services/PlayerDataService";
 import { Boost, BOOSTS } from "shared/constants/Boosts";
@@ -15,7 +16,7 @@ export function rewardMoney ( player: Player, amount: number, useMultiplier: boo
 
     if (useMultiplier) amount *= multiplier
 
-    profile.adjustMoney(amount)
+    profile.adjustMoney( amount )
 }
 
 export function rewardCandy ( player: Player, amount: number, useMultiplier: boolean ) {

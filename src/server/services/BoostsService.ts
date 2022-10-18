@@ -1,4 +1,5 @@
 import { Service, OnStart, OnInit, Dependency } from "@flamework/core";
+import { GameAnalytics } from "@rbxts/gameanalytics";
 import { Players } from "@rbxts/services";
 import { Events } from "server/network";
 import { Boost, BOOSTS, BOOST_DURATION } from "shared/constants/Boosts";
