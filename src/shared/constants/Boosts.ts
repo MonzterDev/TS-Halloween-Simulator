@@ -30,5 +30,5 @@ export const BOOSTS_CONFIG: Record<Boost, Record<Rarity, Multiplier>> = {
 
 export const BOOST_IMAGES: Record<Boost, string> = {
     Luck: "rbxassetid://129474314",
-    Power: "3610692290://129474314"
+    Power: "rbxassetid://129474314"
 }

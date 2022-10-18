@@ -41,7 +41,8 @@ export class SettingsController implements OnStart {
     private updateSetting ( setting: Setting, value: boolean ) {
         const clone = <typeof this.template> this.container.FindFirstChild( setting )
         if ( !clone ) return
-        clone.Toggle.Image = value ? ON_BUTTON : OFF_BUTTON
+        clone.Toggle.On.Visible = value
+        clone.Toggle.Off.Visible = !value
         this.performUpdate(setting)
     }
 
@@ -52,7 +53,9 @@ export class SettingsController implements OnStart {
         clone.Name = setting
         clone.Setting.Text = setting
 
-        clone.Toggle.Image = clientStore.getState().data.settings.get(setting) ? ON_BUTTON : OFF_BUTTON
+        const isEnabled = clientStore.getState().data.settings.get( setting )!
+        clone.Toggle.On.Visible = isEnabled
+        clone.Toggle.Off.Visible = !isEnabled
         clone.MouseButton1Click.Connect( () => Events.toggleSetting.fire( setting ))
     }
 

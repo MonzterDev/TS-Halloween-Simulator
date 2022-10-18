@@ -9,11 +9,11 @@ export class InventoryController implements OnStart {
     private player = Players.LocalPlayer
     private playerGui = <PlayerGui>this.player.WaitForChild( "PlayerGui" )
 
-    private petInventoryGui = <StarterGui["PetInventory"]>this.playerGui.WaitForChild( "PetInventory" )
-    private boostInventoryGui = <StarterGui["BoostInventory"]>this.playerGui.WaitForChild( "BoostInventory" )
-
     private buttons = <StarterGui["Buttons"]>this.playerGui.WaitForChild( "Buttons" )
     private gui = <StarterGui["Inventory"]>this.playerGui.WaitForChild( "Inventory" )
+
+    private petInventory = this.gui.Frame.PetInventory
+    private boostInventory = this.gui.Frame.BoostInventory
 
     private title = this.gui.Frame.Title
 
@@ -36,19 +36,23 @@ export class InventoryController implements OnStart {
 
     private displayGui ( open: boolean ) {
         this.gui.Enabled = open
-        if (this.mode === "Pets") this.petInventoryGui.Enabled = open
-        else if ( this.mode === "Boosts" ) this.boostInventoryGui.Enabled = open
+        if (this.mode === "Pets") this.petInventory.Visible = open
+        else if ( this.mode === "Boosts" ) this.boostInventory.Visible = open
+        this.boostInventory.Info.Visible = false
+        this.petInventory.Info.Visible = false
     }
 
     private changeMode ( mode: Mode ) {
         if (this.mode === mode) return
         this.mode = mode
-        this.title.Text = mode.upper()
-        this.petInventoryGui.Enabled = mode === "Pets"
-        this.boostInventoryGui.Enabled = mode === "Boosts"
-        this.boostInventoryGui.Frame.Info.Visible = false
-        this.petInventoryGui.Frame.Info.Visible = false
-        resetScrollingFrame(this.petInventoryGui.Frame.Container)
-        resetScrollingFrame(this.boostInventoryGui.Frame.Container)
+        this.title.Title.Text = mode
+        this.petInventory.Visible = mode === "Pets"
+        this.boostInventory.Visible = mode === "Boosts"
+        this.petsButton.ZIndex = mode === "Pets" ? 1 : 0
+        this.boostsButton.ZIndex = mode === "Boosts" ? 1 : 0
+        this.boostInventory.Info.Visible = false
+        this.petInventory.Info.Visible = false
+        resetScrollingFrame(this.petInventory.Container)
+        resetScrollingFrame(this.boostInventory.Container)
     }
 }

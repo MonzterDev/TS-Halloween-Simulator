@@ -4,7 +4,6 @@ import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
 import { Boost, BOOSTS, BOOSTS_CONFIG, BOOST_DESCRIPTIONS, BOOST_IMAGES } from "shared/constants/Boosts";
 import { PET_CONFIG, PetInstanceProps, RARITIES, RARITY_COLORS, UUID, Rarity } from "shared/constants/Pets";
-import { timeToString } from "shared/util/functions/timeToString";
 import { NotificationsController } from "./NotificationsController";
 
 @Controller({})
@@ -14,8 +13,8 @@ export class PetInventoryController implements OnStart {
     private player = Players.LocalPlayer
     private playerGui = <PlayerGui>this.player.WaitForChild( "PlayerGui" )
 
-    private gui = <StarterGui["BoostInventory"]>this.playerGui.WaitForChild("BoostInventory")
-    private frame = this.gui.Frame
+    private gui = <StarterGui["Inventory"]>this.playerGui.WaitForChild("Inventory")
+    private frame = this.gui.Frame.BoostInventory
 
     private info = this.frame.Info
     private container = this.frame.Container

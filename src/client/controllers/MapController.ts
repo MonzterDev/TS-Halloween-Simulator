@@ -7,10 +7,6 @@ import { Area, AREAS } from "shared/constants/Areas";
 import { cleanString } from "shared/util/functions/cleanString";
 import { AreaController } from "./AreaController";
 
-const LOCKED_COLOR = Color3.fromRGB(117, 117, 117)
-const UNLOCKED_COLOR = Color3.fromRGB(255, 255, 255)
-const CURRENT_COLOR = Color3.fromRGB(243, 255, 0)
-
 @Controller({})
 export class MapController implements OnStart {
     private areaController = Dependency(AreaController)
@@ -49,14 +45,12 @@ export class MapController implements OnStart {
 
     private updateCurrentArea (area: Area) {
         this.container.GetChildren().forEach( ( child ) => {
-            if ( !child.IsA( "TextButton" ) || !child.Visible ) return
+            if ( !child.IsA( "ImageButton" ) || !child.Visible ) return
 
             const template = <typeof this.template>child
             const isUnlocked = clientStore.getState().data.areas_unlocked[template.Name]
 
-            if (template.Name === area && isUnlocked) template.Background.ImageColor3 = CURRENT_COLOR
-            else if (isUnlocked) template.Background.ImageColor3 = UNLOCKED_COLOR
-            else template.Background.ImageColor3 = LOCKED_COLOR
+            template.Locked.Visible = !isUnlocked
         })
     }
 
@@ -65,7 +59,7 @@ export class MapController implements OnStart {
         if ( !template ) return
 
         template.Area.Text = cleanString(area)
-        template.Background.ImageColor3 = UNLOCKED_COLOR
+        template.Locked.Visible = false
     }
 
     private generateMap () {
@@ -74,8 +68,7 @@ export class MapController implements OnStart {
             clone.Parent = this.container
             clone.Name = area
             clone.Visible = true
-            clone.Area.Text = "?"
-            clone.Background.ImageColor3 = LOCKED_COLOR
+            clone.Area.Text = "???"
 
             clone.MouseButton1Click.Connect( () => this.teleportToArea( area ) )
 

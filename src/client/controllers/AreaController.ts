@@ -1,5 +1,5 @@
-import { Controller, OnStart, OnInit } from "@flamework/core";
-import { Players, Workspace } from "@rbxts/services";
+import { Controller, OnStart, OnInit, OnTick } from "@flamework/core";
+import { Players, RunService, Workspace } from "@rbxts/services";
 import Signal from "@rbxts/signal";
 import { clientStore } from "client/rodux/rodux";
 import { Area } from "shared/constants/Areas";
@@ -14,8 +14,16 @@ export class AreaController implements OnStart {
     onStart () {
         this.areaListener()
         this.player.RespawnLocation = Workspace.Areas.Spawn.Spawn
+
         this.player.CharacterAdded.Connect( ( character ) => {
-            task.delay( .1, () => character.PivotTo( this.player.RespawnLocation!.CFrame ) ) // At 0 it wasn't 100%
+            const connection = RunService.Heartbeat.Connect( () => {
+                const primaryPart = character.PrimaryPart
+                if (!primaryPart) return
+
+                character.PivotTo( this.player.RespawnLocation!.CFrame )
+
+                if ( ( primaryPart.Position.sub( this.player.RespawnLocation!.Position ) ).Magnitude < 5 ) connection.Disconnect()
+            } )
         } )
 
         const character = this.player.Character

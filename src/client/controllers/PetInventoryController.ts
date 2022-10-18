@@ -25,13 +25,12 @@ export class PetInventoryController implements OnStart {
     private player = Players.LocalPlayer
     private playerGui = <PlayerGui>this.player.WaitForChild( "PlayerGui" )
 
-    private gui = <StarterGui["PetInventory"]>this.playerGui.WaitForChild("PetInventory")
-    private frame = this.gui.Frame
+    private gui = <StarterGui["Inventory"]>this.playerGui.WaitForChild("Inventory")
+    private frame = this.gui.Frame.PetInventory
     private buttons = this.frame.Buttons
     private confirmation = this.frame.Confirmation
     private container = this.frame.Container
     private info = this.frame.Info
-    private warning = this.frame.Warning
     private stored = this.frame.Stored
     private equipped = this.frame.Equipped
 
@@ -46,7 +45,10 @@ export class PetInventoryController implements OnStart {
 
     private dataLoaded = false
     private connection = clientStore.changed.connect( ( newState ) => {
-        if ( !this.dataLoaded ) newState.data.pet_inventory.forEach( ( props, uuid ) => this.generatePet( uuid, props ) )
+        if ( !this.dataLoaded ) {
+            this.updateLabels()
+            newState.data.pet_inventory.forEach( ( props, uuid ) => this.generatePet( uuid, props ) )
+        }
         else this.connection.disconnect()
     })
 
@@ -86,8 +88,8 @@ export class PetInventoryController implements OnStart {
             const currentStored = clientStore.getState().data.pet_inventory.size()
             const maxEquipped = getMaxPetsEquipped(clientStore.getState().data)
             const currentEquipped = this.petsController.getEquippedPets().size()
-            this.stored.Text = `${currentStored}/${maxStored} Stored`
-            this.equipped.Text = `${currentEquipped}/${maxEquipped} Equipped`
+            this.stored.Text = `${currentStored}/${maxStored}`
+            this.equipped.Text = `${currentEquipped}/${maxEquipped}`
         })
     }
 
@@ -103,6 +105,7 @@ export class PetInventoryController implements OnStart {
         const power = PET_CONFIG[props!.type][props!.rarity]
         template.LayoutOrder = equip ? -1_000_000 - power : -power
         this.updateLabels()
+        if (this.selectedPet === uuid) task.defer(() => this.displayInfo(uuid))
     }
 
     private lockPet (uuid: UUID, lock: boolean ) {
@@ -130,6 +133,7 @@ export class PetInventoryController implements OnStart {
 
         clone.MouseButton1Click.Connect( () => this.clickPet( uuid ) )
         this.updateLabels()
+        if (this.selectedPet === uuid) task.defer(() => this.displayInfo(uuid))
     }
 
     private changeMode ( mode: Mode ) {
@@ -185,8 +189,6 @@ export class PetInventoryController implements OnStart {
         if ( !props ) return
 
         this.info.PetName.Text = props.type
-        const power = PET_CONFIG[props.type][props.rarity]
-        this.info.Power.Text = tostring( power )
         this.info.Equipped.Visible = props.equipped ? props.equipped : false
         this.info.Locked.Visible = props.locked ? props.locked : false
 
@@ -195,9 +197,9 @@ export class PetInventoryController implements OnStart {
         GenerateViewport( this.info.ViewportFrame, pet, CFrame.Angles(0, math.rad(-90), 0) )
         this.info.Visible = true
 
-        this.info.Buttons.Equip.Text = !props.equipped ? "Equip" : "Unequip"
+        this.info.Buttons.Equip.Title.Text = !props.equipped ? "Equip" : "Unequip"
         this.info.Buttons.Equip.BackgroundColor3 = !props.equipped ? Color3.fromRGB(69,255,46) : Color3.fromRGB(64,232,41)
-        this.info.Buttons.Lock.Text = !props.locked ? "Lock" : "Unlock"
+        this.info.Buttons.Lock.Title.Text = !props.locked ? "Lock" : "Unlock"
         this.info.Buttons.Lock.BackgroundColor3 = !props.locked ? Color3.fromRGB(242,255,46) : Color3.fromRGB(201,212,64)
         this.info.Buttons.Delete.Visible = !props.locked
     }
@@ -210,7 +212,7 @@ export class PetInventoryController implements OnStart {
         }
         if (equipped) Events.unequipPet.fire(this.selectedPet!)
         else Events.equipPet.fire( this.selectedPet! )
-        this.info.Buttons.Equip.Text = equipped ? "Equip" : "Unequip"
+        this.info.Buttons.Equip.Title.Text = equipped ? "Equip" : "Unequip"
         this.info.Buttons.Equip.BackgroundColor3 = equipped ? Color3.fromRGB( 69, 255, 46 ) : Color3.fromRGB( 64, 232, 41 )
         this.info.Equipped.Visible = !equipped
     }
@@ -219,7 +221,7 @@ export class PetInventoryController implements OnStart {
         const locked = this.getPetPropsFromUUID( this.selectedPet! )?.locked
         if (locked) Events.unlockPet.fire(this.selectedPet!)
         else Events.lockPet.fire( this.selectedPet! )
-        this.info.Buttons.Lock.Text = locked ? "Lock" : "Unlock"
+        this.info.Buttons.Lock.Title.Text = locked ? "Lock" : "Unlock"
         this.info.Buttons.Lock.BackgroundColor3 = locked ? Color3.fromRGB(242,255,46) : Color3.fromRGB(201,212,64)
         this.info.Locked.Visible = !locked
         this.info.Buttons.Delete.Visible = locked!
