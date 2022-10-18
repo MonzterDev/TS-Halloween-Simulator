@@ -2,11 +2,13 @@ import { Service, OnStart, OnInit, Dependency } from "@flamework/core";
 import { Functions } from "server/network";
 import { BASKET_SHOP_CONFIG, BasketUpgrade, BasketUpgradeResponse } from "shared/constants/Basket";
 import { PlayerDataService } from "./PlayerDataService";
+import { QuestsService } from "./QuestsService";
 
 
 @Service({})
 export class BasketUpgradeService implements OnStart {
     private playerDataService = Dependency(PlayerDataService)
+    private questsService = Dependency(QuestsService)
 
     onStart () {
         Functions.purchaseBasketUpgrade.setCallback((player, upgrade) => this.purchaseBasketUpgrade(player, upgrade))
@@ -26,6 +28,7 @@ export class BasketUpgradeService implements OnStart {
 
         profile.adjustMoney( -price )
         profile.data.basket_upgrades[upgrade] += 1
+        this.questsService.addPoint(player, "Upgrader")
         return "Success"
     }
 

@@ -4,7 +4,8 @@ export const GAMEPASSES = [
     "2x Money", "2x Candy",
     "Equip 2 More Pets", "Equip 5 More Pets",
     "100 Pet Storage", "500 Pet Storage",
-    "Remove Hatch Cooldown", "Tripple Hatch", "Lucky Eggs"
+    "Remove Hatch Cooldown", "Tripple Hatch", "Lucky Eggs",
+    "Sell from Anywhere"
 
 ] as const
 export type Gamepass = typeof GAMEPASSES[number]
@@ -12,7 +13,8 @@ export const GAMEPASS_IDS = [
     "94737491", "94737363",
     "88116412", "88116438",
     "94738610", "94738652",
-    "88116485", "94738209", "94738011"
+    "88116485", "94738209", "94738011",
+    "95862472"
 ] as const
 export type GamepassID = typeof GAMEPASS_IDS[number]
 
@@ -70,6 +72,12 @@ export const GAMEPASS_CONFIG: Record<GamepassID, GamepassConfigProps> = {
         displayName: "Lucky Eggs",
         imageId: "rbxassetid://129474314",
         description: "Improved odds of finding rare pets!",
+    },
+
+    95862472: {
+        displayName: "Sell from Anywhere",
+        imageId: "rbxassetid://129474314",
+        description: "Sell your Candy from anywhere!",
     },
 }
 

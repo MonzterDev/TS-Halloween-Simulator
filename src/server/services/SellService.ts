@@ -3,17 +3,21 @@ import { Players, Workspace } from "@rbxts/services";
 import { Events } from "server/network";
 import { rewardMoney } from "server/utils/Rewards";
 import { PlayerDataService } from "./PlayerDataService";
+import { QuestsService } from "./QuestsService";
 
 @Service({})
 export class SellService implements OnStart {
     private playerDataService = Dependency(PlayerDataService)
+    private questsService = Dependency(QuestsService)
 
     onStart () {
         this.setupParts()
         Events.sell.connect( ( player ) => {
             const profile = this.playerDataService.getProfile( player )
             if ( !profile ) return
-            // if has gamepass then this.sell()
+
+            const ownsGamepass = profile.data.gamepasses.get( "Sell from Anywhere" )
+            if (ownsGamepass ) this.sell(player)
         })
     }
 
@@ -36,7 +40,8 @@ export class SellService implements OnStart {
 
         const candy = profile.data.candy
         rewardMoney( player, candy, true )
-        profile.setCandy(0)
+        profile.setCandy( 0 )
+        this.questsService.addPoint(player, "Salesman")
     }
 
 }
