@@ -117,7 +117,10 @@ export type DataState = PlayerData;
 export type DataActions = UpdateDataAction | UpdateCurrencyAction | UpdateUpgradeAction | AddPetAction | RemovePetAction | UpdatePetAction | UpdateSettingAction | UpdateGamepassAction | AddBoostAction | RemoveBoostAction | UseBoostAction | UpdateBoostAction | EndBoostAction | UnlockAreaAction |UpdateQuestPointsAction | CompleteQuestAction | ClaimQuestAction | UpdateGiftPlayDurationAction | UpdateGiftResetTimeAction | ResetGiftsAction | ClaimGiftAction | UpdateAutoDeletePetAction | UpdateCodeAction | IndexPetAction | UpdateGroupChestAction | IncreaseEggPityAction | ResetEggPityAction;
 
 export const dataReducer = createReducer<DataState, DataActions>(DEFAULT_PLAYER_DATA, {
-    updatePlayerData: ( state, action ) => action.data,
+    updatePlayerData: ( state, action ) => {
+        state = action.data
+        return state
+    },
     updateCurrency: ( state, action ) => {
         state[action.currency] = action.amount
         return state

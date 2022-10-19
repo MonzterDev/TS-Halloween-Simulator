@@ -4,13 +4,12 @@ import ProfileService from "@rbxts/profileservice";
 import { Profile } from "@rbxts/profileservice/globals";
 import Signal from "@rbxts/signal";
 import { Events, Functions } from "server/network";
-import { Currency } from "shared/constants/Currencies";
 import { DEFAULT_PLAYER_DATA } from "shared/constants/PlayerData";
 import { Quest } from "shared/constants/Quests";
 import { PlayerData } from "shared/types/PlayerData";
 import { forEveryPlayer } from "shared/util/functions/forEveryPlayer";
 
-const DATASTORE_NAME = "PlayerData";
+const DATASTORE_NAME = "TESTING";
 const KEY_TEMPLATE = "%d_Data";
 
 @Service()
@@ -37,7 +36,8 @@ export class PlayerDataService implements OnStart {
 		} )
 
 		Functions.getAllData.setCallback( ( player ) => {
-			return this.profiles.get( player )?.Data || false
+			const profile = this.profiles.get( player )?.Data!;
+			return profile
 		} )
 	}
 

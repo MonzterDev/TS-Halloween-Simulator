@@ -56,3 +56,14 @@ Events.resetGroupChest.connect( ( time ) => clientStore.dispatch( { type: "updat
 
 Events.resetEggPity.connect( (egg) => clientStore.dispatch( { type: "resetEggPity", egg: egg } ) )
 Events.increaseEggPity.connect( (egg) => clientStore.dispatch( { type: "increaseEggPity", egg: egg } ) )
+
+print(clientStore.getState().data)
+
+// while ( true ) {
+	Functions.getAllData().andThen( ( data ) => {
+		print(data)
+		if (data) clientStore.dispatch({ type: "updatePlayerData", data: data });
+	}, (reason) => print(reason) )
+	// task.wait(1)
+// }
+//

@@ -350,8 +350,10 @@ interface StarterGui extends BasePlayerGui {
 			Inventory: ImageButton & {
 				Icon: ImageLabel;
 			};
+			Sell: ImageButton & {
+				Icon: ImageLabel;
+			};
 			PetIndex: TextButton;
-			Sell: TextButton;
 			Quests: ImageButton & {
 				Icon: ImageLabel;
 			};
@@ -410,31 +412,44 @@ interface StarterGui extends BasePlayerGui {
 	};
 	Quests: ScreenGui & {
 		Frame: Frame & {
-			Exit: TextButton;
-			Title: TextLabel;
+			Exit: ImageButton;
+			Line: ImageLabel;
+			Title: ImageLabel & {
+				Title: TextLabel;
+			};
 			Buttons: Frame & {
-				Completed: TextButton & {
-					Background: ImageLabel;
+				Completed: ImageButton & {
+					Title: TextLabel;
 				};
 				UIGridLayout: UIGridLayout;
-				ActiveQuests: TextButton & {
-					Background: ImageLabel;
+				ActiveQuests: ImageButton & {
+					Title: TextLabel;
 				};
-				Unclaimed: TextButton & {
-					Background: ImageLabel;
+				Unclaimed: ImageButton & {
+					Title: TextLabel;
 				};
 			};
+			ContainerBackground: ImageLabel;
 			Background: ImageLabel;
+			UIAspectRatioConstraint: UIAspectRatioConstraint;
 			Container: ScrollingFrame & {
 				Template: TextButton & {
-					ProgressBar: ImageLabel & {
-						CompletedProgressBar: ImageLabel;
+					Completed: Frame & {
+						Completed: TextLabel & {
+							UIStroke: UIStroke;
+						};
+						UICorner: UICorner;
+					};
+					Claim: ImageButton & {
+						Text: TextLabel;
 					};
 					Description: TextLabel;
-					Claim: TextButton & {
-						Background: ImageLabel;
-					};
 					Background: ImageLabel;
+					ProgressBar: ImageLabel & {
+						Box: Frame & {
+							CompletedProgressBar: ImageLabel;
+						};
+					};
 					Rewards: TextLabel;
 					Quest: TextLabel;
 					ProgressPercent: TextLabel;

@@ -33,7 +33,7 @@ interface ServerEvents {
 }
 
 interface ServerFunctions {
-    getAllData: () => PlayerData | false
+    getAllData: () => PlayerData
     getData: <k extends keyof PlayerData>( data: k ) => PlayerData[k] | false
     getBasketUpgrade: <k extends keyof PlayerData["basket_upgrades"]>( data: k ) => number | false
     purchaseBasketUpgrade: ( upgrade: BasketUpgrade ) => BasketUpgradeResponse

@@ -3,6 +3,7 @@ import { GameAnalytics } from "@rbxts/gameanalytics";
 import { Players, Workspace } from "@rbxts/services";
 import { Events } from "server/network";
 import { rewardMoney } from "server/utils/Rewards";
+import { PlayerCooldown } from "shared/util/classes/PlayerCooldown";
 import { PlayerDataService } from "./PlayerDataService";
 import { QuestsService } from "./QuestsService";
 
@@ -10,6 +11,8 @@ import { QuestsService } from "./QuestsService";
 export class SellService implements OnStart {
     private playerDataService = Dependency(PlayerDataService)
     private questsService = Dependency(QuestsService)
+
+    private cooldown = new PlayerCooldown(1)
 
     onStart () {
         this.setupParts()
@@ -30,7 +33,10 @@ export class SellService implements OnStart {
             sellPart.Touched.Connect( ( otherPart ) => {
                 if (!otherPart.IsA("BasePart")) return
                 const player = Players.GetPlayerFromCharacter( otherPart.Parent )
-                if ( player ) this.sell(player)
+                if ( player && this.cooldown.cooldownIsFinished(player) ) {
+                    this.sell( player )
+                    this.cooldown.giveCooldown(player)
+                }
             })
         })
     }
@@ -40,6 +46,8 @@ export class SellService implements OnStart {
         if ( !profile ) return
 
         const candy = profile.data.candy
+        if ( candy < 1 ) return
+
         rewardMoney( player, candy, true)
         GameAnalytics.addResourceEvent( player.UserId, { flowType: "Source", currency: "Money", amount: candy, itemType: "Sell", itemId: "Candy" } )
         profile.setCandy( 0 )

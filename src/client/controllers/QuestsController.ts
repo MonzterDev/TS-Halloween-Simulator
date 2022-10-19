@@ -59,14 +59,14 @@ export class QuestsController implements OnStart {
 
         const percent = (points / requiredPoints) * 100
 
-        template.ProgressPercent.Text = `${percent}%`
-        template.ProgressBar.CompletedProgressBar.Size = UDim2.fromScale(points / requiredPoints, 1)
+        template.ProgressPercent.Text = `${math.floor(percent)}%`
+        template.ProgressBar.Box.CompletedProgressBar.Size = UDim2.fromScale(points / requiredPoints, 1)
     }
 
     private changeMode ( mode: Mode ) {
         this.cleanup()
         this.mode = mode
-        this.title.Text = `${mode} QUESTS`.upper()
+        this.title.Title.Text = `${mode} Quests`
 
         if (mode === "Active") this.generateActiveQuests()
         else if (mode === "Unclaimed") this.generateUnclaimedQuests()
@@ -118,23 +118,23 @@ export class QuestsController implements OnStart {
         clone.Name = quest
         clone.SetAttribute("tier", tier)
         clone.Quest.Text = `${quest} ${tier}`
-        clone.ProgressPercent.Text = `${percent}%`
-        clone.ProgressBar.CompletedProgressBar.Size = UDim2.fromScale(currentPoints / requiredPoints, 1)
+        clone.ProgressPercent.Text = `${math.floor(percent)}%`
+        clone.ProgressBar.Box.CompletedProgressBar.Size = UDim2.fromScale(currentPoints / requiredPoints, 1)
         clone.Description.Text = questConfig.description.gsub( "REPLACE", requiredPoints )[0]
-        clone.Rewards.Text = this.getRewardsToTextForm( questConfig.reward, tier )
-
+        clone.Rewards.Text = `Rewards<br />${this.getRewardsToTextForm( questConfig.reward, tier )}`
+        clone.Completed.Visible = isCompleted && isClaimed
         this.updateClaimButton(clone, isCompleted, isClaimed)
     }
 
     private updateClaimButton ( template: typeof this.template, completed: boolean, isClaimed: boolean ) {
         const button = template.Claim
         if ( !completed || isClaimed ) {
-            button.TextTransparency = .5
-            button.Background.ImageTransparency = .5
+            button.Text.TextTransparency = .5
+            button.ImageTransparency = .5
             button.Selectable = false
         } else if (completed && !isClaimed) {
-            button.TextTransparency = 0
-            button.Background.ImageTransparency = 0
+            button.Text.TextTransparency = 0
+            button.ImageTransparency = 0
             button.Selectable = true
             button.MouseButton1Click.Connect(() => Events.claimQuest.fire(template.Name, tonumber(template.GetAttribute("tier")!)!))
         }
@@ -148,12 +148,16 @@ export class QuestsController implements OnStart {
             const isABoost = BOOSTS.includes( <Boost>rewardType )
             if ( isABoost ) {
                 const boosterInfo = <BoosterQuestRewardProps> props
-                rewardString = `${rewardString} ${boosterInfo.amount}x ${boosterInfo.rarity} ${rewardType} Booster`
+                rewardString = `${rewardString} ${boosterInfo.amount}x ${rewardType} Booster`
+                // rewardString = `${rewardString} ${boosterInfo.amount}x ${boosterInfo.rarity} ${rewardType} Booster`
             } else {
                 const currencyAmount =  <number> props
                 rewardString = `${rewardString} ${FormatCompact(currencyAmount)}x ${cleanString(rewardType)}`
             }
+            rewardString = `${rewardString}, `
         }
+
+        rewardString = rewardString.reverse().gsub( " ,", "", 1 )[0].reverse()
 
         return rewardString
     }
