@@ -2,6 +2,7 @@ import { OnStart, Service } from "@flamework/core";
 import Make from "@rbxts/make";
 import ProfileService from "@rbxts/profileservice";
 import { Profile } from "@rbxts/profileservice/globals";
+import { HttpService } from "@rbxts/services";
 import Signal from "@rbxts/signal";
 import { Events, Functions } from "server/network";
 import { DEFAULT_PLAYER_DATA } from "shared/constants/PlayerData";
@@ -33,11 +34,6 @@ export class PlayerDataService implements OnStart {
 		Functions.getBasketUpgrade.setCallback( ( player, upgrade ) => {
 			const profile = this.profiles.get( player );
 			return profile?.Data?.basket_upgrades[upgrade] ?? 0;
-		} )
-
-		Functions.getAllData.setCallback( ( player ) => {
-			const profile = this.profiles.get( player )?.Data!;
-			return profile
 		} )
 	}
 
@@ -76,6 +72,7 @@ export class PlayerDataService implements OnStart {
 		this.createLeaderstats(player, profile.Data)
 		this.profiles.set( player, profile );
 		this.profileLoaded.Fire( player, profile )
+		Events.updateData.fire(player, HttpService.JSONEncode(profile.Data))
 	}
 
 	private removeProfile ( player: Player ) {

@@ -1,7 +1,8 @@
 import { combineReducers, Store } from "@rbxts/rodux";
-import { Players } from "@rbxts/services";
+import { HttpService, Players } from "@rbxts/services";
 import { Events, Functions } from "client/network";
 import { BOOST_DURATION } from "shared/constants/Boosts";
+import { PlayerData } from "shared/types/PlayerData";
 import { DataActions, dataReducer, DataState } from "./reducers";
 
 export interface CombinedState {
@@ -14,6 +15,10 @@ const combinedReducer = combineReducers<CombinedState, DataActions>({
 
 export const clientStore = new Store( combinedReducer );
 
+Events.updateData.connect( ( data ) => {
+	const playerData = <PlayerData> HttpService.JSONDecode(data)
+	if (data) clientStore.dispatch({ type: "updatePlayerData", data: playerData });
+})
 Events.updateCurrency.connect( ( currency, amount ) => clientStore.dispatch( { type: "updateCurrency", currency: currency, amount: amount } ) )
 Events.givePet.connect( ( uuid, props ) => clientStore.dispatch( { type: "addPet", uuid: uuid, props: props } ) )
 Events.deletePet.connect((uuid) => clientStore.dispatch( { type: "removePet", uuid: uuid }))
@@ -56,14 +61,3 @@ Events.resetGroupChest.connect( ( time ) => clientStore.dispatch( { type: "updat
 
 Events.resetEggPity.connect( (egg) => clientStore.dispatch( { type: "resetEggPity", egg: egg } ) )
 Events.increaseEggPity.connect( (egg) => clientStore.dispatch( { type: "increaseEggPity", egg: egg } ) )
-
-print(clientStore.getState().data)
-
-// while ( true ) {
-	Functions.getAllData().andThen( ( data ) => {
-		print(data)
-		if (data) clientStore.dispatch({ type: "updatePlayerData", data: data });
-	}, (reason) => print(reason) )
-	// task.wait(1)
-// }
-//

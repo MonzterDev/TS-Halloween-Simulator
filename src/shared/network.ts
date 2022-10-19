@@ -33,7 +33,6 @@ interface ServerEvents {
 }
 
 interface ServerFunctions {
-    getAllData: () => PlayerData
     getData: <k extends keyof PlayerData>( data: k ) => PlayerData[k] | false
     getBasketUpgrade: <k extends keyof PlayerData["basket_upgrades"]>( data: k ) => number | false
     purchaseBasketUpgrade: ( upgrade: BasketUpgrade ) => BasketUpgradeResponse
@@ -41,6 +40,7 @@ interface ServerFunctions {
 }
 
 interface ClientEvents {
+    updateData: (data: string) => void // String is used because Flamework's Type Guards don't recognize PlayerData for some reason
     updatePileHealth: (uuid: string) => void
     updateCurrency: ( currency: Currency, amount: number ) => void
     updateGamepass: ( gamepass: Gamepass ) => void
