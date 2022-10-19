@@ -5,7 +5,7 @@ import { Debris, Lighting, Players, ReplicatedStorage, RunService, Workspace } f
 import { CleanViewport, GenerateViewport } from "@rbxts/viewport-model";
 import { Events, Functions } from "client/network";
 import { clientStore } from "client/rodux/rodux";
-import { EGG_SHOP_CONFIG, EGGS, PETS, Pet, Egg, getMaxPetsStored, RARITY_COLORS } from "shared/constants/Pets";
+import { EGG_SHOP_CONFIG, EGGS, PETS, Pet, Egg, getMaxPetsStored, RARITY_COLORS, getEggHatchChance, PET_CONFIG, Rarity } from "shared/constants/Pets";
 import { cleanString } from "shared/util/functions/cleanString";
 import { NotificationsController } from "./NotificationsController";
 
@@ -30,11 +30,45 @@ export class PetEggController implements OnStart {
 
     private isAutoHatching = false
 
+    private connection = clientStore.changed.connect( ( newState ) => {
+        this.updateHatchChance()
+        this.connection.disconnect()
+    })
+
     onStart () {
-        this.eggs.GetChildren().forEach((child) => this.generateEgg(<Egg> child.Name))
+        this.eggs.GetChildren().forEach( ( child ) => this.generateEgg( <Egg>child.Name ) )
         Events.autoDeletePet.connect( ( egg, pet ) => task.defer( () => this.autoDeletePet( egg, pet ) ) )
         Events.resetEggPity.connect( ( egg ) => this.resetPity( egg ) )
-        Events.increaseEggPity.connect((egg) => task.defer(() => this.increaseEggPity(egg)))
+        Events.increaseEggPity.connect( ( egg ) => task.defer( () => this.increaseEggPity( egg ) ) )
+        Events.updateGamepass.connect( ( gamePass ) => {
+            if ( gamePass === "Lucky Eggs" ) task.defer( () => this.updateHatchChance() )
+        } )
+        Events.useBoost.connect( ( boost ) => {
+            if ( boost === "Luck" ) task.defer( () => this.updateHatchChance() )
+        } )
+        Events.endBoost.connect( ( boost ) => {
+            if ( boost === "Luck" ) task.defer( () => this.updateHatchChance() )
+        } )
+    }
+
+    private updateHatchChance () {
+        this.folder.GetChildren().forEach( ( child ) => {
+            if ( !child.IsA( "Folder" ) ) return
+
+            const infoGui = <typeof this.infoGui>child.FindFirstChild( "InfoGui" )
+            if ( !infoGui ) return
+
+            const container = infoGui.Background.Frame.Container
+            container.GetChildren().forEach( ( child ) => {
+                if ( !child.IsA( "TextButton" ) || !child.Visible ) return
+
+                let chance = <number>child.GetAttribute( "chance" )
+                chance = getEggHatchChance( chance, clientStore.getState().data )
+
+                const chanceLabel = child.FindFirstChild( "Chance" ) as TextLabel
+                chanceLabel.Text = `${chance}%`
+            })
+        })
     }
 
     private increaseEggPity ( egg: Egg ) {
@@ -71,9 +105,10 @@ export class PetEggController implements OnStart {
             template.Parent = container
             template.Visible = true
             template.Name = pet
-            template.Chance.Text = `${props.chance}%`
+            template.Chance.Text = `${getEggHatchChance( props.chance, clientStore.getState().data )}%`
             template.LayoutOrder = -props.chance
             template.ViewportFrame.BackgroundColor3 = RARITY_COLORS[props.rarity]
+            template.SetAttribute("chance", props.chance)
 
             template.Delete.Visible = clientStore.getState().data.pet_auto_delete.get(egg)?.get(pet)!
             template.MouseButton1Click.Connect(() => Events.autoDeletePet.fire(egg, pet))

@@ -1,4 +1,5 @@
 import { PlayerData } from "shared/types/PlayerData"
+import { BOOSTS_CONFIG } from "./Boosts"
 
 export const DEFAULT_MAX_PET_STORAGE_AMOUNT = 50
 export const DEFAULT_MAX_PET_EQUIPPED_AMOUNT = 5
@@ -52,7 +53,7 @@ export const EGG_SHOP_CONFIG: Record<Egg, EggProps> = {
             Ghost: {chance: 20, rarity: "Common"},
             "Ghost Dog": {chance: 10, rarity: "Rare"},
             "Ghost Dragon": {chance: 5, rarity: "Rare"},
-            "Devil": {chance: 2.5, rarity: "Rare"},
+            Devil: {chance: 2.5, rarity: "Rare"},
         }
     },
 
@@ -116,4 +117,26 @@ export function getMaxPetsStored (data: PlayerData) {
     if (data.gamepasses.get("100 Pet Storage")) total += 100
     if ( data.gamepasses.get("500 Pet Storage") ) total += 500
     return total
+}
+
+// All Pets below 10% have increase chances to be spawned by the Egg Luck stat
+export function getEggHatchChance ( chance: number, data: PlayerData ) {
+    const luck = getEggLuckStat(data)
+    if (chance < 10)  chance *= luck
+    return chance
+}
+
+export function getEggLuckStat ( data: PlayerData ) {
+    let amount = 1
+
+    const boost = data.active_boosts.get( "Luck" )
+    const rarity = boost?.rarity
+    if ( rarity ) {
+        const boostMultiplier = BOOSTS_CONFIG.Luck[rarity]
+        amount += boostMultiplier
+    }
+
+    const hasGamepass = data.gamepasses.get( "Lucky Eggs" )
+    amount += hasGamepass ? 1 : 0
+    return amount
 }

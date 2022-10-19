@@ -71,7 +71,10 @@ export class BoostsService implements OnStart {
 
                 activeBoosts.forEach( ( props, boost ) => {
                     props.duration -= 1
-                    if ( props.duration === 0 ) activeBoosts.delete( boost )
+                    if ( props.duration <= 0 ) {
+                        Events.endBoost.fire( player, boost )
+                        activeBoosts.delete( boost )
+                    }
                 })
             })
             task.wait(1)

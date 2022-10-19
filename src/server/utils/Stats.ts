@@ -67,9 +67,6 @@ export function getLuckStat ( player: Player ): number {
     const profile = playerDataService.getProfile( player )
     if ( !profile ) return amount
 
-    const booster = getBooster( player, "Luck" )
-    amount += booster
-
     const basketUpgradeLevel = profile.data.basket_upgrades.Luck
     const basketStat = BASKET_UPGRADE_CONFIG.Luck[basketUpgradeLevel] ?? 0
     amount += basketStat

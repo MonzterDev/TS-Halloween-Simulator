@@ -48,6 +48,7 @@ export class PetIndexController implements OnStart {
             clone.Visible = true
             clone.ViewportFrame.BackgroundColor3 = RARITY_COLORS[petConfig.rarity]
             clone.ViewportFrame.Title.Text = petName
+            clone.LayoutOrder = -petConfig.chance
 
             const isUnlocked = clientStore.getState().data.pet_index.get(container.Parent?.Name as Egg)?.get(petName)!
 

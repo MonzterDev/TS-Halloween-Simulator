@@ -2,13 +2,12 @@ import { Service, OnStart, Dependency } from "@flamework/core";
 import { GameAnalytics } from "@rbxts/gameanalytics";
 import { Workspace } from "@rbxts/services";
 import { Events, Functions } from "server/network";
-import { EggPetProps, EGG_SHOP_CONFIG, Pet, Egg, getMaxPetsStored } from "shared/constants/Pets";
+import { getLuckStat } from "server/utils/Stats";
+import { EggPetProps, EGG_SHOP_CONFIG, Pet, Egg, getMaxPetsStored, getEggHatchChance, getEggLuckStat } from "shared/constants/Pets";
 import { HatchEggResponse } from "shared/network";
 import { PlayerCooldown } from "shared/util/classes/PlayerCooldown";
 import { PetsService } from "./PetsService";
 import { PlayerDataService } from "./PlayerDataService";
-
-// TODO: Implement Lucky Eggs
 
 @Service({})
 export class EggsService implements OnStart {
@@ -65,7 +64,8 @@ export class EggsService implements OnStart {
 
             const pity = profile.data.pet_egg_pity.get( egg )
 
-            let pet = this.choosePet( eggConfig.pets )
+            const luck = getEggLuckStat(profile.data)
+            let pet = this.choosePet( eggConfig.pets, luck )
 
             if ( pity! >= 100 ) {
                 pet = this.chooseRarestPet( eggConfig.pets )
@@ -87,14 +87,17 @@ export class EggsService implements OnStart {
         return pets
     }
 
-    private choosePet ( pets: EggPetProps ) {
+    private choosePet ( pets: EggPetProps, luck: number ) {
         let totalWeight = 0
-        for ( const [pet, props] of pairs(pets) ) totalWeight += props.chance
+        for ( const [pet, props] of pairs( pets ) ) {
+            totalWeight += props.chance
+            // totalWeight += props.chance < 10 ? props.chance * luck : props.chance
+        }
 
         const chance = math.random( 1, totalWeight )
         let counter = 0
-        for ( const [pet, props] of pairs(pets) ) {
-            counter += props.chance
+        for ( const [pet, props] of pairs( pets ) ) {
+            counter += props.chance < 10 ? props.chance * luck : props.chance
             if (chance <= counter) return pet
         }
     }

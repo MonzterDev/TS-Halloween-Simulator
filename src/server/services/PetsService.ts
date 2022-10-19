@@ -31,7 +31,6 @@ export class PetsService implements OnStart {
             allPets.push({uuid: uuid, power: power})
         } )
 
-        print(allPets)
         allPets.sort( ( a, b ) => {
             return a.power > b.power
         } )
