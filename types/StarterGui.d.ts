@@ -160,53 +160,54 @@ interface StarterGui extends BasePlayerGui {
 			Area: TextLabel;
 		};
 	};
-	PetEgg: Folder & {
+	PetEgg: ScreenGui & {
 		InteractGui: BillboardGui & {
-			Auto: ProximityPrompt;
-			Hatch: ProximityPrompt;
-			Container: Frame & {
-				Auto: TextButton & {
-					UICorner: UICorner;
-					Frame: Frame & {
-						KeyToPressMobile: ImageLabel;
-						KeyToPress: TextLabel;
-						UICorner: UICorner;
-					};
-					Action: TextLabel;
-				};
+			Frame: Frame & {
 				UIGridLayout: UIGridLayout;
 				UIPadding: UIPadding;
-				Hatch: TextButton & {
-					UICorner: UICorner;
+				Auto: ImageButton & {
+					Action: TextLabel;
 					Frame: Frame & {
 						KeyToPressMobile: ImageLabel;
 						KeyToPress: TextLabel;
 						UICorner: UICorner;
 					};
+				};
+				UIAspectRatioConstraint: UIAspectRatioConstraint;
+				Hatch: ImageButton & {
 					Action: TextLabel;
+					Frame: Frame & {
+						KeyToPressMobile: ImageLabel;
+						KeyToPress: TextLabel;
+						UICorner: UICorner;
+					};
 				};
 			};
+			Hatch: ProximityPrompt;
+			Auto: ProximityPrompt;
 		};
 		InfoGui: BillboardGui & {
-			Background: Frame & {
-				Frame: Frame & {
-					Pity: ImageLabel & {
-						Title: TextLabel;
-						Bar: ImageLabel;
-					};
+			Title: ImageLabel & {
+				Title: TextLabel;
+			};
+			Frame: Frame & {
+				Message: TextLabel;
+				Pity: ImageLabel & {
 					Title: TextLabel;
-					Container: Frame & {
-						UIGridLayout: UIGridLayout;
-						UIPadding: UIPadding;
-						Template: TextButton & {
-							UICorner: UICorner;
-							Delete: TextLabel;
-							ViewportFrame: ViewportFrame & {
-								UICorner: UICorner;
-							};
-							Chance: TextLabel;
-						};
+					Bar: ImageLabel;
+				};
+				Background: ImageLabel;
+				UIAspectRatioConstraint: UIAspectRatioConstraint;
+				Container: Frame & {
+					UIGridLayout: UIGridLayout;
+					Template: ImageButton & {
+						Delete: ImageLabel;
+						ViewportFrame: ViewportFrame;
+						UIStroke: UIStroke;
+						Chance: TextLabel;
+						UICorner: UICorner;
 					};
+					UIPadding: UIPadding;
 				};
 			};
 		};
@@ -383,7 +384,7 @@ interface StarterGui extends BasePlayerGui {
 			};
 		};
 	};
-	AreaWalls: Folder & {
+	AreaWalls: ScreenGui & {
 		AreaDisplay: BillboardGui & {
 			Price: TextLabel & {
 				UIStroke: UIStroke;

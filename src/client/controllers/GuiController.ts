@@ -1,4 +1,5 @@
 import { Controller, OnStart, OnInit } from "@flamework/core";
+import { Clack, Prefer } from "@rbxts/clack";
 import { GuiService, Players, UserInputService } from "@rbxts/services";
 import { hideGuis } from "client/utils/hideGuis";
 import { makeButtonsSelectable } from "client/utils/openGui";
@@ -13,6 +14,8 @@ export class GuiController implements OnStart {
 
     private currencyGui = <StarterGui["Currency"]>this.playerGui.WaitForChild( "Currency" )
     private fullCurrencyFrame = this.currencyGui.Full
+
+    private prefer = new Prefer()
 
     private inSelectMode = false
 
@@ -39,9 +42,10 @@ export class GuiController implements OnStart {
         GuiService.GetPropertyChangedSignal( "SelectedObject" ).Connect( () => {
             const isOnGamepad = UserInputService.GamepadEnabled
             if ( !isOnGamepad ) GuiService.SelectedObject = undefined
+        } )
 
-            const selectedObject = GuiService.SelectedObject
-            if (!selectedObject) this.inSelectMode = false
+        this.prefer.observePreferredInput( ( input ) => {
+            if (input !== Clack.InputType.Gamepad) GuiService.SelectedObject = undefined
         })
     }
 }

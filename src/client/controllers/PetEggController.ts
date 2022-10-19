@@ -1,5 +1,6 @@
 import { Controller, OnStart, OnInit, Dependency } from "@flamework/core";
 import { BoatTween } from "@rbxts/boat-tween";
+import { Clack, Prefer } from "@rbxts/clack";
 import Make from "@rbxts/make";
 import { Debris, Lighting, Players, ReplicatedStorage, RunService, Workspace } from "@rbxts/services";
 import { CleanViewport, GenerateViewport } from "@rbxts/viewport-model";
@@ -9,7 +10,7 @@ import { EGG_SHOP_CONFIG, EGGS, PETS, Pet, Egg, getMaxPetsStored, RARITY_COLORS,
 import { cleanString } from "shared/util/functions/cleanString";
 import { NotificationsController } from "./NotificationsController";
 
-type PetTemplate = StarterGui["PetEgg"]["InfoGui"]["Background"]["Frame"]["Container"]["Template"]
+type PetTemplate = StarterGui["PetEgg"]["InfoGui"]["Frame"]["Container"]["Template"]
 
 const MAX_DISTANCE_FROM_EGG = 25
 
@@ -30,6 +31,8 @@ export class PetEggController implements OnStart {
 
     private isAutoHatching = false
 
+    private prefer = new Prefer()
+
     private connection = clientStore.changed.connect( ( newState ) => {
         this.updateHatchChance()
         this.connection.disconnect()
@@ -49,6 +52,29 @@ export class PetEggController implements OnStart {
         Events.endBoost.connect( ( boost ) => {
             if ( boost === "Luck" ) task.defer( () => this.updateHatchChance() )
         } )
+        this.prefer.observePreferredInput( ( input ) => this.updateInteractButtons(input))
+    }
+
+    private updateInteractButtons ( input: Clack.InputType ) {
+        this.folder.GetChildren().forEach( ( child ) => {
+            if ( !child.IsA( "Folder" ) ) return
+
+            const interactGui = <StarterGui["PetEgg"]["InteractGui"]>child.FindFirstChild( "InteractGui" )
+            if ( !interactGui ) return
+
+            const eggModel = Workspace.Eggs.FindFirstChild( child.Name )
+            if ( !eggModel ) return
+
+            const autoPrompt = <ProximityPrompt> eggModel.FindFirstChild("Auto")
+            const hatchPrompt = <ProximityPrompt> eggModel.FindFirstChild("Hatch")
+
+            interactGui.Frame.Hatch.Frame.KeyToPress.Text = input === Clack.InputType.MouseKeyboard ? hatchPrompt.KeyboardKeyCode.Name : hatchPrompt.GamepadKeyCode.Name.gsub("Button", "")[0]
+            interactGui.Frame.Auto.Frame.KeyToPress.Text = input === Clack.InputType.MouseKeyboard ? autoPrompt.KeyboardKeyCode.Name : autoPrompt.GamepadKeyCode.Name.gsub("Button", "")[0]
+            interactGui.Frame.Hatch.Frame.KeyToPress.Visible = input === Clack.InputType.MouseKeyboard || input === Clack.InputType.Gamepad
+            interactGui.Frame.Auto.Frame.KeyToPress.Visible = input === Clack.InputType.MouseKeyboard || input === Clack.InputType.Gamepad
+            interactGui.Frame.Hatch.Frame.KeyToPressMobile.Visible = input === Clack.InputType.Touch
+            interactGui.Frame.Auto.Frame.KeyToPressMobile.Visible = input === Clack.InputType.Touch
+        })
     }
 
     private updateHatchChance () {
@@ -58,9 +84,9 @@ export class PetEggController implements OnStart {
             const infoGui = <typeof this.infoGui>child.FindFirstChild( "InfoGui" )
             if ( !infoGui ) return
 
-            const container = infoGui.Background.Frame.Container
+            const container = infoGui.Frame.Container
             container.GetChildren().forEach( ( child ) => {
-                if ( !child.IsA( "TextButton" ) || !child.Visible ) return
+                if ( !child.IsA( "ImageButton" ) || !child.Visible ) return
 
                 let chance = <number>child.GetAttribute( "chance" )
                 chance = getEggHatchChance( chance, clientStore.getState().data )
@@ -77,23 +103,27 @@ export class PetEggController implements OnStart {
 
         const pity = clientStore.getState().data.pet_egg_pity.get( egg )!
 
-        infoGui.Background.Frame.Pity.Bar.Size = UDim2.fromScale( pity / 100, 1 )
-        infoGui.Background.Frame.Pity.Title.Text = `Exotic Pity ${pity}/100`
+        infoGui.Frame.Pity.Bar.Size = UDim2.fromScale( pity / 100, 1 )
+        infoGui.Frame.Pity.Title.Text = `Exotic Pity ${pity}/100`
     }
 
     private resetPity ( egg: Egg ) {
         const infoGui = <typeof this.infoGui>this.folder.FindFirstChild( egg )?.FindFirstChild( "InfoGui" )
         if ( !infoGui ) return
 
-        infoGui.Background.Frame.Pity.Bar.Size = UDim2.fromScale( 0, 1 )
-        infoGui.Background.Frame.Pity.Title.Text = `Exotic Pity 0/100`
+        infoGui.Frame.Pity.Bar.Size = UDim2.fromScale( 0, 1 )
+        infoGui.Frame.Pity.Title.Text = `Exotic Pity 0/100`
     }
 
     private autoDeletePet (egg: Egg, pet: Pet) {
         const folder = <typeof this.folder>this.folder.FindFirstChild( egg )
         const infoGui = folder.InfoGui
-        const template = <PetTemplate> infoGui.Background.Frame.Container.FindFirstChild( pet )
-        template.Delete.Visible = clientStore.getState().data.pet_auto_delete.get(egg)?.get(pet)!
+        const template = <PetTemplate>infoGui.Frame.Container.FindFirstChild( pet )
+        if (!template) return
+
+        const autoDeleteEnabled = clientStore.getState().data.pet_auto_delete.get( egg )?.get( pet )!
+        template.Delete.Visible = autoDeleteEnabled
+        template.UIStroke.Enabled = autoDeleteEnabled
     }
 
     private populatePets ( container: Frame, egg: Egg ) {
@@ -110,7 +140,10 @@ export class PetEggController implements OnStart {
             template.ViewportFrame.BackgroundColor3 = RARITY_COLORS[props.rarity]
             template.SetAttribute("chance", props.chance)
 
-            template.Delete.Visible = clientStore.getState().data.pet_auto_delete.get(egg)?.get(pet)!
+            const autoDeleteEnabled = clientStore.getState().data.pet_auto_delete.get( egg )?.get( pet )!
+            template.Delete.Visible = autoDeleteEnabled
+            template.UIStroke.Enabled = autoDeleteEnabled
+
             template.MouseButton1Click.Connect(() => Events.autoDeletePet.fire(egg, pet))
         }
     }
@@ -122,15 +155,16 @@ export class PetEggController implements OnStart {
             Name: egg,
             Parent: this.folder
         } )
+
         const eggModel = <Workspace["Eggs"]["Starter"]>this.eggs.FindFirstChild(egg)
         const infoClone = this.infoGui.Clone()
         infoClone.Enabled = true
         infoClone.Parent = folder
         infoClone.Adornee = eggModel.Info
-        infoClone.Background.Frame.Title.Text = `${egg.upper()} EGG`
-        infoClone.Background.Frame.Pity.Title.Text = `Exotic Pity ${pity}/100`
-        infoClone.Background.Frame.Pity.Bar.Size = UDim2.fromScale( pity / 100, 1 )
-        this.populatePets( infoClone.Background.Frame.Container, egg )
+        infoClone.Title.Title.Text = `${egg} Egg`
+        infoClone.Frame.Pity.Title.Text = `Exotic Pity ${pity}/100`
+        infoClone.Frame.Pity.Bar.Size = UDim2.fromScale( pity / 100, 1 )
+        this.populatePets( infoClone.Frame.Container, egg )
 
         const interactClone = this.interact.Clone()
         interactClone.Enabled = true
@@ -142,14 +176,18 @@ export class PetEggController implements OnStart {
         interactClone.Auto.Parent = eggModel
         interactClone.Hatch.Parent = eggModel
 
-        interactClone.Container.Auto.MouseButton1Click.Connect(() => this.autoHatch(egg))
-        interactClone.Container.Hatch.MouseButton1Click.Connect(() => this.hatch(egg))
+        interactClone.Frame.Auto.MouseButton1Click.Connect(() => this.autoHatch(egg))
+        interactClone.Frame.Hatch.MouseButton1Click.Connect(() => this.hatch(egg))
     }
 
     private autoHatch ( egg: Egg ) {
+        const position = this.player.Character?.PrimaryPart?.Position
+        if ( !position ) return
+
         this.isAutoHatching = true
         while ( this.isAutoHatching ) {
             this.hatch(egg)
+            if ( this.player.Character?.PrimaryPart?.Position !== position ) this.isAutoHatching = false
             task.wait(1)
         }
     }
