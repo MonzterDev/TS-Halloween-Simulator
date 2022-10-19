@@ -165,11 +165,18 @@ export class PetEggController implements OnStart {
             gui.Enabled = false
         } )
 
+        this.folder.GetDescendants().forEach( ( child ) => {
+            if (child.IsA("BillboardGui")) child.Enabled = false
+        })
+
         const skipAnimation = clientStore.getState().data.settings.get("Skip Hatch Animation")
 
         task.delay( skipAnimation ? 1 : 3 , () => {
             enabledGuis.forEach( ( gui ) => gui.Enabled = true )
             Lighting.Blur.Enabled = false
+            this.folder.GetDescendants().forEach( ( child ) => {
+                if (child.IsA("BillboardGui")) child.Enabled = true
+            })
         } )
     }
 
@@ -197,6 +204,7 @@ export class PetEggController implements OnStart {
 
         GenerateViewport( template, eggModel )
 
+        eggModel.PrimaryPart!.Orientation = new Vector3( 0, 0, -70 )
         const tween = BoatTween.Create( eggModel.PrimaryPart!, {
             Time: .5,
             EasingStyle: "Cubic",
