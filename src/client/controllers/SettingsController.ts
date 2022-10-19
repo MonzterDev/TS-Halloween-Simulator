@@ -2,7 +2,7 @@ import { Controller, OnStart, OnInit, Dependency } from "@flamework/core";
 import { Players } from "@rbxts/services";
 import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
-import { openGui } from "client/utils/openGui";
+import { closeGui, openGui } from "client/utils/openGui";
 import { DEFAULT_PLAYER_DATA } from "shared/constants/PlayerData";
 import { OFF_BUTTON, ON_BUTTON, Setting, SETTINGS } from "shared/constants/Settings";
 import { PetsController } from "./PetsController";
@@ -34,7 +34,7 @@ export class SettingsController implements OnStart {
         SETTINGS.forEach( ( setting ) => this.generateTemplate( setting ) )
 
         this.openButton.MouseButton1Click.Connect( () => openGui(this.gui) )
-        this.exit.MouseButton1Click.Connect(() => this.gui.Enabled = false)
+        this.exit.MouseButton1Click.Connect(() => closeGui(this.gui))
         Events.toggleSetting.connect( ( setting, value ) => this.updateSetting( setting, value ) )
     }
 

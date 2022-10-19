@@ -2,7 +2,7 @@ import { Controller, OnStart, OnInit, Dependency } from "@flamework/core";
 import { Players } from "@rbxts/services";
 import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
-import { openGui } from "client/utils/openGui";
+import { closeGui, openGui } from "client/utils/openGui";
 import { Area, AREAS } from "shared/constants/Areas";
 import { cleanString } from "shared/util/functions/cleanString";
 import { AreaController } from "./AreaController";
@@ -37,7 +37,7 @@ export class MapController implements OnStart {
         this.updateCurrentArea( this.areaController.currentArea )
 
         this.openButton.MouseButton1Click.Connect( () => openGui( this.gui ) )
-        this.exitButton.MouseButton1Click.Connect( () => this.gui.Enabled = false )
+        this.exitButton.MouseButton1Click.Connect( () => closeGui(this.gui) )
 
         Events.unlockArea.connect( ( area ) => this.unlockArea( area ) )
         this.areaController.areaChanged.Connect((area) => this.updateCurrentArea(area))

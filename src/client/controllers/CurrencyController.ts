@@ -1,5 +1,5 @@
 import { Controller, OnStart, OnInit, Dependency } from "@flamework/core";
-import { Players } from "@rbxts/services";
+import { GuiService, Players } from "@rbxts/services";
 import { BoatTween } from "@rbxts/boat-tween";
 import { Events, Functions } from "client/network";
 import { Currency } from "shared/constants/Currencies";
@@ -8,6 +8,7 @@ import { BasketUpgradeController } from "./BasketUpgradeController";
 import { clientStore } from "client/rodux/rodux";
 import { BASKET_UPGRADE_CONFIG } from "shared/constants/Basket";
 import { FormatCompact, FormatStandard } from "@rbxts/format-number";
+import { makeButtonsSelectable, setSelectedObject } from "client/utils/openGui";
 
 @Controller({})
 export class CurrencyController implements OnStart {
@@ -54,11 +55,18 @@ export class CurrencyController implements OnStart {
 
     private fullNotification () {
         this.full.Visible = true
-        task.delay(5, () => this.full.Visible = false)
+        setSelectedObject(this.sellButton)
+        makeButtonsSelectable(false)
+        task.delay( 5, () => {
+            if (this.full.Visible) makeButtonsSelectable(true)
+            this.full.Visible = false
+        } )
     }
 
     private clickFullButtons (button: "Sell" | "Upgrade") {
         this.full.Visible = false
+        makeButtonsSelectable( true )
+        GuiService.SelectedObject = undefined
         if (button === "Sell") this.sellController.clickSellButton()
         if (button === "Upgrade") this.basketUpgradeController.teleportToShop()
     }

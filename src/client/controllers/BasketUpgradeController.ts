@@ -1,13 +1,15 @@
 import { Controller, OnStart, OnInit, Dependency } from "@flamework/core";
-import { Players, Workspace } from "@rbxts/services";
+import { GuiService, Players, Workspace } from "@rbxts/services";
 import Signal from "@rbxts/signal";
 import { Events, Functions } from "client/network";
 import { clientStore } from "client/rodux/rodux";
+import { closeGui, openGui, setSelectedObject } from "client/utils/openGui";
 import { Area } from "shared/constants/Areas";
 import { BASKET_SHOP_CONFIG, BASKET_UPGRADES, getBasketUpgradePrice, BASKET_UPGRADE_DESCRIPTION, BasketUpgrade } from "shared/constants/Basket";
 import { abbreviator } from "shared/util/functions/abbreviate";
 import { getClosestUpgradePart } from "shared/util/functions/getClosestPart";
 import { AreaController } from "./AreaController";
+import { GuiController } from "./GuiController";
 import { NotificationsController } from "./NotificationsController";
 
 const areasMaxLevel: Record<Area, number> = {
@@ -37,11 +39,13 @@ export class BasketUpgradeController implements OnStart {
 
     public upgradePurchaseEvent = new Signal<() => void>()
 
+    private isOnCooldown = false
+
     onStart () {
         this.generateShopParts()
         this.purchase.MouseButton1Click.Connect( () => this.requestUpgrade() )
         this.exit.MouseButton1Click.Connect( () => {
-            this.gui.Enabled = false
+            closeGui(this.gui)
             this.info.Visible = false
         } )
         Events.displayBasketUpgradeShop.connect( ( area ) => this.display( area ) )
@@ -69,6 +73,12 @@ export class BasketUpgradeController implements OnStart {
     }
 
     private display ( area: Area ) {
+        if (this.isOnCooldown) return
+        this.isOnCooldown = true
+        task.delay( 2, () => this.isOnCooldown = false )
+
+        openGui( this.gui )
+        setSelectedObject(this.upgrades)
         this.area = area
         this.gui.Enabled = true
         this.cleanup()

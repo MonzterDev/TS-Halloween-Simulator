@@ -3,7 +3,7 @@ import { Players, ReplicatedStorage, ServerStorage } from "@rbxts/services";
 import { CleanViewport, GenerateViewport } from "@rbxts/viewport-model";
 import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
-import { openGui } from "client/utils/openGui";
+import { closeGui, openGui } from "client/utils/openGui";
 import { EggPetProps, EGG_SHOP_CONFIG, EGGS, PETS, RARITY_COLORS, Egg, Pet } from "shared/constants/Pets";
 
 @Controller({})
@@ -24,7 +24,7 @@ export class PetIndexController implements OnStart {
 
     onStart() {
         this.openButton.MouseButton1Click.Connect( () => openGui( this.gui ) )
-        this.exitButton.MouseButton1Click.Connect( () => this.gui.Enabled = false )
+        this.exitButton.MouseButton1Click.Connect( () => closeGui(this.gui) )
         Events.addToPetIndex.connect((egg, pet) => this.updatePetIndex(egg, pet) )
         this.generateEggs()
     }

@@ -1,8 +1,9 @@
 import { Controller, OnStart, OnInit, Dependency } from "@flamework/core";
-import { Players, ReplicatedStorage } from "@rbxts/services";
+import { GuiService, Players, ReplicatedStorage } from "@rbxts/services";
 import { CleanViewport, GenerateViewport } from "@rbxts/viewport-model";
 import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
+import { setSelectedObject } from "client/utils/openGui";
 import { PET_CONFIG, PetInstanceProps, UUID, getMaxPetsEquipped, getMaxPetsStored } from "shared/constants/Pets";
 import { NotificationsController } from "./NotificationsController";
 import { PetsController } from "./PetsController";
@@ -137,6 +138,7 @@ export class PetInventoryController implements OnStart {
     }
 
     private changeMode ( mode: Mode ) {
+        setSelectedObject( this.container)
         this.mode = mode
         switch ( this.mode ) {
             case "Default":

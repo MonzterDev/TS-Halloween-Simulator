@@ -3,7 +3,7 @@ import { FormatStandard } from "@rbxts/format-number";
 import { MarketplaceService, Players } from "@rbxts/services";
 import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
-import { openGui } from "client/utils/openGui";
+import { closeGui, openGui } from "client/utils/openGui";
 import { calculateCoinReward, DevProduct, DEV_PRODUCTS, DEV_PRODUCT_CONFIG, Gamepass, GAMEPASSES, GAMEPASS_CONFIG, getGamepassIDFromGamepass } from "shared/constants/Monetization";
 import { BasketUpgradeController } from "./BasketUpgradeController";
 import { NotificationsController } from "./NotificationsController";
@@ -36,7 +36,7 @@ export class MonetizationController implements OnStart {
     onStart () {
         Events.purchaseSuccess.connect( ( product ) => this.notificationsController.createNotification("You purchased GAMEPASS, enjoy!", {gamepassOrProduct: product} ) )
         this.openButton.MouseButton1Click.Connect( () => openGui( this.gui ) )
-        this.exit.MouseButton1Click.Connect( () => this.gui.Enabled = false )
+        this.exit.MouseButton1Click.Connect( () => closeGui(this.gui) )
         this.buttons.Gamepasses.MouseButton1Click.Connect(() => this.switchMode( "Passes" ))
         this.buttons.Currency.MouseButton1Click.Connect(() => this.switchMode( "Currency" ))
         this.buttons.Boosts.MouseButton1Click.Connect(() => this.switchMode( "Boosts" ))

@@ -1,9 +1,10 @@
 import { Controller, OnStart, OnInit, Dependency } from "@flamework/core";
 import { FormatCompact } from "@rbxts/format-number";
-import { Players, Workspace } from "@rbxts/services";
+import { GuiService, Players, Workspace } from "@rbxts/services";
 import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
 import { hideGuis } from "client/utils/hideGuis";
+import { setSelectedObject } from "client/utils/openGui";
 import { Area, AREA_WALL_CONFIG } from "shared/constants/Areas";
 import { cleanString } from "shared/util/functions/cleanString";
 import { NotificationsController } from "./NotificationsController";
@@ -75,11 +76,15 @@ export class BoostController implements OnStart {
             guiClone.Area.Text = area.gsub( "_", " " )[0]
             guiClone.Price.Text = FormatCompact( AREA_WALL_CONFIG[area].coin_price )
 
+            let touched = false
             wallInstance.Touched.Connect( ( otherPart ) => {
                 const player = Players.GetPlayerFromCharacter(otherPart.Parent)
-                if ( !player || player !== this.player ) return
+                if ( !player || player !== this.player || touched) return
                 this.selectedArea = area
+                touched = true
+                task.delay(1, () => touched = false)
 
+                setSelectedObject(this.purchaseGui.Frame.Buy)
                 this.purchaseGui.Frame.Area.Text = cleanString(area)
                 this.purchaseGui.Frame.Price.Text = FormatCompact( AREA_WALL_CONFIG[area].coin_price )
                 this.purchaseGui.Enabled = true

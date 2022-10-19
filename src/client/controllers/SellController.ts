@@ -1,5 +1,5 @@
 import { Controller, OnStart, OnInit, Dependency } from "@flamework/core";
-import { Players, Workspace } from "@rbxts/services";
+import { GuiService, Players, Workspace } from "@rbxts/services";
 import { Events } from "client/network";
 import { AreaController } from "./AreaController";
 
@@ -20,6 +20,7 @@ export class SellController implements OnStart {
     }
 
     public clickSellButton () {
+        GuiService.SelectedObject = undefined
         if ( this.ownsSellGamepass ) Events.sell()
         else {
             const sellPart = this.areaController.getPart("Sell")

@@ -1,6 +1,6 @@
 import { Controller, OnStart, OnInit, Dependency } from "@flamework/core";
-import { Players, ReplicatedStorage } from "@rbxts/services";
-import { openGui, resetScrollingFrame } from "client/utils/openGui";
+import { GuiService, Players, ReplicatedStorage } from "@rbxts/services";
+import { closeGui, openGui, resetScrollingFrame, setSelectedObject } from "client/utils/openGui";
 
 type Mode = "Pets" | "Boosts"
 
@@ -29,15 +29,24 @@ export class InventoryController implements OnStart {
             openGui(this.gui)
             this.displayGui( this.gui.Enabled )
         } )
-        this.exitButton.MouseButton1Click.Connect( () => this.displayGui( false ) )
+        this.exitButton.MouseButton1Click.Connect( () => {
+            closeGui( this.gui )
+            this.displayGui( false )
+        } )
         this.petsButton.MouseButton1Click.Connect(() => this.changeMode("Pets"))
         this.boostsButton.MouseButton1Click.Connect(() => this.changeMode("Boosts"))
     }
 
     private displayGui ( open: boolean ) {
         this.gui.Enabled = open
-        if (this.mode === "Pets") this.petInventory.Visible = open
-        else if ( this.mode === "Boosts" ) this.boostInventory.Visible = open
+        if ( this.mode === "Pets" ) {
+            this.petInventory.Visible = open
+            setSelectedObject(this.petsButton)
+        }
+        else if ( this.mode === "Boosts" ) {
+            this.boostInventory.Visible = open
+            setSelectedObject(this.boostsButton)
+        }
         this.boostInventory.Info.Visible = false
         this.petInventory.Info.Visible = false
     }
@@ -53,6 +62,7 @@ export class InventoryController implements OnStart {
         this.boostInventory.Info.Visible = false
         this.petInventory.Info.Visible = false
         resetScrollingFrame(this.petInventory.Container)
-        resetScrollingFrame(this.boostInventory.Container)
+        resetScrollingFrame( this.boostInventory.Container )
+        setSelectedObject(mode === "Pets" ? this.petInventory.Container : this.boostInventory.Container)
     }
 }

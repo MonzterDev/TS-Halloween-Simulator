@@ -1,8 +1,8 @@
 import { Controller, OnStart, OnInit, Dependency } from "@flamework/core";
-import { Players } from "@rbxts/services";
+import { GuiService, Players } from "@rbxts/services";
 import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
-import { openGui } from "client/utils/openGui";
+import { openGui, setSelectedObject } from "client/utils/openGui";
 import { CODES, CODES_CONFIG } from "shared/constants/Codes";
 import { NotificationsController } from "./NotificationsController";
 
@@ -24,7 +24,10 @@ export class CodesController implements OnStart {
 
     onStart () {
         this.redeemButton.MouseButton1Click.Connect( () => this.redeemCode())
-        this.openButton.MouseButton1Click.Connect( () => openGui( this.gui ) )
+        this.openButton.MouseButton1Click.Connect( () => {
+            openGui( this.gui )
+            setSelectedObject( this.textBox)
+        } )
         this.exit.MouseButton1Click.Connect( () => this.gui.Enabled = false )
     }
 
