@@ -1,7 +1,7 @@
 import { PlayerData } from "shared/types/PlayerData"
 
 export const DEFAULT_MAX_PET_STORAGE_AMOUNT = 50
-export const DEFAULT_MAX_PET_EQUIPPED_AMOUNT = 3
+export const DEFAULT_MAX_PET_EQUIPPED_AMOUNT = 5
 
 export interface PetInstanceProps {
     type: Pet
@@ -21,10 +21,10 @@ export const RARITY_COLORS: Record<Rarity, Color3> = {
     Rare: Color3.fromRGB(51,222,227),
 }
 
-export const EGGS = ["Starter"] as const
+export const EGGS = ["Halloween", "Spawn", "Camp"] as const
 export type Egg = typeof EGGS[number]
 
-export const PETS = ["Dog", "Cat"] as const
+export const PETS = ["Alien", "Ant", "Baby Bee", "Baby Slime", "Beast", "Blue Slime", "Crab", "Demon", "Devil", "Dino", "Dragoon", "Duck", "Elephant", "Fire Demon", "Fly", "Fox", "Ghost", "Ghost Dog", "Ghost Dragon", "Ghost Slime", "Kitty", "Monkey", "Mouse", "Penguin", "Piggy", "Purple Slime", "Red Slime", "Rhino", "Scorch", "Slime King", "Spider", "Void Angel", "Void Vampire", "Wolf", "Yellow Slime", "Zelot"] as const
 export type Pet = typeof PETS[number]
 
 export type Power = number
@@ -43,30 +43,65 @@ interface EggProps {
     pets: EggPetProps
 }
 
-
+// Devil, Ant, Ghost Dog, Spider
 export const EGG_SHOP_CONFIG: Record<Egg, EggProps> = {
-    Starter: {
+    Halloween: {
         price: 10,
         pets: {
-            Dog: {chance: 1, rarity: "Common"},
-            Cat: {chance: 5, rarity: "Uncommon"},
+            Spider: {chance: 40, rarity: "Common"},
+            Ghost: {chance: 20, rarity: "Common"},
+            "Ghost Dog": {chance: 10, rarity: "Rare"},
+            "Ghost Dragon": {chance: 5, rarity: "Rare"},
+            "Devil": {chance: 2.5, rarity: "Rare"},
+        }
+    },
+
+    Spawn: {
+        price: 10,
+        pets: {
+            Alien: {chance: 40, rarity: "Common"},
+            Wolf: {chance: 20, rarity: "Common"},
+            Kitty: {chance: 10, rarity: "Uncommon"},
+            Dragoon: {chance: 5, rarity: "Uncommon"},
+        }
+    },
+    Camp: {
+        price: 10,
+        pets: {
+            Mouse: {chance: 40, rarity: "Common"},
+            Elephant: {chance: 20, rarity: "Common"},
+            Ant: {chance: 10, rarity: "Uncommon"},
+            Dino: {chance: 5, rarity: "Uncommon"},
+            Crab: {chance: 2.5, rarity: "Uncommon"},
         }
     }
 }
 
 type PetProps = Record<Rarity, number>
 
-export const PET_CONFIG: Record<Pet, PetProps> = {
-    Dog: {
-        Common: 1,
-        Uncommon: 2,
-        Rare: 3,
-    },
-    Cat: {
-        Common: 2,
-        Uncommon: 3,
-        Rare: 4,
-    },
+const DEFAULT_PET_PROPS: PetProps = {
+    Common: 1,
+    Uncommon: 2,
+    Rare: 3,
+}
+
+export const PET_CONFIG: Partial<Record<Pet, PetProps>> = {
+    Spider: DEFAULT_PET_PROPS,
+    Ghost: DEFAULT_PET_PROPS,
+    "Ghost Dog": DEFAULT_PET_PROPS,
+    "Ghost Dragon": DEFAULT_PET_PROPS,
+    Devil: DEFAULT_PET_PROPS,
+
+    Alien: DEFAULT_PET_PROPS,
+    Wolf: DEFAULT_PET_PROPS,
+    Kitty: DEFAULT_PET_PROPS,
+    Dragoon: DEFAULT_PET_PROPS,
+
+    Mouse: DEFAULT_PET_PROPS,
+    Elephant: DEFAULT_PET_PROPS,
+    Ant: DEFAULT_PET_PROPS,
+    Dino: DEFAULT_PET_PROPS,
+    Crab: DEFAULT_PET_PROPS,
 }
 
 export function getMaxPetsEquipped (data: PlayerData) {

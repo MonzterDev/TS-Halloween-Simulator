@@ -27,10 +27,11 @@ export class PetsService implements OnStart {
 
         const allPets: {uuid: string, power: number}[] = []
         profile.data.pet_inventory.forEach( ( props, uuid ) => {
-            const power = PET_CONFIG[props.type][props.rarity]
+            const power = PET_CONFIG[props.type]![props.rarity]
             allPets.push({uuid: uuid, power: power})
         } )
 
+        print(allPets)
         allPets.sort( ( a, b ) => {
             return a.power > b.power
         } )

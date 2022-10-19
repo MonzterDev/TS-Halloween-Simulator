@@ -5,7 +5,7 @@ import { Debris, Lighting, Players, ReplicatedStorage, RunService, Workspace } f
 import { CleanViewport, GenerateViewport } from "@rbxts/viewport-model";
 import { Events, Functions } from "client/network";
 import { clientStore } from "client/rodux/rodux";
-import { EGG_SHOP_CONFIG, EGGS, PETS, Pet, Egg, getMaxPetsStored } from "shared/constants/Pets";
+import { EGG_SHOP_CONFIG, EGGS, PETS, Pet, Egg, getMaxPetsStored, RARITY_COLORS } from "shared/constants/Pets";
 import { cleanString } from "shared/util/functions/cleanString";
 import { NotificationsController } from "./NotificationsController";
 
@@ -31,7 +31,7 @@ export class PetEggController implements OnStart {
     private isAutoHatching = false
 
     onStart () {
-        this.generateEgg( "Starter" )
+        this.eggs.GetChildren().forEach((child) => this.generateEgg(<Egg> child.Name))
         Events.autoDeletePet.connect( ( egg, pet ) => task.defer( () => this.autoDeletePet( egg, pet ) ) )
         Events.resetEggPity.connect( ( egg ) => this.resetPity( egg ) )
         Events.increaseEggPity.connect((egg) => task.defer(() => this.increaseEggPity(egg)))
@@ -72,6 +72,8 @@ export class PetEggController implements OnStart {
             template.Visible = true
             template.Name = pet
             template.Chance.Text = `${props.chance}%`
+            template.LayoutOrder = -props.chance
+            template.ViewportFrame.BackgroundColor3 = RARITY_COLORS[props.rarity]
 
             template.Delete.Visible = clientStore.getState().data.pet_auto_delete.get(egg)?.get(pet)!
             template.MouseButton1Click.Connect(() => Events.autoDeletePet.fire(egg, pet))

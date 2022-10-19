@@ -31,7 +31,7 @@ export class PetIndexController implements OnStart {
 
     private updatePetIndex ( egg: Egg, pet: Pet ) {
         const eggTemplate = this.container.FindFirstChild( egg )
-        const petTemplate = <typeof this.template.Container.Template> eggTemplate?.FindFirstChild( "Container" )?.FindFirstChild( pet )
+        const petTemplate = <typeof this.template.Container.Template>eggTemplate?.FindFirstChild( "Container" )?.FindFirstChild( pet )
         CleanViewport( petTemplate.ViewportFrame )
 
         const petModel = <Model>ReplicatedStorage.Pets.FindFirstChild( pet )?.Clone()

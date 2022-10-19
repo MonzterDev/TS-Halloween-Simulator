@@ -9,11 +9,15 @@ const positions = [
     new Vector3( 0, 1, 8 ),
     new Vector3( -7.5, 1, 6 ),
     new Vector3( 7.5, 1, 6 ),
+    new Vector3( 5, 1, 9 ),
+    new Vector3( -4.5, 1, 9 ),
 ]
 const orientations = [
-    new Vector3( 0, -90, 0 ),
-    new Vector3( 0, -120, 0 ),
-    new Vector3( 0, -60, 0 ),
+    new Vector3( 0, -0, 0 ),
+    new Vector3( 0, -30, 0 ),
+    new Vector3( 0, 30, 0 ),
+    new Vector3( 0, 35, 0 ),
+    new Vector3( 0, -35, 0 ),
 ]
 
 interface pet {
@@ -45,8 +49,8 @@ export class PetsController implements OnStart {
         Events.equipPet.connect((player, uuid, pet) => this.equipPet(player, uuid, pet))
         Events.unequipPet.connect( ( player, uuid ) => this.unequipPet( player, uuid ) )
 
-        Players.GetPlayers().forEach(( player ) => player.CharacterAdded.Connect( () => this.respawnPet( player ) ))
-        Players.PlayerAdded.Connect( ( player ) => player.CharacterAdded.Connect( () => this.respawnPet( player ) ) )
+        Players.GetPlayers().forEach(( player ) => player.CharacterAdded.Connect( () => task.delay(1, () => this.respawnPet( player ) ) ))
+        Players.PlayerAdded.Connect( ( player ) => player.CharacterAdded.Connect( () => task.delay(1, () => this.respawnPet( player ) ) ) )
         Players.PlayerRemoving.Connect( ( player ) => {
             this.pets.delete( player.UserId )
             this.petsFolder.FindFirstChild(player.UserId)?.Destroy()
@@ -151,13 +155,13 @@ export class PetsController implements OnStart {
             Parent: model,
             Attachment0: petAttachment,
             Attachment1: charAttachment,
-            Responsiveness: 25
+            RigidityEnabled: true
         } )
         const alignOrientation = Make( "AlignOrientation", {
             Parent: model,
             Attachment0: petAttachment,
             Attachment1: charAttachment,
-            Responsiveness: 25
+            RigidityEnabled: true
         } )
 
         const positionNumber = this.getPetOrder( <Folder>folder )

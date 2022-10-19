@@ -31,6 +31,7 @@ export class PilesService implements OnStart {
             const areaConfig = AREA_PILE_CONFIG[folder.Name]
             folder.GetChildren().forEach( ( spawnPart ) => {
                 if ( !spawnPart.IsA( "BasePart" ) ) return
+                spawnPart.Transparency = 1
                 const pileConfig = PILES_CONFIG[spawnPart.Name]
                 const health = pileConfig.health * areaConfig.health_multiplier
                 const uuid = HttpService.GenerateGUID( false )

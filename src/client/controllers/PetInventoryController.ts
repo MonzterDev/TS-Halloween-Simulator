@@ -102,7 +102,7 @@ export class PetInventoryController implements OnStart {
         template.Equipped.Visible = equip
 
         const props = this.getPetPropsFromUUID( uuid )
-        const power = PET_CONFIG[props!.type][props!.rarity]
+        const power = PET_CONFIG[props!.type]![props!.rarity]
         template.LayoutOrder = equip ? -1_000_000 - power : -power
         this.updateLabels()
         if (this.selectedPet === uuid) task.defer(() => this.displayInfo(uuid))
@@ -122,7 +122,7 @@ export class PetInventoryController implements OnStart {
         clone.Visible = true
         clone.Name = uuid
 
-        const power = PET_CONFIG[props.type][props.rarity]
+        const power = PET_CONFIG[props.type]![props.rarity]
         clone.Power.Text = tostring( power )
         clone.Equipped.Visible = props.equipped ? props.equipped : false
         clone.Locked.Visible = props.locked ? props.locked : false
