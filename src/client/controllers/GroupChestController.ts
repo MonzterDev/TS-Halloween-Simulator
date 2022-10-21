@@ -2,6 +2,7 @@ import { Controller, OnStart, OnInit, Dependency } from "@flamework/core";
 import { Players, Workspace } from "@rbxts/services";
 import { clientStore } from "client/rodux/rodux";
 import { GROUP_ID } from "shared/constants/Group";
+import { PlayerCooldown } from "shared/util/classes/PlayerCooldown";
 import { timeToString } from "shared/util/functions/timeToString";
 import { NotificationsController } from "./NotificationsController";
 
@@ -14,6 +15,8 @@ export class GroupChestController implements OnStart {
     private groupChest = Workspace.GroupChest
 
     private billboardGui = this.groupChest.Attachment.Display
+
+    private cooldown = new PlayerCooldown(2)
 
     onStart () {
         this.notify()
@@ -34,9 +37,10 @@ export class GroupChestController implements OnStart {
     private notify () {
         this.groupChest.Touched.Connect( ( otherPart ) => {
             const player = Players.GetPlayerFromCharacter(otherPart.Parent)
-            if ( !player || player !== this.player ) return
+            if ( !player || player !== this.player || !this.cooldown.cooldownIsFinished(player) ) return
 
-            if (!player.IsInGroup(GROUP_ID)) this.notificationsController.createNotification("Join our Group to receive rewards!")
+            if ( !player.IsInGroup( GROUP_ID ) ) this.notificationsController.createNotification( "Join our Group to receive rewards!" )
+            this.cooldown.giveCooldown(player)
         })
     }
 }

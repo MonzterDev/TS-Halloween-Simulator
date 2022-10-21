@@ -151,13 +151,17 @@ interface StarterGui extends BasePlayerGui {
 	AreaPurchase: ScreenGui & {
 		Frame: Frame & {
 			Exit: TextButton;
-			Buy: TextButton;
-			Title: TextLabel;
 			Icon: ImageLabel;
+			Title: ImageLabel & {
+				Title: TextLabel;
+			};
+			Area: TextLabel;
 			Price: TextLabel;
 			Background: ImageLabel;
 			UIAspectRatioConstraint: UIAspectRatioConstraint;
-			Area: TextLabel;
+			Buy: ImageButton & {
+				Text: TextLabel;
+			};
 		};
 	};
 	PetEgg: ScreenGui & {
@@ -245,12 +249,15 @@ interface StarterGui extends BasePlayerGui {
 			UIAspectRatioConstraint: UIAspectRatioConstraint;
 		};
 		Full: Frame & {
-			Tip: TextLabel;
-			Title: TextLabel;
-			Upgrade: TextButton;
-			UICorner: UICorner;
-			Sell: TextButton;
+			Subtext: TextLabel;
+			Upgrade: ImageButton & {
+				Text: TextLabel;
+			};
+			Background: ImageLabel;
 			UIAspectRatioConstraint: UIAspectRatioConstraint;
+			Sell: ImageButton & {
+				Text: TextLabel;
+			};
 		};
 		Popup: Frame & {
 			Template: Frame & {
@@ -295,7 +302,37 @@ interface StarterGui extends BasePlayerGui {
 			TextBoxBackground: ImageLabel;
 		};
 	};
-	PetIndex: ScreenGui;
+	PetIndex: ScreenGui & {
+		Frame: Frame & {
+			Exit: ImageButton;
+			Title: ImageLabel & {
+				Title: TextLabel;
+			};
+			ContainerBackground: ImageLabel;
+			Background: ImageLabel;
+			UIAspectRatioConstraint: UIAspectRatioConstraint;
+			Container: ScrollingFrame & {
+				UIGridLayout: UIGridLayout;
+				Template: Frame & {
+					Egg: ViewportFrame & {
+						Title: TextLabel;
+						Amount: TextLabel;
+					};
+					Background: ImageLabel;
+					Container: Frame & {
+						Template: TextLabel & {
+							ViewportFrame: ViewportFrame;
+							Background: ImageLabel;
+							Title: TextLabel;
+							Locked: TextLabel;
+						};
+						UIGridLayout: UIGridLayout;
+					};
+				};
+				UIPadding: UIPadding;
+			};
+		};
+	};
 	Map: ScreenGui & {
 		Frame: Frame & {
 			Exit: ImageButton;

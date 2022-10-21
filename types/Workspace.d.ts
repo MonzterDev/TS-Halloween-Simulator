@@ -1,5 +1,4 @@
 interface Workspace extends Model {
-	Pets: Folder
 	Map: Folder & {
 		Dummy: Model & {
 			LeftLowerArm: MeshPart & {
@@ -495,6 +494,14 @@ interface Workspace extends Model {
 		};
 	};
 	TogglePluginMenu: BoolValue;
+	PetIndex: Part & {
+		Weld: Weld;
+		Attachment: Attachment & {
+			Display: BillboardGui & {
+				Title: TextLabel;
+			};
+		};
+	};
 	Eggs: Folder & {
 		Camp: Part & {
 			Info: Attachment;
