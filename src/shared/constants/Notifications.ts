@@ -7,6 +7,7 @@ export const NOTIFICATIONS = [
     "That code is invalid!",
     "That code is expired!",
     "You already redeemed this code!",
+    "You moved, auto hatching stopped!",
 
     "+AMOUNT RARITY TYPE Booster!",
     "You purchased GAMEPASS, enjoy!",
@@ -49,6 +50,9 @@ export const NOTIFICATION_CONFIG: NotificationConfig = {
         type: "Error"
     },
     "You already redeemed this code!": {
+        type: "Error"
+    },
+    "You moved, auto hatching stopped!": {
         type: "Error"
     },
 

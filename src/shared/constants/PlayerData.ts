@@ -111,5 +111,12 @@ export const DEFAULT_PLAYER_DATA: PlayerData = {
     group_chest: {
         claimed: false,
         reset_time: os.time() + 86400
+    },
+    tutorial: {
+        earn_candy: false,
+        sell_candy: false,
+        hatch_pet: false,
+        upgrade_basket: false,
+        unlock_area: false,
     }
 }

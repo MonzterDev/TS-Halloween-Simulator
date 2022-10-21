@@ -3,7 +3,6 @@ import { Players } from "@rbxts/services";
 import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
 import { closeGui, openGui } from "client/utils/openGui";
-import { DEFAULT_PLAYER_DATA } from "shared/constants/PlayerData";
 import { OFF_BUTTON, ON_BUTTON, Setting, SETTINGS } from "shared/constants/Settings";
 import { PetsController } from "./PetsController";
 

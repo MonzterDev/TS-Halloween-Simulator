@@ -9,7 +9,7 @@ import { GiftTime } from "./constants/Gifts";
 import { Egg, EGGS, Pet, PetInstanceProps, PETS, RARITIES, Rarity, UUID } from "./constants/Pets";
 import { Quest } from "./constants/Quests";
 import { Setting, SETTINGS } from "./constants/Settings";
-import { PlayerData } from "./types/PlayerData";
+import { PlayerData, TutorialData } from "./types/PlayerData";
 
 export type HatchEggResponse =  Pet[] | undefined
 
@@ -80,7 +80,7 @@ interface ClientEvents {
     resetGroupChest: ( time: number ) => void
 
     resetEggPity: (egg: Egg ) => void
-    increaseEggPity: (egg: Egg ) => void
+    increaseEggPity: ( egg: Egg ) => void
 }
 
 

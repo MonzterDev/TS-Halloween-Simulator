@@ -2,10 +2,12 @@ import { Service, OnStart, OnInit, Dependency } from "@flamework/core";
 import { Events } from "server/network";
 import { Area, AREA_WALL_CONFIG } from "shared/constants/Areas";
 import { PlayerDataService } from "./PlayerDataService";
+import { TutorialSerivce } from "./TutorialSerivce";
 
 @Service({})
 export class AreaWallService implements OnStart {
     private playerDataService = Dependency(PlayerDataService)
+    private tutorialSerivce = Dependency( TutorialSerivce )
 
     onStart () {
         Events.unlockArea.connect((player, area) => this.requestUnlockWall(player, area))
@@ -27,7 +29,8 @@ export class AreaWallService implements OnStart {
 
         profile.adjustMoney( price )
         profile.data.areas_unlocked[area] = true
-        Events.unlockArea.fire(player, area)
+        Events.unlockArea.fire( player, area )
+        this.tutorialSerivce.completeTutorial(player, "unlock_area")
     }
 
 }

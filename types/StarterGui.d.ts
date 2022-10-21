@@ -187,15 +187,11 @@ interface StarterGui extends BasePlayerGui {
 			Auto: ProximityPrompt;
 		};
 		InfoGui: BillboardGui & {
-			Title: ImageLabel & {
-				Title: TextLabel;
+			Progress: TextLabel & {
+				UIStroke: UIStroke;
 			};
 			Frame: Frame & {
 				Message: TextLabel;
-				Pity: ImageLabel & {
-					Title: TextLabel;
-					Bar: ImageLabel;
-				};
 				Background: ImageLabel;
 				UIAspectRatioConstraint: UIAspectRatioConstraint;
 				Container: Frame & {
@@ -208,6 +204,14 @@ interface StarterGui extends BasePlayerGui {
 						UICorner: UICorner;
 					};
 					UIPadding: UIPadding;
+				};
+			};
+			Title: ImageLabel & {
+				Title: TextLabel;
+			};
+			ProgressBar: ImageLabel & {
+				Box: Frame & {
+					CompletedProgressBar: ImageLabel;
 				};
 			};
 		};
@@ -291,31 +295,7 @@ interface StarterGui extends BasePlayerGui {
 			TextBoxBackground: ImageLabel;
 		};
 	};
-	PetIndex: ScreenGui & {
-		Frame: Frame & {
-			Exit: TextButton;
-			Title: TextLabel;
-			Background: ImageLabel;
-			UIAspectRatioConstraint: UIAspectRatioConstraint;
-			Container: ScrollingFrame & {
-				Template: Frame & {
-					Egg: ViewportFrame & {
-						Amount: TextLabel;
-					};
-					Container: Frame & {
-						Template: TextLabel & {
-							ViewportFrame: ViewportFrame & {
-								Title: TextLabel;
-								Locked: TextLabel;
-							};
-						};
-						UIGridLayout: UIGridLayout;
-					};
-				};
-				UIGridLayout: UIGridLayout;
-			};
-		};
-	};
+	PetIndex: ScreenGui;
 	Map: ScreenGui & {
 		Frame: Frame & {
 			Exit: ImageButton;

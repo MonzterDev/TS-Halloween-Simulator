@@ -6,11 +6,13 @@ import { rewardMoney } from "server/utils/Rewards";
 import { PlayerCooldown } from "shared/util/classes/PlayerCooldown";
 import { PlayerDataService } from "./PlayerDataService";
 import { QuestsService } from "./QuestsService";
+import { TutorialSerivce } from "./TutorialSerivce";
 
 @Service({})
 export class SellService implements OnStart {
     private playerDataService = Dependency(PlayerDataService)
     private questsService = Dependency(QuestsService)
+    private tutorialSerivce = Dependency( TutorialSerivce )
 
     private cooldown = new PlayerCooldown(1)
 
@@ -52,6 +54,7 @@ export class SellService implements OnStart {
         GameAnalytics.addResourceEvent( player.UserId, { flowType: "Source", currency: "Money", amount: candy, itemType: "Sell", itemId: "Candy" } )
         profile.setCandy( 0 )
         this.questsService.addPoint( player, "Salesman" )
+        this.tutorialSerivce.completeTutorial( player, "sell_candy" )
     }
 
 }

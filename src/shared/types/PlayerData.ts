@@ -29,6 +29,7 @@ export interface PlayerData {
 	gifts: GiftData
 	codes: CodeData
 	group_chest: GroupChestProps
+	tutorial: TutorialData
 }
 
 export interface GroupChestProps {
@@ -70,3 +71,11 @@ export type PetEggPityData = Map<Egg, number>
 
 export type GamepassesData = Map<Gamepass, boolean>
 export type SettingsData = Map<Setting, boolean>
+
+export interface TutorialData {
+	earn_candy: boolean,
+	sell_candy: boolean,
+	hatch_pet: boolean,
+	upgrade_basket: boolean,
+	unlock_area: boolean,
+}

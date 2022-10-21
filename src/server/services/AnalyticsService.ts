@@ -1,8 +1,5 @@
-import { GameAnalytics, initializeServer } from "@rbxts/gameanalytics";
-import { Service, OnStart, OnInit } from "@flamework/core";
-
-
-
+import { GameAnalytics } from "@rbxts/gameanalytics";
+import { Service, OnStart } from "@flamework/core";
 
 @Service({})
 export class AnalyticsService implements OnStart {

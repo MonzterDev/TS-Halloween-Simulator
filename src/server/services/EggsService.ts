@@ -8,11 +8,13 @@ import { HatchEggResponse } from "shared/network";
 import { PlayerCooldown } from "shared/util/classes/PlayerCooldown";
 import { PetsService } from "./PetsService";
 import { PlayerDataService } from "./PlayerDataService";
+import { TutorialSerivce } from "./TutorialSerivce";
 
 @Service({})
 export class EggsService implements OnStart {
     private playerDataService = Dependency(PlayerDataService)
     private petsService = Dependency( PetsService )
+    private tutorialSerivce = Dependency( TutorialSerivce )
 
     private playerCooldown = new PlayerCooldown(3)
 
@@ -83,7 +85,8 @@ export class EggsService implements OnStart {
             if (!shouldDelete) this.petsService.rewardPet( player, pet!, rarity! )
             task.wait()
         }
-        GameAnalytics.addDesignEvent(player.UserId, {eventId: `Hatch:${egg}`})
+        GameAnalytics.addDesignEvent( player.UserId, { eventId: `Hatch:${egg}` } )
+        this.tutorialSerivce.completeTutorial( player, "hatch_pet" )
         return pets
     }
 

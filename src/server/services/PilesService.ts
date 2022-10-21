@@ -10,12 +10,14 @@ import { AREA_PILE_CONFIG } from "shared/constants/Areas";
 import { PILES_CONFIG } from "shared/constants/Piles";
 import { PlayerDataService } from "./PlayerDataService";
 import { QuestsService } from "./QuestsService";
+import { TutorialSerivce } from "./TutorialSerivce";
 
 @Service({})
 export class PilesService implements OnStart {
     private components = Dependency( Components )
     private playerDataService = Dependency( PlayerDataService )
     private questsService = Dependency( QuestsService )
+    private tutorialSerivce = Dependency( TutorialSerivce )
 
     private areaFolder = Workspace.Piles
     private pileModels = ServerStorage.Piles
@@ -97,7 +99,8 @@ export class PilesService implements OnStart {
         if ( wasLucky ) bonusReward = math.round( damage / ( math.random( 20, 100 ) / 100 ) )
         reward += bonusReward
 
-        GameAnalytics.addResourceEvent(player.UserId, {flowType: "Source", currency: "Candy", amount: reward, itemType: "PILE", itemId: "PILE"})
+        this.tutorialSerivce.completeTutorial(player, "earn_candy")
+        GameAnalytics.addResourceEvent( player.UserId, { flowType: "Source", currency: "Candy", amount: reward, itemType: "PILE", itemId: "PILE" } )
         rewardCandy(player, reward, true)
         this.questsService.addPoint(player, "Candy Collector", 0, reward)
         if (wasLucky) Events.luckyReward.fire(player, bonusReward)

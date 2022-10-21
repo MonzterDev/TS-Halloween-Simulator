@@ -103,16 +103,16 @@ export class PetEggController implements OnStart {
 
         const pity = clientStore.getState().data.pet_egg_pity.get( egg )!
 
-        infoGui.Frame.Pity.Bar.Size = UDim2.fromScale( pity / 100, 1 )
-        infoGui.Frame.Pity.Title.Text = `Exotic Pity ${pity}/100`
+        infoGui.ProgressBar.Box.CompletedProgressBar.Size = UDim2.fromScale( pity / 100, 1 )
+        infoGui.Progress.Text = `Pity ${pity}/100`
     }
 
     private resetPity ( egg: Egg ) {
         const infoGui = <typeof this.infoGui>this.folder.FindFirstChild( egg )?.FindFirstChild( "InfoGui" )
         if ( !infoGui ) return
 
-        infoGui.Frame.Pity.Bar.Size = UDim2.fromScale( 0, 1 )
-        infoGui.Frame.Pity.Title.Text = `Exotic Pity 0/100`
+        infoGui.ProgressBar.Box.CompletedProgressBar.Size = UDim2.fromScale( 0, 1 )
+        infoGui.Progress.Text = `Pity 0/100`
     }
 
     private autoDeletePet (egg: Egg, pet: Pet) {
@@ -156,14 +156,14 @@ export class PetEggController implements OnStart {
             Parent: this.folder
         } )
 
-        const eggModel = <Workspace["Eggs"]["Starter"]>this.eggs.FindFirstChild(egg)
+        const eggModel = <Workspace["Eggs"]["Spawn"]>this.eggs.FindFirstChild(egg)
         const infoClone = this.infoGui.Clone()
         infoClone.Enabled = true
         infoClone.Parent = folder
         infoClone.Adornee = eggModel.Info
         infoClone.Title.Title.Text = `${egg} Egg`
-        infoClone.Frame.Pity.Title.Text = `Exotic Pity ${pity}/100`
-        infoClone.Frame.Pity.Bar.Size = UDim2.fromScale( pity / 100, 1 )
+        infoClone.Progress.Text = `Pity ${pity}/100`
+        infoClone.ProgressBar.Box.CompletedProgressBar.Size = UDim2.fromScale( pity / 100, 1 )
         this.populatePets( infoClone.Frame.Container, egg )
 
         const interactClone = this.interact.Clone()
@@ -187,13 +187,16 @@ export class PetEggController implements OnStart {
         this.isAutoHatching = true
         while ( this.isAutoHatching ) {
             this.hatch(egg)
-            if ( this.player.Character?.PrimaryPart?.Position !== position ) this.isAutoHatching = false
+            if ( this.player.Character?.PrimaryPart?.Position !== position ) {
+                this.notificationsController.createNotification( "You moved, auto hatching stopped!" )
+                this.isAutoHatching = false
+            }
             task.wait(1)
         }
     }
 
     private hatch ( egg: Egg ) {
-        const eggModel = <Workspace["Eggs"]["Starter"]>this.eggs.FindFirstChild(egg)
+        const eggModel = <Workspace["Eggs"]["Spawn"]>this.eggs.FindFirstChild(egg)
 
         const isTrippleHatch = clientStore.getState().data.gamepasses.get( "Tripple Hatch" ) && clientStore.getState().data.settings.get("Tripple Hatch")
         const amountOfHatches = isTrippleHatch ? 3 : 1
@@ -218,10 +221,16 @@ export class PetEggController implements OnStart {
 
         const character = this.player.Character
         const humanoidRootPart = <BasePart>character?.FindFirstChild( "HumanoidRootPart" )
-        if ( !character || !humanoidRootPart ) return
+        if ( !character || !humanoidRootPart ) {
+            this.isAutoHatching = false
+            return
+        }
 
         const distanceBetween = ( humanoidRootPart.Position.sub( eggModel.Position ) ).Magnitude
-        if ( distanceBetween >= MAX_DISTANCE_FROM_EGG ) return
+        if ( distanceBetween >= MAX_DISTANCE_FROM_EGG ) {
+            this.isAutoHatching = false
+            return
+        }
 
         Functions.hatchEgg( egg ).andThen( ( pets ) => {
             if ( !pets ) return
