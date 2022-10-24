@@ -30,7 +30,7 @@ export class EggsService implements OnStart {
         const hasRemoveHatchCooldownGamepass = profile.data.gamepasses.get( "Remove Hatch Cooldown" )
         if ( !this.playerCooldown.cooldownIsFinished( player ) && !hasRemoveHatchCooldownGamepass ) return
 
-        const userPolicy = PolicyService.GetPolicyInfoForPlayerAsync( player )
+        const userPolicy = PolicyService.GetPolicyInfoForPlayerAsync( player ) // Probably should implement differently
         if (userPolicy.ArePaidRandomItemsRestricted) return
 
         let amountOfHatches = 1
