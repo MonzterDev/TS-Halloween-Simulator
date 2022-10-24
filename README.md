@@ -2,10 +2,11 @@
 
 The first game I've created using Roblox TypeScript!
 
-Please understand this game was never intended to be published and was only created as a learning project.
-There are flaws with the game, including UI, certain unfinished systems, & more, but I wanted to release it so I can get feedback about my code and move on to the next project!
+Please understand this game was never intended to be published and was only **created** as a **learning project**. There are flaws with the game, including UI, certain unfinished systems, & more, but I wanted to release it so I can get feedback about my code and move on to the next project!
 
-Hopefully others can use this project to learn, get ideas, or take inspiration from!
+Hopefully, others can use this project to learn, get ideas, or take inspiration from it!
+
+You can **play** the game [here](https://rblx.games/10907854635)!
 
 ## Systems
 
@@ -30,3 +31,7 @@ The focus of this project was to make most of the modern day Simulator systems a
 
 Players can collect and sell Candy to earn Money.
 With that money, players can purchase Basket Upgrades, hatch Pet Eggs, and unlock new Areas.
+
+## Usage
+
+When cloning this repo, I'd recommend you open the [`Halloween Simulator.rbxl`](https://github.com/MonzterDev/TS-Halloween-Simulator/blob/main/Halloween%20Simulator.rbxl) file, which contains all the Workspace, ServerStorage, and other contents which aren't included here.
