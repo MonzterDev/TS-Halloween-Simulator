@@ -121,7 +121,7 @@ export class PetsController implements OnStart {
         if (!playerPets) this.pets.set(player.UserId, [{uuid: uuid, type: pet}])
         else playerPets.push( { type: pet, uuid: uuid } )
 
-        this.spawnPet(player, uuid, pet)
+        task.spawn(() => this.spawnPet(player, uuid, pet))
     }
 
     private spawnPet ( player: Player, uuid: UUID, pet: Pet ) {
