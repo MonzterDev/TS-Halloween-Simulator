@@ -1,7 +1,7 @@
 import { Dependency } from "@flamework/core"
 import { BoostsService } from "server/services/BoostsService"
 import { PlayerDataService } from "server/services/PlayerDataService"
-import { BASKET_UPGRADE_CONFIG } from "shared/constants/Basket"
+import { BASKET_UPGRADE_CONFIG, getBasketUpgradeStat } from "shared/constants/Basket"
 import { Boost, BOOSTS_CONFIG } from "shared/constants/Boosts"
 
 
@@ -26,7 +26,7 @@ export function getSizeStat ( player: Player ): number {
     if ( !profile ) return amount
 
     const basketUpgradeLevel = profile.data.basket_upgrades.Size
-    const basketStat = BASKET_UPGRADE_CONFIG.Size[basketUpgradeLevel] ?? 0
+    const basketStat = getBasketUpgradeStat("Size", basketUpgradeLevel)
     amount += basketStat
 
     return amount
@@ -40,7 +40,7 @@ export function getPowerStat ( player: Player ): number {
     if ( !profile ) return amount
 
     const basketUpgradeLevel = profile.data.basket_upgrades.Power
-    const basketStat = BASKET_UPGRADE_CONFIG.Power[basketUpgradeLevel] ?? 0
+    const basketStat = getBasketUpgradeStat("Power", basketUpgradeLevel)
     amount += basketStat
 
     return amount
@@ -54,7 +54,7 @@ export function getRangeStat ( player: Player ): number {
     if ( !profile ) return amount
 
     const basketUpgradeLevel = profile.data.basket_upgrades.Range
-    const basketStat = BASKET_UPGRADE_CONFIG.Range[basketUpgradeLevel] ?? 0
+    const basketStat = getBasketUpgradeStat("Range", basketUpgradeLevel)
     amount = basketStat
 
     return amount
@@ -68,7 +68,7 @@ export function getLuckStat ( player: Player ): number {
     if ( !profile ) return amount
 
     const basketUpgradeLevel = profile.data.basket_upgrades.Luck
-    const basketStat = BASKET_UPGRADE_CONFIG.Luck[basketUpgradeLevel] ?? 0
+    const basketStat = getBasketUpgradeStat("Luck", basketUpgradeLevel)
     amount += basketStat
 
     return amount

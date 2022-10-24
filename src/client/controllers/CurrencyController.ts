@@ -6,7 +6,7 @@ import { Currency } from "shared/constants/Currencies";
 import { SellController } from "./SellController";
 import { BasketUpgradeController } from "./BasketUpgradeController";
 import { clientStore } from "client/rodux/rodux";
-import { BASKET_UPGRADE_CONFIG } from "shared/constants/Basket";
+import { BASKET_UPGRADE_CONFIG, getBasketUpgradeStat } from "shared/constants/Basket";
 import { FormatCompact, FormatStandard } from "@rbxts/format-number";
 import { makeButtonsSelectable, openGui, setSelectedObject } from "client/utils/openGui";
 
@@ -50,7 +50,7 @@ export class CurrencyController implements OnStart {
     private updateAmount ( currency: Currency, amount: number ) {
         const displayAmount = FormatStandard( amount )
         if ( currency === "candy" ) {
-            const storage = BASKET_UPGRADE_CONFIG.Size[clientStore.getState().data.basket_upgrades.Size]
+            const storage = getBasketUpgradeStat("Size", clientStore.getState().data.basket_upgrades.Size)
             this.candyAmount.Text = `${FormatStandard(amount)}/${storage}`
             if ( amount > 0 ) this.animateAmount()
             if (amount >= storage) this.fullNotification()

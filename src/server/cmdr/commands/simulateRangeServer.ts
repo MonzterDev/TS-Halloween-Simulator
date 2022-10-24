@@ -2,7 +2,7 @@ import { Dependency } from "@flamework/core";
 import { CommandContext } from "@rbxts/cmdr";
 import Make from "@rbxts/make";
 import { PlayerDataService } from "server/services/PlayerDataService";
-import { BASKET_UPGRADE_CONFIG } from "shared/constants/Basket";
+import { BASKET_UPGRADE_CONFIG, getBasketUpgradeStat } from "shared/constants/Basket";
 
 export = function ( context: CommandContext, range: number ) {
     const character = context.Executor.Character
@@ -15,7 +15,7 @@ export = function ( context: CommandContext, range: number ) {
     if ( !profile ) return
 
     const rangeLevel = profile.data.basket_upgrades.Range
-    if ( !range ) range = BASKET_UPGRADE_CONFIG.Range[rangeLevel] * 2
+    if ( !range ) range = getBasketUpgradeStat("Range", rangeLevel) * 2
 
     let part = humanoidRootPart.FindFirstChild("Radius")
     if ( part ) {
