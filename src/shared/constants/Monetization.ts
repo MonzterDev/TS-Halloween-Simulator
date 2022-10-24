@@ -4,7 +4,7 @@ export const GAMEPASSES = [
     "2x Money", "2x Candy",
     "Equip 2 More Pets", "Equip 5 More Pets",
     "100 Pet Storage", "500 Pet Storage",
-    "Remove Hatch Cooldown", "Tripple Hatch", "Lucky Eggs",
+    "Remove Hatch Cooldown", "Triple Hatch", "Lucky Eggs",
     "Sell from Anywhere"
 
 ] as const
@@ -39,12 +39,12 @@ export const GAMEPASS_CONFIG: Record<GamepassID, GamepassConfigProps> = {
     88116412: {
         displayName: "Equip 2 More Pets",
         imageId: "rbxassetid://129474314",
-        description: "Equip +1 more pet!",
+        description: "Equip +2 more pet!",
     },
     88116438: {
         displayName: "Equip 5 More Pets",
         imageId: "rbxassetid://129474314",
-        description: "Equip +2 more pets!",
+        description: "Equip +5 more pets!",
     },
 
     94738610: {
@@ -64,7 +64,7 @@ export const GAMEPASS_CONFIG: Record<GamepassID, GamepassConfigProps> = {
         description: "Hatch eggs quicker!",
     },
     94738209: {
-        displayName: "Tripple Hatch",
+        displayName: "Triple Hatch",
         imageId: "rbxassetid://129474314",
         description: "Hatch 3 Eggs at once!",
     },

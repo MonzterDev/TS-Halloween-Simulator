@@ -3,7 +3,7 @@ import { FormatStandard } from "@rbxts/format-number";
 import { MarketplaceService, Players } from "@rbxts/services";
 import { Events } from "client/network";
 import { clientStore } from "client/rodux/rodux";
-import { closeGui, openGui } from "client/utils/openGui";
+import { closeGui, openGui, resetScrollingFrame } from "client/utils/openGui";
 import { calculateCoinReward, DevProduct, DEV_PRODUCTS, DEV_PRODUCT_CONFIG, Gamepass, GAMEPASSES, GAMEPASS_CONFIG, getGamepassIDFromGamepass } from "shared/constants/Monetization";
 import { BasketUpgradeController } from "./BasketUpgradeController";
 import { NotificationsController } from "./NotificationsController";
@@ -31,13 +31,11 @@ export class MonetizationController implements OnStart {
 
     private exit = this.frame.Exit
 
-    private mode: Mode = "Passes"
-
     onStart () {
         Events.purchaseSuccess.connect( ( product ) => this.notificationsController.createNotification("You purchased GAMEPASS, enjoy!", {gamepassOrProduct: product} ) )
         this.openButton.MouseButton1Click.Connect( () => openGui( this.gui ) )
         this.exit.MouseButton1Click.Connect( () => closeGui(this.gui) )
-        this.buttons.Gamepasses.MouseButton1Click.Connect(() => this.switchMode( "Passes" ))
+        this.buttons.Passes.MouseButton1Click.Connect(() => this.switchMode( "Passes" ))
         this.buttons.Currency.MouseButton1Click.Connect(() => this.switchMode( "Currency" ))
         this.buttons.Boosts.MouseButton1Click.Connect(() => this.switchMode( "Boosts" ))
 
@@ -52,6 +50,13 @@ export class MonetizationController implements OnStart {
         this.gamepasses.Visible = mode === "Passes"
         this.boosts.Visible = mode === "Boosts"
         this.currency.Visible = mode === "Currency"
+        resetScrollingFrame(this.gamepasses)
+        resetScrollingFrame(this.boosts)
+        resetScrollingFrame( this.currency )
+
+        this.buttons.Passes.ZIndex = mode === "Passes" ? 0 : -1
+        this.buttons.Currency.ZIndex = mode === "Currency" ? 0 : -1
+        this.buttons.Boosts.ZIndex = mode === "Boosts" ? 0 : -1
     }
 
     private generateGamepasses () {
@@ -65,7 +70,7 @@ export class MonetizationController implements OnStart {
             const price = MarketplaceService.GetProductInfo( tonumber( passId )!, Enum.InfoType.GamePass ).PriceInRobux
 
             template.Icon.Image = passProps.imageId
-            template.Price.Text = `R$: ${price}`
+            template.Price.Text = tostring(price)
             template.Title.Text = passProps.displayName
             template.Description.Text = passProps.description
             template.MouseButton1Click.Connect(() => MarketplaceService.PromptGamePassPurchase( this.player, tonumber( passId )! ))
@@ -85,7 +90,8 @@ export class MonetizationController implements OnStart {
             const price = MarketplaceService.GetProductInfo( tonumber( productId )!, Enum.InfoType.Product ).PriceInRobux
 
             template.Icon.Image = passProps.imageId
-            template.Price.Text = `R$: ${price}`
+            template.Price.Text = tostring(price)
+            template.Title.Text = passProps.displayName
             template.Description.Text = `+150% ${passProps.displayName} for 20mins`
             template.MouseButton1Click.Connect(() => MarketplaceService.PromptProductPurchase( this.player, tonumber( productId )! ))
         }
@@ -93,13 +99,13 @@ export class MonetizationController implements OnStart {
 
     private updateCurrency () {
         this.currency.GetChildren().forEach( ( child ) => {
-            if ( !child.IsA( "TextButton" ) || !child.Visible ) return
+            if ( !child.IsA( "GuiButton" ) || !child.Visible ) return
 
             const template = <typeof this.currency.Template>child
             const coinPackage = template.GetAttribute( "coinPackage" )
             if ( !coinPackage ) return
 
-            template.Amount.Text = FormatStandard(calculateCoinReward(<DevProduct> coinPackage, clientStore.getState().data))
+            template.Title.Text = FormatStandard(calculateCoinReward(<DevProduct> coinPackage, clientStore.getState().data))
         })
     }
 
@@ -117,8 +123,8 @@ export class MonetizationController implements OnStart {
             const price = MarketplaceService.GetProductInfo( tonumber( productId )!, Enum.InfoType.Product ).PriceInRobux
 
             template.Icon.Image = passProps.imageId
-            template.Price.Text = `R$: ${price}`
-            template.Amount.Text = FormatStandard(calculateCoinReward(passProps.displayName, clientStore.getState().data))
+            template.Price.Text = tostring(price)
+            template.Title.Text = FormatStandard(calculateCoinReward(passProps.displayName, clientStore.getState().data))
             template.MouseButton1Click.Connect(() => MarketplaceService.PromptProductPurchase( this.player, tonumber( productId )! ))
         }
     }

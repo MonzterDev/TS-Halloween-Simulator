@@ -5,11 +5,9 @@ import { Events, Functions } from "client/network";
 import { clientStore } from "client/rodux/rodux";
 import { closeGui, openGui, setSelectedObject } from "client/utils/openGui";
 import { Area } from "shared/constants/Areas";
-import { BASKET_SHOP_CONFIG, BASKET_UPGRADES, getBasketUpgradePrice, BASKET_UPGRADE_DESCRIPTION, BasketUpgrade } from "shared/constants/Basket";
+import { BASKET_UPGRADES, getBasketUpgradePrice, BASKET_UPGRADE_DESCRIPTION, BasketUpgrade } from "shared/constants/Basket";
 import { abbreviator } from "shared/util/functions/abbreviate";
-import { getClosestUpgradePart } from "shared/util/functions/getClosestPart";
 import { AreaController } from "./AreaController";
-import { GuiController } from "./GuiController";
 import { NotificationsController } from "./NotificationsController";
 
 const areasMaxLevel: Record<Area, number> = {
@@ -102,8 +100,10 @@ export class BasketUpgradeController implements OnStart {
         clone.Visible = true
 
         clone.Upgrade.Text = upgrade
-        const level = this.getLevel(upgrade)
-        clone.Bar.Progress.Size = UDim2.fromScale( level / areasMaxLevel[this.area], 1 )
+        const level = this.getLevel( upgrade )
+        const progressPercent = level / areasMaxLevel[this.area]
+
+        clone.Bar.Progress.Size = UDim2.fromScale( progressPercent >= 0.9 ? progressPercent - 0.03 : progressPercent, clone.Bar.Progress.Size.Y.Scale )
         clone.Level.Text = `LVL ${level}`
         clone.MouseButton1Click.Connect(() => this.displayInfo(upgrade))
     }

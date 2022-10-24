@@ -19,7 +19,6 @@ export class PetIndexController implements OnStart {
     private container = this.frame.Container
     private template = this.container.Template
 
-    private openButton = this.buttons.Frame.PetIndex
     private exitButton = this.frame.Exit
 
     private openPart = Workspace.PetIndex
@@ -27,7 +26,6 @@ export class PetIndexController implements OnStart {
     private cooldown = new PlayerCooldown(2)
 
     onStart() {
-        this.openButton.MouseButton1Click.Connect( () => openGui( this.gui ) )
         this.exitButton.MouseButton1Click.Connect( () => closeGui(this.gui) )
         Events.addToPetIndex.connect((egg, pet) => this.updatePetIndex(egg, pet) )
         this.generateEggs()

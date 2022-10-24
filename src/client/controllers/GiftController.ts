@@ -59,7 +59,7 @@ export class GiftController implements OnStart {
 
     private updateGiftTimes (secondsPlayed: number) {
         this.container.GetChildren().forEach( ( child ) => {
-            if ( !child.IsA( "TextButton" ) || !child.Visible || child.GetAttribute( "Claimed" ) ) return
+            if ( !child.IsA( "GuiButton" ) || !child.Visible || child.GetAttribute( "Claimed" ) ) return
             const timeInSeconds = tonumber( child.Name )! * 60
             const secondsUntilUnlocked = timeInSeconds - secondsPlayed
             const isUnlocked = secondsUntilUnlocked <= 0

@@ -43,7 +43,7 @@ export interface Gamepasses {
 	equip_more_pets: boolean
 	equip_more_pets2: boolean
 	remove_hatch_cooldown: boolean
-	tripple_hatch: boolean
+	Triple_hatch: boolean
 }
 
 export interface Analytics {

@@ -269,6 +269,25 @@ interface Workspace extends Model {
 			};
 		};
 	};
+	Pets: Folder;
+	Camera: Camera;
+	Baseplate: Part & {
+		Texture: Texture;
+	};
+	Model: Model & {
+		["314-fgm"]: Model & {
+			Part: Part & {
+				Decal: Decal;
+			};
+			Primary: MeshPart;
+		};
+		["263-pmv Queen Bee"]: Model & {
+			Part: Part & {
+				Decal: Decal;
+			};
+			Primary: Part;
+		};
+	};
 	Dummy: Model & {
 		LeftLowerArm: MeshPart & {
 			LeftElbowRigAttachment: Attachment & {
@@ -475,25 +494,6 @@ interface Workspace extends Model {
 			OriginalSize: Vector3Value;
 		};
 	};
-	Camera: Camera;
-	Baseplate: Part & {
-		Texture: Texture;
-	};
-	Model: Model & {
-		["314-fgm"]: Model & {
-			Part: Part & {
-				Decal: Decal;
-			};
-			Primary: MeshPart;
-		};
-		["263-pmv Queen Bee"]: Model & {
-			Part: Part & {
-				Decal: Decal;
-			};
-			Primary: Part;
-		};
-	};
-	TogglePluginMenu: BoolValue;
 	PetIndex: Part & {
 		Weld: Weld;
 		Attachment: Attachment & {

@@ -198,8 +198,8 @@ export class PetEggController implements OnStart {
     private hatch ( egg: Egg ) {
         const eggModel = <Workspace["Eggs"]["Spawn"]>this.eggs.FindFirstChild(egg)
 
-        const isTrippleHatch = clientStore.getState().data.gamepasses.get( "Tripple Hatch" ) && clientStore.getState().data.settings.get("Tripple Hatch")
-        const amountOfHatches = isTrippleHatch ? 3 : 1
+        const isTripleHatch = clientStore.getState().data.gamepasses.get( "Triple Hatch" ) && clientStore.getState().data.settings.get("Triple Hatch")
+        const amountOfHatches = isTripleHatch ? 3 : 1
 
         const price = EGG_SHOP_CONFIG[egg].price * amountOfHatches
         const money = clientStore.getState().data.money
