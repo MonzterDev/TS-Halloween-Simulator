@@ -1,6 +1,6 @@
 import { Service, OnStart, Dependency } from "@flamework/core";
 import { GameAnalytics } from "@rbxts/gameanalytics";
-import { Workspace } from "@rbxts/services";
+import { PolicyService, Workspace } from "@rbxts/services";
 import { Events, Functions } from "server/network";
 import { getLuckStat } from "server/utils/Stats";
 import { EggPetProps, EGG_SHOP_CONFIG, Pet, Egg, getMaxPetsStored, getEggHatchChance, getEggLuckStat } from "shared/constants/Pets";
@@ -30,6 +30,8 @@ export class EggsService implements OnStart {
         const hasRemoveHatchCooldownGamepass = profile.data.gamepasses.get( "Remove Hatch Cooldown" )
         if ( !this.playerCooldown.cooldownIsFinished( player ) && !hasRemoveHatchCooldownGamepass ) return
 
+        const userPolicy = PolicyService.GetPolicyInfoForPlayerAsync( player )
+        if (userPolicy.ArePaidRandomItemsRestricted) return
 
         let amountOfHatches = 1
 
