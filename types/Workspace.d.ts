@@ -205,22 +205,6 @@ interface Workspace extends Model {
 				OriginalSize: Vector3Value;
 			};
 		};
-		Water: Model & {
-			Layer3: MeshPart & {
-				TextureBottom: Texture;
-				TextureLeft: Texture;
-				TextureFront: Texture;
-				TextureBack: Texture;
-				TextureRight: Texture;
-				TextureTop: Texture;
-			};
-			Layer2: MeshPart;
-			Layer4: MeshPart & {
-				SurfaceAppearance: SurfaceAppearance;
-			};
-			Layer1: MeshPart;
-		};
-		["Meshes/ocean cliff 2"]: MeshPart;
 	};
 	Areas: Folder & {
 		Crystal_Valley: Folder & {
@@ -229,7 +213,7 @@ interface Workspace extends Model {
 				Block: Part;
 			};
 			Sell: Part;
-			Spawn: Part;
+			Spawn: SpawnLocation;
 		};
 		Camp: Folder & {
 			Shop: Part;
@@ -240,14 +224,6 @@ interface Workspace extends Model {
 			Sell: Part;
 			Spawn: SpawnLocation;
 			Area: Part;
-		};
-		Swamp: Folder & {
-			Wall: Part & {
-				Display: Attachment;
-				Block: Part;
-			};
-			Sell: Part;
-			Spawn: Part;
 		};
 		Spawn: Folder & {
 			Shop: Part;
@@ -271,9 +247,6 @@ interface Workspace extends Model {
 	};
 	Pets: Folder;
 	Camera: Camera;
-	Baseplate: Part & {
-		Texture: Texture;
-	};
 	Model: Model & {
 		["314-fgm"]: Model & {
 			Part: Part & {

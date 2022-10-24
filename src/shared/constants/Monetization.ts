@@ -27,56 +27,56 @@ export interface GamepassConfigProps {
 export const GAMEPASS_CONFIG: Record<GamepassID, GamepassConfigProps> = {
     94737491: {
         displayName: "2x Money",
-        imageId: "rbxassetid://129474314",
+        imageId: "rbxassetid://11370830100",
         description: "Earn 2x more Money when Selling!",
     },
     94737363: {
         displayName: "2x Candy",
-        imageId: "rbxassetid://129474314",
+        imageId: "rbxassetid://11370830248",
         description: "Earn 2x more Candy when Selling!",
     },
 
     88116412: {
         displayName: "Equip 2 More Pets",
-        imageId: "rbxassetid://129474314",
+        imageId: "rbxassetid://11370830541",
         description: "Equip +2 more pet!",
     },
     88116438: {
         displayName: "Equip 5 More Pets",
-        imageId: "rbxassetid://129474314",
+        imageId: "rbxassetid://11370830541",
         description: "Equip +5 more pets!",
     },
 
     94738610: {
         displayName: "100 Pet Storage",
-        imageId: "rbxassetid://129474314",
+        imageId: "rbxassetid://11370829902",
         description: "Store an additional 100 Pets!",
     },
     94738652: {
         displayName: "500 Pet Storage",
-        imageId: "rbxassetid://129474314",
+        imageId: "rbxassetid://11370829902",
         description: "Store an additional 500 Pets!",
     },
 
     88116485: {
         displayName: "Remove Hatch Cooldown",
-        imageId: "rbxassetid://129474314",
+        imageId: "rbxassetid://11370829789",
         description: "Hatch eggs quicker!",
     },
     94738209: {
         displayName: "Triple Hatch",
-        imageId: "rbxassetid://129474314",
+        imageId: "rbxassetid://11370829473",
         description: "Hatch 3 Eggs at once!",
     },
     94738011: {
         displayName: "Lucky Eggs",
-        imageId: "rbxassetid://129474314",
+        imageId: "rbxassetid://11370830019",
         description: "Improved odds of finding rare pets!",
     },
 
     95862472: {
         displayName: "Sell from Anywhere",
-        imageId: "rbxassetid://129474314",
+        imageId: "rbxassetid://11370829650",
         description: "Sell your Candy from anywhere!",
     },
 }
@@ -120,38 +120,38 @@ export interface DevProductConfigProps {
 export const DEV_PRODUCT_CONFIG: Partial<Record<DevProductID, DevProductConfigProps>> = {
     1325865359: {
         displayName: "Luck Booster",
-        imageId: "rbxassetid://129474314",
+        imageId: "rbxassetid://11370830019",
         type: "Boost"
     },
     1325882600: {
         displayName: "Power Booster",
-        imageId: "rbxassetid://129474314",
+        imageId: "rbxassetid://11370830100",
         type: "Boost"
     },
 
     1317443894: {
         displayName: "Coins",
-        imageId: "rbxassetid://129474314",
+        imageId: "rbxassetid://11370830100",
         type: "Currency"
     },
     1325865355: {
         displayName: "More Coins",
-        imageId: "rbxassetid://129474314",
+        imageId: "rbxassetid://11370830100",
         type: "Currency"
     },
     1325865356: {
         displayName: "Many Coins",
-        imageId: "rbxassetid://129474314",
+        imageId: "rbxassetid://11370830100",
         type: "Currency"
     },
     1325865357: {
         displayName: "Lots Coins",
-        imageId: "rbxassetid://129474314",
+        imageId: "rbxassetid://11370830100",
         type: "Currency"
     },
     1325865358: {
         displayName: "TONS Coins",
-        imageId: "rbxassetid://129474314",
+        imageId: "rbxassetid://11370830100",
         type: "Currency"
     },
 }

@@ -1,4 +1,4 @@
-export const AREAS = ["Spawn", "Camp", "Crystal_Valley", "Swamp"]
+export const AREAS = ["Spawn", "Camp", "Crystal_Valley"]
 export type Area = typeof AREAS[number]
 
 export interface AreaWallProps {
@@ -19,10 +19,6 @@ export const AREA_WALL_CONFIG: AreaWallConfig = {
     Crystal_Valley: {
         coin_price: 500,
         requirements: "Camp"
-    },
-    Swamp: {
-        coin_price: 500,
-        requirements: "Crystal_Valley"
     },
 }
 
@@ -48,9 +44,5 @@ export const AREA_PILE_CONFIG: AreaPileConfig = {
     Crystal_Valley: {
         health_multiplier: 3,
         reward_multiplier: 3,
-    },
-    Swamp: {
-        health_multiplier: 4,
-        reward_multiplier: 4,
     },
 }
