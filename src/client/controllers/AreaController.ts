@@ -26,8 +26,8 @@ export class AreaController implements OnStart {
             } )
         } )
 
-        const character = this.player.Character
-        if ( character && this.player.UserId !== 811308495 ) character.PivotTo( this.player.RespawnLocation!.CFrame ) // Spawn at spawn
+        const character = this.player.Character || this.player.CharacterAdded.Wait()[0]
+        if ( character ) character.PivotTo( this.player.RespawnLocation!.CFrame ) // Spawn at spawn
     }
 
     private areaListener () {

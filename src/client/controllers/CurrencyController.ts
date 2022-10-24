@@ -8,7 +8,7 @@ import { BasketUpgradeController } from "./BasketUpgradeController";
 import { clientStore } from "client/rodux/rodux";
 import { BASKET_UPGRADE_CONFIG } from "shared/constants/Basket";
 import { FormatCompact, FormatStandard } from "@rbxts/format-number";
-import { makeButtonsSelectable, setSelectedObject } from "client/utils/openGui";
+import { makeButtonsSelectable, openGui, setSelectedObject } from "client/utils/openGui";
 
 @Controller({})
 export class CurrencyController implements OnStart {
@@ -16,7 +16,7 @@ export class CurrencyController implements OnStart {
     private basketUpgradeController = Dependency( BasketUpgradeController )
 
     private player = Players.LocalPlayer
-    private playerGui = <PlayerGui>this.player.WaitForChild( "PlayerGui" )
+    private playerGui = <StarterGui>this.player.WaitForChild( "PlayerGui" )
 
     private gui = <StarterGui["Currency"]> this.playerGui.WaitForChild("Currency")
     private frame = this.gui.Frame
@@ -31,6 +31,8 @@ export class CurrencyController implements OnStart {
     private upgradeButton = this.full.Upgrade
     private sellButton = this.full.Sell
 
+    private buyMoneyButton = this.frame.MoneyHolder.Purchase
+
     onStart () {
         this.updateAmount("candy", clientStore.getState().data.candy)
         this.updateAmount("money", clientStore.getState().data.money)
@@ -38,7 +40,11 @@ export class CurrencyController implements OnStart {
         Events.updateCurrency.connect( ( currency, amount ) => this.updateAmount( currency, amount ) )
         Events.luckyReward.connect( ( amount ) => this.animateAmount( true ) )
         this.sellButton.MouseButton1Click.Connect(() => this.clickFullButtons("Sell"))
-        this.upgradeButton.MouseButton1Click.Connect(() => this.clickFullButtons("Upgrade"))
+        this.upgradeButton.MouseButton1Click.Connect( () => this.clickFullButtons( "Upgrade" ) )
+        this.buyMoneyButton.MouseButton1Click.Connect( () => {
+            const gui = this.playerGui.MonetizationShop
+            openGui(gui)
+        })
     }
 
     private updateAmount ( currency: Currency, amount: number ) {
